@@ -18,6 +18,7 @@ sudo systemctl status nginx
 systemctl halt – останавливает систему
 systemctl poweroff – выключает систему
 systemctl reboot – перезагружает систему
+systemctl daemon-reload - перезагрузка всех серверов
 
 =======Добавление сервиса в автозагрузку======
 Find out the name of service’s script from /etc/init.d/ directory e.g. mysqld or httpd
@@ -96,83 +97,7 @@ sudo systemctl disable mysqld - отменяет автозапуск при п�
 
 mysqladmin -u root -p version - информация об установленной версии
 
-Команды:
 
-поиск sudo find / -name mysql
-ищем адрес:
-/usr/local/mysql-5.7.20-macos10.12-x86_64/bin/mysql
-
-Добавляем в .bash_profile ссылку на .bachrc
-source $HOME/.bashrc
-
-
-Прописываем в .bashrc
-PATH=${PATH}:/usr/local/mysql-5.7.20-macos10.12-x86_64/bin/
-export PATH
-
-коннектимся к сервер (# mysql –u user_name –p user_password или # mysql -hхост -u user_name -puser_password или mysql -uusername -ppassword -hlocalhost)
-$ mysql -u root -p;
-
-Частые команды:
-
-Задание пароля
-mysql> UPDATE user SET Password=PASSWORD ('НОВЫЙ_ПАРОЛЬ') WHERE user='root';
-
-Новая база данных
-mysql> CREATE DATABASE ИМЯ_БАЗЫ CHARACTER SET utf8 COLLATE utf8_general_ci; (mytestdb)
-
-Создание нового пользователя.
-mysql> create user 'stepanich'@'localhost' identified by 'Stepanich_competition2001';
-
-Предоставление пользователю доступа к базе данных
-mysql> GRANT ALL PRIVILEGES ON Stepanich.* to 'stepanich'@'localhost';
-
-Вступление в силу новых полномочий:
-mysql> FLUSH PRIVILEGES;
-Создание пльзователя с провами для доступа к базе данных
-
-
-mysql> GRANT ALL PRIVILEGES ON mytestdb.* TO 'stepanych'@'localhost' IDENTIFIED BY 'stepanych';
-
-Список баз данных
-mysql> SHOW DATABASES;
-
-полная информация о созданной таблице!
-mysql> SHOW CREATE TABLE name_db 
-
-Переключение между базами (выбор конкретной базы)
-mysql> use new_db;
-
-вывести список таблиц в MySQL, для выбранной базы
-mysql> show tables;
-
-вывести данные по таблице:
-mysql> describe table_name;
-
-удалить базу данных в MySQL
-mysql> DROP DATABASE db_name;
-
-сделать дамп базы в MySQL
-$ mysqldump --user=user_name --password=user_password db_name > /path_to_dump/dump.sql;
-
-Как залить данные из дампа в MySQL
-$ mysql -u user_name -puser_password -f db_name < /path_to_dump/dump.sql
-
-скопировать данные из одной таблицы в другую в MySQL
-mysql> INSERT INTO `table_one` (id, parent_id, text) SELECT id, parent_id, option FROM `table_two`;
-
-Показать данные о кодировке таблице 
-mysql> show create table tablename;
-
-Поменять кодировку таблицы
-mysql> alter table `tablename` charset "utf8";
-
-mysql>show processlist;
-mysql>kill process_id;
-
-Отображение русских букв 
-SET NAMES utf8; - чаще для линуксовых консолей
-SET NAMES cp866; - для cmd windows
 
 
 

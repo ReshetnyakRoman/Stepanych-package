@@ -44,7 +44,7 @@ def before_request():
 def login(currentURL=''):
 	#session['nextURL'] = request.args.get('next')
 	loginForm = LoginForm()
-	competition1 = Competition.query.filter_by(id=1).first().competitionName
+	competition1 = Competition.query.first().competitionName
 	confirmationURL = session['confirmURL']
 	if loginForm.validate_on_submit():
 		team = mainTable.query.filter_by(teamName=loginForm.teamName.data).first()
@@ -88,7 +88,7 @@ def logout():
 @auth.route('/teamoffice')
 @login_required
 def teamoffice():	
-	competition1 = Competition.query.filter_by(id=1).first().competitionName
+	competition1 = Competition.query.first().competitionName
 	if session['role'] == 'admin' or session['role'] == 'guest':
 		competition1 = mainTable.query.filter_by(teamName=session['teamName']).first().competition
 		teamName = mainTable.query.filter_by(teamName=session['teamName']).first().teamName
@@ -187,7 +187,7 @@ def teamoffice():
 @auth.route('/registration', methods=['GET', 'POST'])
 def registration():
 	registrationForm = RegistrationForm()	
-	competition1 = Competition.query.filter_by(id=1).first().competitionName
+	competition1 = Competition.query.first().competitionName
 	if registrationForm.validate_on_submit():
 		team = mainTable(
 			keyTeamCompetition = registrationForm.teamName.data+competition1,

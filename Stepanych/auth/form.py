@@ -139,7 +139,7 @@ class RegistrationForm(FlaskForm):
 		self.role.choices = [(i.role, i.role) for i in roles]
 	
 	def validate_teamName(self, field):
-		competition1 = Competition.query.filter_by(id=1).first()
+		competition1 = Competition.query.first()
 		if mainTable.query.filter_by(keyTeamCompetition=str(field.data)+str(competition1.competitionName)).first():
 			raise ValidationError('Команда с таким названием уже зарегестрирована в этих соревнованиях')
 		

@@ -10,7 +10,8 @@ import bleach, re, string
 from Stepanych.models.routes import Routes
 from Stepanych.models.competition import Competition
 from sqlalchemy import event
-		
+from sqlalchemy.orm import backref
+
 class mainTable(db.Model, UserMixin):
 	__tablename__='main'
 	keyTeamCompetition = db.Column(db.String(256), primary_key=True, index=True, unique = True)
@@ -33,7 +34,7 @@ class mainTable(db.Model, UserMixin):
 	club2 = db.Column(db.String(64))
 	alpSkill2 = db.Column(db.String(64))
 	climbSkill2 = db.Column(db.String(64))	
-	role = db.Column(db.String(64), db.ForeignKey('roles.role'))
+	role = db.Column(db.String(64), db.ForeignKey('roles.role', ondelete='CASCADE'))
 	teamChange = db.Column(db.String(64))
 	waitingListYes = db.Column(db.String(64))
 	keyName1Sname1Year1 = db.Column(db.String(256))
@@ -86,8 +87,8 @@ class mainTable(db.Model, UserMixin):
 	routeScoreTotal = db.Column(db.Float, default = 0)
 	routeTimeSecTotal = db.Column(db.Integer, default = 0)
 	
-	posts = db.relationship('Post', backref='author', lazy='dynamic', primaryjoin='Post.keyTeamCompetition == mainTable.keyTeamCompetition', cascade='all, delete-orphan')
-	comments =db.relationship('Comment', backref='author', lazy='dynamic', cascade='all, delete-orphan')
+	posts = db.relationship('Post', backref=backref('author', passive_deletes=True), lazy='dynamic', primaryjoin='Post.keyTeamCompetition == mainTable.keyTeamCompetition', cascade='all, delete-orphan')
+	comments =db.relationship('Comment', backref=backref('author', passive_deletes=True), lazy='dynamic', cascade='all, delete-orphan')
 
 	def is_authenticated(self):
 		return True
@@ -171,7 +172,10 @@ class mainTable(db.Model, UserMixin):
 
 	@staticmethod
 	def update_scores():
-		competitionName = Competition.query.first().competitionName
+		if Competition.query.first() is not None:
+			competitionName = Competition.query.first().competitionName
+		else: 
+			competitionName = ''
 		teams = mainTable.query.filter_by(competition=competitionName).all()
 		routes = Routes.query.all()
 		for team in teams:
@@ -194,7 +198,10 @@ class mainTable(db.Model, UserMixin):
 
 	@staticmethod
 	def update_positions():
-		competitionName = Competition.query.first().competitionName
+		if Competition.query.first() is not None:
+			competitionName = Competition.query.first().competitionName
+		else: 
+			competitionName = ''
 		teams = mainTable.query.filter_by(competition=competitionName).filter_by(teamStatus='ok').order_by(mainTable.routeScoreTotal.desc()).order_by(mainTable.routeTimeSecTotal).all()
 		for index, team in enumerate(teams, start=1):
 			team.position = index
@@ -361,7 +368,7 @@ class Roles(db.Model):
 	role = db.Column(db.String(64), unique = True, primary_key=True)
 	defaults = db.Column(db.Boolean, default=False, index=True)
 	permissions = db.Column(db.Integer)
-	keyTeamCompetition = db.relationship('mainTable', backref = 'roleName', lazy='dynamic')
+	keyTeamCompetition = db.relationship('mainTable', backref=backref('roleName', passive_deletes=True), lazy='dynamic')
 
 	@staticmethod
 	def insert_roles():

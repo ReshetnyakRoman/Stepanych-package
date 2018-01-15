@@ -1,0 +1,150 @@
+Настраиваем nginx
+идем в домашний каталог nginx
+$cd /etc/nginx/
+создаем 2 каталога, один для хранения персональных конфигов второй для их подглючения в главный конфиг-файл nginx
+$sudo mkdir sites-available sites-enabled
+создаем конфиг файл нашего приложения
+$sudo touch /etc/nginx/sites-available/flask-uwsgi.conf
+$sudo vim /etc/nginx/sites-available/flask-uwsgi.conf
+Настраиваем наш сервер который читает через сокет unix:/tmp/flask-uwsgi.sock:
+
+		upstream uwsgi_flask_upstream {
+		    server unix:/home/flask/flask-uwsgi.sock;
+		}
+		   
+		server {
+		   listen 80;
+		   server_tokens off;
+		   server_name stepanich.ru;
+		         
+		   location / {
+		         include uwsgi_params;
+		         uwsgi_pass uwsgi_flask_upstream;
+		     }
+		    
+		    # отдаем статический файлы напрямую
+		    location /static {
+		        root /home/flask/stepanich;
+		        autoindex on;
+		    }
+		    
+		    error_page  404              /404.html;
+		    error_page   500 502 503 504  /50x.html;
+		    location = /50x.html {
+		                root   html;
+		    } 
+		    
+		    # access-log можно отключить для снижения загруженности сервера.
+		    access_log on;
+		    access_log  /home/flask/stepanich/nginx-access.log;
+		}
+
+активируем наш виртуальный хост
+$ sudo ln -s /etc/nginx/sites-available/flask-uwsgi.conf /etc/nginx/sites-enabled/
+
+Настраиваем основной конф-файл nginx
+
+			###nginx.conf ###
+			### Располагается в /etc/nginx/
+
+			# Пользователь
+			user  nginx;
+
+			# Количество рабочих процессов (по количеству ядер сервера)
+			worker_processes  1;
+
+			# Приоритет рабочих процессов (от -20 до 20, чем ниже тем приоритетнее)
+			worker_priority -5;
+
+			# Pid-файл и error_log файл сервера
+			pid        /var/run/nginx.pid;
+			error_log  /etc/nginx/logs/error.log  notice;
+
+			events {
+			    # Максимальное число соединений на один рабочий процесс
+			    # Принимаем максимально возможное количество соединений
+			    worker_connections  1024;
+			    multi_accept       on;
+			}
+
+			http {
+			    # Подключение сайтов
+			    include /etc/nginx/sites-enabled/*;
+
+			    # Задаем расположение файла с MIME типами
+			    include       mime.types;
+
+			    # Задаем тип ответов по умолчанию
+			    default_type  application/octet-stream;
+
+			    # Включаем системный вызов (передача данных между файловыми дескрипторами по средством ядра, а не через write read)
+			    sendfile        on;
+
+			    # Ограничиваем объем данных для sendfile
+			    # (ограничение объема данных могущих передаваться за один вызов sendfile
+			    # иначе одно соединение может подмять под себя весь рабочий процесс)
+			    sendfile_max_chunk 128k;
+
+			    # Заголовок ответа и начало файла одним пакетом
+			    tcp_nopush on;
+
+			    # Отключаем буферизацию keep-alive соединений
+			    tcp_nodelay on;
+
+			    # Разрывать неактивное keep-alive соединение через...
+			    keepalive_timeout 45;
+
+			    # Максимальное число запросов для одного keep-alive соединения
+			    keepalive_requests 100;
+
+			    #закрываем подключения для переставших отвечать клиентов
+			    reset_timedout_connection on;
+
+			    # Таймаут для чтения заголовка запроса клиента
+			    client_header_timeout 5;
+
+			    # Таймаут для чтения тела запроса клиента
+			    client_body_timeout 5;
+
+			    # Время для ответа клиента
+			    send_timeout 5;
+
+			    # Выделяем дополнительные буферы для больших запросов
+			    large_client_header_buffers 2 2k;
+
+			   # Размер буфера для заголовка запроса от клиента
+			    client_header_buffer_size 2k;
+
+			    # Буфер чтения тела запроса клиента
+			    client_body_buffer_size 256k;
+
+			    # Максимальный размер тела запроса от клиента (влияет на размер загружаемого файла)
+			    client_max_body_size 3m;
+
+			    # отключаем вывод версси сервера в заголовках ответа
+			    server_tokens off;
+
+			    # включаем сжатие ответа больше 1Kb (ответы меньше не имеет смысла сжимать так как они идут одним пакетом)
+			    # сжимаем только текстовые блоки, т.к. на это требуется мало времени
+			    gzip            on;
+			    gzip_static     on;
+			    gzip_types      text/plain text/css text/xml application/x-javascript application/msword application/rtf application/pdf application/x-font-ttf application/vnd.ms-excel image/x-icon image/svg+xml;
+			    gzip_comp_level 9;
+			    gzip_proxied    any;
+			    gzip_min_length 1000;
+			    gzip_disable    "msie6"
+			    gzip_vary       on;
+			    gzip_proxied    no-cache no-store private expired auth;
+
+			    # формат вывода логов
+			    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+			                  '$status $body_bytes_sent "$http_referer" '
+			                  '"$http_user_agent" "$http_x_forwarded_for"';
+
+			}
+
+проверяем nginx
+$ sudo nginx -t
+
+$запускаем nginx
+$ sudo nginx -s reload

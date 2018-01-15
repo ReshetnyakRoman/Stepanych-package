@@ -6,11 +6,11 @@ class Competition(db.Model):
 	__tablename__='competition'
 	id=db.Column(db.Integer, primary_key=True)
 	competitionName = db.Column(db.String(64)) # название соревнований
-	numberOfSets = db.Column(db.Integer) # количество сетов в соревновании 
+	numberOfSets = db.Column(db.Integer, default = 0) # количество сетов в соревновании 
 	participantsListStatus = db.Column(db.String(64)) #статус финальных списков (опубликован или нет) default = closed
 	finalResultsStatus = db.Column(db.String(64)) #статус результатов соревнований (опубликованы или нет) default = closed
-	competitionStatus = db.Column(db.String(64)) #статус самих соревнований (открыты или нет) 
-	routesStatus = db.Column(db.String(64)) #статус трасс, открыты или нет (default =  0 == all sets closed ), может прнимать значения 1-512 в зависимости от того какой сет сейчас открыт
+	competitionStatus = db.Column(db.String(64)) #статус самих соревнований (открыты или нет) default = closed
+	routesStatus = db.Column(db.String(64), default = '0') #статус трасс, открыты или нет (default =  0 == all sets closed ), может прнимать значения 1-512 в зависимости от того какой сет сейчас открыт
 	numberOfRoutes = db.Column(db.Integer) #количество трасс по default = 0
 	highlightFinals = db.Column(db.String(32)) #нужно ли выделять финалистов или нет default = 'yes'
 	resultsHeader = db.Column(db.String(1000)) #заголовок для финальных результатов

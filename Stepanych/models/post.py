@@ -5,6 +5,7 @@ from flask import current_app
 from datetime import datetime
 from markdown import markdown
 import bleach, re, string
+from sqlalchemy.orm import backref
 
 class Post(db.Model):
 	__tablename__ = 'posts'
@@ -13,9 +14,9 @@ class Post(db.Model):
 	body = db.Column(db.Text)
 	bodyHTML = db.Column(db.Text)
 	timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-	keyTeamCompetition = db.Column(db.String(128), db.ForeignKey('main.keyTeamCompetition'))
-	comments =  db.relationship('Comment', backref='post', lazy='dynamic')
-	gallery = db.relationship('PostGallery', backref='post', lazy='dynamic')
+	keyTeamCompetition = db.Column(db.String(128), db.ForeignKey('main.keyTeamCompetition', ondelete='CASCADE'))
+	comments =  db.relationship('Comment', backref=backref('post', passive_deletes=True), lazy='dynamic')
+	gallery = db.relationship('PostGallery', backref=backref('post', passive_deletes=True), lazy='dynamic')
 
 	def snippet(self):
 		split = str.split(self.bodyHTML, '\n')
@@ -91,8 +92,8 @@ class Comment(db.Model):
 	bodyHTML = db.Column(db.Text)
 	timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 	disabled = db.Column(db.Boolean)
-	author_id = db.Column(db.String(256), db.ForeignKey('main.keyTeamCompetition'))
-	post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
+	author_id = db.Column(db.String(256), db.ForeignKey('main.keyTeamCompetition', ondelete='CASCADE'))
+	post_id = db.Column(db.Integer, db.ForeignKey('posts.id', ondelete='CASCADE'))
 
 	@staticmethod
 	def on_change_body(target, value, oldvalue, initiator):
@@ -130,7 +131,7 @@ class PostGallery(db.Model):
 	id=db.Column(db.Integer, primary_key=True)
 	imgName = db.Column(db.String(128)) 
 	imgURL = db.Column(db.String(128)) 
-	postID =  db.Column(db.Integer, db.ForeignKey('posts.id'))
+	postID =  db.Column(db.Integer, db.ForeignKey('posts.id', ondelete='CASCADE'))
 
 	def __repr__(self):
 		return '<name %s gallery %s >' % (self.imgName, self.galleryName)

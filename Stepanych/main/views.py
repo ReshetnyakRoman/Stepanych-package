@@ -44,7 +44,9 @@ def index():
 		blank = False
 
 	competition= Competition.query.first()
-	registrationStatus = competition.registrationStatus
+	if competition is not None:
+		registrationStatus = competition.registrationStatus
+	else:registrationStatus = 'closed'
 
 	page = request.args.get('page',1,type=int)
 	registrationForm = RegistrationForm()
