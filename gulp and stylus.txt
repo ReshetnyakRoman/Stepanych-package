@@ -1,0 +1,128 @@
+notes.txt
+
+изменения для git
+
+Установка gulp/stylus/nib/rupture/livereload/uglify/imagemin
+
+В работчем каталоге 
+0) установить npm в корневой каталог проекта
+1) $ sudo npm install -g gulp унстанавливаем галп глобально
+2) в консоле в каталоге проекта создаем файл package.json командой npm init
+3) ~$ sudo npm install --save-dev gulp устанавливаем gulp в корневой каталог проекта.
+
+4) в каталоге проекта создаем пустой файл gulpfile.js
+5) $ npm install --save-dev gulp-stylus gulp   - устанавливеме gulp и плагин для него sytlus
+6) $ npm install --save-dev gulp-sourcemaps - устанавливаем плагин gulp-sourcemaps
+7) $ sudo npm install --save-dev gulp-stylus nib  - устанавливаем библиотеку nib
+8) $ sudo npm install --save-dev rupture - устанавливаем библиатеку раптче - для работы с брэйкпоинтами (разные разрешения экрана)
+
+9) $ sudo npm intall gulp-livereload - устанавливаем live reload (плагин для брауздера устанавливается отдельно)
+10) $ sudo npm install --save-dev gulp-uglify - плагин по упрощению JS
+11) $ sudo npm install --save-dev gulp-plumber - пакет который позволяет не прерывать функцию watch при возникновении ошибок
+12) $ npm install --save-dev gulp-imagemin  - (запускаем в корневом каталоге проекта) оптимизация картинок
+13) $ sudo npm install --save-dev gulp-autoprefixer - добавление префиксов для старых браузеров
+
+14) прописываем в файле gulpfile.js следующее:
+
+-------------Start file---------------------------------------
+
+// gulpfile with included stylus/autoupdate/sourcemap/nib. 
+
+// include the required packages. 
+var gulp = require('gulp');
+var stylus = require('gulp-stylus');
+var sourcemaps = require('gulp-sourcemaps');
+var nib = require('nib');
+var rupture = require('rupture');
+var livereload = require('gulp-livereload');
+var uglify = require('gulp-uglify');
+var plumber = require('gulp-plumber');
+var imagemin = require('gulp-imagemin');
+
+
+function errorLog(error) {
+	console.error.bind(error);
+	this.emit('end');
+}
+
+// by command 'gulp' run all task in one shot
+
+gulp.task('default',['scripts','styles','watch']);
+
+// task for stylus compilation with nib library sorucemap and starting livereload plagins
+
+gulp.task('styles', function () {
+  	gulp.src('stylus/*.styl')
+  		.pipe(plumber())
+	  	.pipe(sourcemaps.init())
+	    .pipe(stylus({use:[nib(), rupture()]}))	
+	    .pipe(sourcemaps.write())
+	    .pipe(gulp.dest('css'))
+	    .pipe(livereload());
+});
+
+gulp.task('livereload', function(){
+	gulp.src('*.html')
+		.pipe(livereload());
+});
+
+// javaScript simplification
+gulp.task('scripts', function(){
+	gulp.src('js/*.js')
+		
+		.pipe(uglify())
+		.pipe(gulp.dest('build/js'));
+})
+
+// Image Task
+// Compress 
+
+gulp.task('image', function(){
+	gulp.src('img/*')
+		.pipe(imagemin())
+		.pipe(gulp.dest('img/'))
+
+});
+
+// watch task for livereload and stylus compilations
+
+gulp.task('watch', function () {
+	gulp.watch('stylus/*.styl',['styles'])
+	gulp.watch('js/*.js',['scripts'])
+	gulp.watch('*.html',['livereload'])
+	var server = livereload();
+});
+
+
+
+
+
+---------------End of File-------------------------------------
+
+14) запускаем компилятор в консоле командой 
+$ gulp - запуск всех скриптов стразу
+$ gulp watch - для автообновления компиляции или 
+$ gulp stylуs - для разовой компиляции css
+$ gulp scripts - для разовой компиляции js
+$ gulp image - сжатие картинок в указанной папке
+
+
+
+
+
+Запуск компиляции средствами Stylus 
+
+ $ stylus -w stylus/mystyle.styl --out css
+
+расшифровка (компилятор с ключем -w,  путь из каталога запуска к файлу стилуса, ключ --out  и путь куда записывать финальный css файл)
+
+ запуск с библиотекой nib:
+ $ stylus -u nib -w stylus/mystyle.styl --out css  
+
+запуск с бибилотекой nib и rupture
+
+$ stylus -u nib -u rupture -w stylus/mystyle.styl --out css 
+
+
+Документация по ниб http://tj.github.io/nib/
+Документация по рапче https://github.com/jenius/rupture

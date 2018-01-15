@@ -1,0 +1,20 @@
+
+Кодировка: # -*- coding: utf-8 -*-
+
+Запись логов
+import logging
+logging.basicConfig(filename='program.log',level=logging.DEBUG)
+
+запуск других программ
+import subprocess
+
+Запуск с дебагером и перезагрузкой сервера после изменения кода.
+
+$ export FLASK_DEBUG=1
+$ python test.py
+
+Запуск uwsgi server
+$ uwsgi --virtualenv ~/Documents/programming/Stepanych/stepanych-env/bin/ -s /tmp/stepanych.sock  --manage-script-name --mount ~/Documents/programming/Stepanych=test:app
+
+ uwsgi --ini uwsgi.ini
+

@@ -1,0 +1,227 @@
+{% extends "base.html" %}
+
+{% block content %}
+		<div class="w3-hide-small" style="height: 43px;"></div>
+	
+		<section class="w3-row w3-margin-top">
+		<div class="w3-col m1 l2 w3-hide-small"> &nbsp;</div>
+
+		<div class="w3-col m10 l8 s12 w3-padding " id="content">
+
+	<!-- Start of Text - Content block -->
+
+
+
+		<h2 class="w3-center w3-text-red">Страница  управления соревнованиями</h2>
+		<hr style="width: 90%; margin:auto;">
+		{% with messages = get_flashed_messages() %}
+		    {% if messages %}
+		    <div class="w3-pale-green w3-border-green w3-border w3-round" style="margin: 16px 0 0 0;">
+		    <a href="#" class="w3-right w3-padding w3-text-green w3-large w3-hover-text-red w3-round w3-padding" onclick="assign_id(this);delete_element()" style="position: relative; top:-3px">x</a>
+		    {% for message in messages %}
+		    	
+		        <p class="w3-padding">{{ message }}</p>
+
+		    {% endfor %}
+		    </div>
+		    <br>
+		  {% endif %}
+		{% endwith %}	
+	<!-- Open/Close competition block -->
+		<div id="main_competition_block" class="w3-margin">
+			{% if competitionStatus == 'closed' %}
+
+			<button class="w3-btn-1 w3-round w3-lime w3-show w3-large" id="open_competition" onclick=";document.getElementById('competition_name').style.display='block';document.getElementById('close_comment').style.display='block'"> Открыть соревнования <i class="fa fa-check-circle"></i></button>
+			
+			<p class="w3-tiny w3-text-grey w3-margin-top" id="open_comment"><sup>*</sup>С нажатия этой кнопки начинается работа с любыми новыми соревнованиями. "Открытие соревнований" - приводит операционные базы данных в исходные состояния. Далее в них будет заносится информация по запущенным соревнованиям: зарегестрированные команды, участники, название соревнований, результаты и т.п. Модуль трассы обнулится до исходного значения.</p>
+			{% else %}
+			<form action="{{ url_for('competition.close_competition') }}" method="POST">
+				<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+				<button class="w3-btn-1 w3-round w3-red w3-large" id="close_competition" type="submit">Закрыть соревнования <i class="fa fa fa-close"></i></button>
+			</form>
+			<p class="w3-tiny w3-text-grey w3-margin-top" id="close_comment"><sup>*</sup>При закрытие соревнований, финальные протоколы сохраняются в архив, ссылка на который появится на страничке /инфо/положение и протоколы/ а так же внизу страницы</p>
+			
+			{% endif %}
+			
+			
+		</div>
+	
+	<!-- Competition Name modal windowq -->
+			<div id="competition_name" class="w3-modal">
+				<div class="w3-modal-content w3-animate-zoom w3-padding w3-center" style="max-width: 600px">
+					<button onclick="document.getElementById('competition_name').style.display='none'" class="w3-button w3-right w3-hover-red-d3 w3-red"><i class="fa fa-close"></i></button>	
+					<h2 class="w3-text-blue">Название соревнований</h2>
+					<form action="{{ url_for('competition.open_competition') }}" class="w3-container w3-padding w3-center set_number" method="POST">
+						<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+						<input type="text" placeholder="Степаныч 20..." name="competitionName" class="w3-margin-bottom w3-border" style=" width: 80%;">
+						<select class="w3-select my-input w3-margin-bottom" required name="numberOfSets" id="number_of_sets" style="width: 80%" onchange="set_description()">
+							<option value="x" selected disabled >выберете количество сетов</option>
+							<option value="0">1</option>
+						    <option value="1">2</option>
+						    <option value="2">3</option>
+						    <option value="3">4</option>
+						    <option value="4">5</option>
+						    <option value="5">6</option>
+						    <option value="6">7</option>
+						    <option value="7">8</option>
+						    <option value="8">9</option>
+						    <option value="9">10</option>
+				 		</select>
+				 		<br>
+				 		<p id="set_description" class="w3-small w3-hide w3-padding">Введите краткое описание для каждого сета. 	Например: "1й сет с 12:00 до 14:30"</p>
+				 		<input type="text" class="w3-input w3-hide  input-filter" style="width: 80%; margin: auto;" placeholder="1й сет с 00:00 до 2:00" name="set1">
+				 		<input type="text" class="w3-input w3-hide  input-filter" style="width: 80%; margin: auto;" placeholder="2й сет с 00:00 до 2:00" name="set2">
+				 		<input type="text" class="w3-input w3-hide  input-filter" style="width: 80%; margin: auto;" placeholder="3й сет с 00:00 до 2:00" name="set3">
+				 		<input type="text" class="w3-input w3-hide  input-filter" style="width: 80%; margin: auto;" placeholder="4й сет с 00:00 до 2:00" name="set4">
+				 		<input type="text" class="w3-input w3-hide  input-filter" style="width: 80%; margin: auto;" placeholder="5й сет с 00:00 до 2:00" name="set5">
+				 		<input type="text" class="w3-input w3-hide  input-filter" style="width: 80%; margin: auto;" placeholder="6й сет с 00:00 до 2:00" name="set6">
+				 		<input type="text" class="w3-input w3-hide  input-filter" style="width: 80%; margin: auto;" placeholder="7й сет с 00:00 до 2:00" name="set7">
+				 		<input type="text" class="w3-input w3-hide  input-filter" style="width: 80%; margin: auto;" placeholder="8й сет с 00:00 до 2:00" name="set8">
+				 		<input type="text" class="w3-input w3-hide  input-filter" style="width: 80%; margin: auto;" placeholder="9й сет с 00:00 до 2:00" name="set9">
+				 		<input type="text" class="w3-input w3-hide  input-filter" style="width: 80%; margin: auto;" placeholder="10й сет с 00:00 до 2:00" name="set10">
+				 		
+					 	<br>
+					 	<input type="submit" class="w3-button w3-green w3-margin" value="Открыть соревнования">
+					</form>
+				</div>	
+			</div>		
+		
+		<hr style="width: 90%; margin:auto;">
+
+	<!-- Сompetition controls block -->	
+		<div id="tooltip" class="test my-tooltip">
+		<h3></h3>
+		<div class="{% if competitionStatus == 'closed' %} w3-disabled {% else %}{% endif %}">
+			<div id="controls" class="my-flex w3-container  w3-margin-bottom" >
+				
+				{% if registrationStatus == 'closed' %}
+
+				<form action="{{ url_for('competition.open_registration') }}" method="POST">
+				<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+				<button type="submit" id="open_registration" class="w3-display-container w3-show my-controls w3-round-xlarge w3-btn-1 w3-margin w3-border w3-border-green w3-text-green w3-hover-green w3-hover-text-white">
+					<div  class="w3-display-middle w3-center w3-large">
+					 <b>Открыть<br>регистрацию</b>
+					</div>
+				</button>
+				</form>
+				
+				{% else %}
+
+				<form action="{{ url_for('competition.close_registration') }}" method="POST">
+				<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+				<button type="submit" id="close_registration" class="w3-display-container w3-show my-controls w3-round-xlarge w3-btn-1 w3-margin w3-border w3-border-red w3-text-red w3-hover-red w3-hover-text-white">
+					<div class="w3-display-middle w3-center w3-large ">
+					 <b>Закрыть<br> регистрацию</b>
+					</div>
+				</button>
+				</form>
+				{% endif %}
+
+				<a href="{{ url_for('competition.routes') }}">
+				<div id="create_routes" class="w3-display-container my-controls w3-round-xlarge w3-btn-1 w3-margin w3-border w3-border-lime w3-text-lime w3-hover-lime w3-hover-text-white">
+					<div class="w3-display-middle w3-center w3-large ">
+					 <b>Управлять<br> Трассами</b>
+					</div>
+				</div>
+				</a>
+
+			</div>
+			
+			<div class="my-flex w3-container">
+				{% for set in sets %}
+				{% if set.bitwhiseStatus != 0%}
+					<form action="{{ url_for('competition.close_set') }}" method="POST">
+					<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+					<input type="hidden" name="setNuber" value="{{set.setNuber}}"/>
+					<button type="submit" id="open_routes" class="w3-display-container my-controls w3-round-xlarge w3-btn-1 w3-margin w3-border w3-border-red w3-text-red w3-hover-red w3-hover-text-white {% if set.setNuber == 0 %} w3-hide {% else %}w3-show {% endif %}" onclick="open_routes(this, 'close_routes')">
+						<div class="w3-display-middle w3-center w3-large ">
+						 <b>Закрыть<br> {{set.setNuber}}й сет</b>
+						</div>
+					</button>
+					</form>
+
+				{% else %}
+					<form action="{{ url_for('competition.open_set') }}" method="POST">
+					<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+					<input type="hidden" name="setNuber" value="{{set.setNuber}}"/>
+					<button type="submit" id="open_routes" class="w3-display-container my-controls w3-round-xlarge w3-btn-1 w3-margin w3-border w3-border-blue w3-text-blue w3-hover-blue w3-hover-text-white {% if set.setNuber == 0 %} w3-hide {% else %}w3-show {% endif %}" onclick="open_routes(this, 'close_routes')">
+						<div class="w3-display-middle w3-center w3-large ">
+						 <b>Открыть<br> {{set.setNuber}}й сет</b>
+						</div>
+					</button>
+					</form>
+				{% endif %}
+				
+				{% endfor %}
+
+			</div>
+
+		</div>
+		<p class="w3-tiny w3-text-grey w3-margin-bottom"><sup>*</sup>этот блок служит для запуска и остановки регистрации. Включения/Выключения и управления модулем трасс, в закрытом состоянии участники не могут вносить результаты по трассам</p>
+		
+		{% if competitionStatus == 'closed' %}
+			<div id="controls_tooltip" class="w3-blue my-tooltip-text-2 w3-round-medium w3-padding w3-small w3-center">Что-бы активировать блок управленияя соревнованиями, "Откройте соревнования"!</div>
+		{% else %}
+
+		{% endif %}
+		
+		</div>
+		
+		
+		<hr style="width: 90%; margin:auto;">
+	<!-- Command and Users navigation block -->	
+		
+		<div class="my-flex w3-continer w3-margin-bottom">
+			<a href="{{ url_for('competition.allteams') }}" class="w3-btn-1 w3-padding w3-border-blue w3-border w3-round w3-margin w3-text-blue">Все команды</a>
+			<a href="{{ url_for('competition.allmembers') }}" class="w3-btn-1 w3-padding w3-border-blue w3-round w3-border w3-margin w3-text-blue">Все пользователи</a>
+			<br>
+
+			<p class="w3-tiny w3-text-grey" style="width: 100%"><sup>*</sup>В этом блоке можно упрвлять всеми пользователями и командами когда либо зарегестрированными на сайте</p>
+		</div>
+		<hr style="width: 90%; margin:auto;">
+
+	<!-- Archived competition block -->
+		<div class="my-flex w3-continer w3-margin-bottom">
+
+				{% for competition in competitionArchive%}
+				<div class="archive w3-border my-card w3-round-large my-btn-1 w3-text-grey w3-display-container"> 
+					<div class="w3-display-topright w3-text-red w3-large w3-hover-red w3-round-large" style="padding: 3px 8px 3px 8px;" onclick="document.getElementById('delete_archive').style.display='block';assign_id(this)"><i class="fa fa-trash-o"></i></div>
+					<a href="{{ url_for('competition.archive', competitionName=competition.competitionName, prevURL=request.full_path) }}" target="blank">
+						<div class=" my-card-top" ><p class="step45 competitionName">{{competition.competitionName}}</p></div>
+				
+						<div class="w3-padding-24 w3-container" style="height: 70px"><i class="fa fa-lock w3-xxlarge"></i></div>
+					</a>
+				</div>
+				{% endfor %}
+					
+			<br>
+			<p class="w3-tiny w3-text-grey" style="display: block;"><sup>*</sup>Этот блок предназанчен для управления архивными соревнованиями. Здесь можно удалить протоколы архивных (предыдущих) соревнований. Этот блок в оновном используется для тестирования работы системы <span class="w3-red">Внимание! при удалении архива, он становится не видим пользователям!</span></p>
+		</div>
+		
+		<!-- Delete archived competition modal window -->
+			<div id="delete_archive" class="w3-modal">
+				<div class="w3-modal-content w3-animate-zoom w3-padding w3-center" style="max-width: 600px">
+					<button onclick="this.parentElement.parentElement.style.display='none'" class="w3-button w3-right w3-hover-gren w3-green"><i class="fa fa-close"></i></button>	
+					<h2 class="w3-text-blue">Удаление архивных соревнований</h2>
+					
+						<p class="w3-small">Вы уверены что хотите удалить этот архив? Он будет удален с сервера!</p>
+					 	<button class="w3-button w3-red w3-margin" onclick="delete_archive_modal('delete_archive')"><i class="fa fa-trash-o" ></i> удалить</button>
+					
+				</div>	
+			</div>	
+	<hr style="width: 90%; margin:auto;">
+
+
+
+
+
+
+	<!-- End of Text - Content block -->
+		</div>
+
+		<div class="w3-col m1 l2 w3-hide-small"> &nbsp;</div>
+		
+		
+	</section>
+
+{% endblock %}

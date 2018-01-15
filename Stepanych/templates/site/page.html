@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<!-- End of SIMDITOR scripts -->
+	<div class="w3-hide-small" style="height: 43px;"></div>
+	
+	<section class="w3-row w3-margin-top">
+		<div class="w3-col m1 l2 w3-hide-small"> &nbsp;</div>
+
+		<div class="w3-col m10 l8 s12 w3-padding blue-links w3-display-container">
+			{% if current_user.can(Permission.ADMINVIEW) %}
+			<a href="{{ url_for('site.edit_page', iconDescriptionEng=page.iconDescriptionEng)}}"><i class="fa fa-pencil w3-xlarge w3-text-green w3-display-topright w3-hover-blue w3-round-large w3-padding"></i></a>
+			{% else %}
+			{% endif %}
+	<!-- Start of Text - Content block -->
+		
+			
+			<h2 class="w3-text-red">{{ page.header | safe }}</h2>
+			<br>
+			<p class="blue-links">
+			{% if page.bodyHTML %}
+		        {{ page.bodyHTML | safe }}
+		    {% else %}
+		        {{ page.body }}
+		    {% endif %}
+			</p>
+			<br>
+		</div>
+
+		<div class="w3-col m1 l2 w3-hide-small"> &nbsp;</div>
+
+{% endblock %}

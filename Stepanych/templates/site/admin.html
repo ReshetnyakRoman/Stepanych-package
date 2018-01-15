@@ -1,0 +1,305 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div class="w3-hide-small" style="height: 43px;"></div>
+	
+	<section class="w3-row w3-margin-top">
+		<div class="w3-col m1 l2 w3-hide-small"> &nbsp;</div>
+
+		<div class="w3-col m10 l8 s12 w3-padding " id="content">
+
+			<!-- Start of Text - Content block -->
+			
+				<!-- Main LOGO block -->
+				<h3 class="">Выбор заглавной картинки</h3>
+				
+				{% with messages = get_flashed_messages() %}
+				    {% if messages %}
+					    <div class="w3-pale-green w3-border-green w3-border w3-round" style="margin: 16px 0 0 0; width: 80%">
+					    <a href="#" class="w3-right w3-padding w3-text-green w3-large w3-hover-text-red w3-round w3-padding" onclick="assign_id(this);delete_element()" style="position: relative; top:-3px">x</a>
+						    {% for message in messages %}
+						    	
+						        <p class="w3-padding">{{ message }}</p>
+
+						    {% endfor %}
+				    	</div>
+				   	 <br>
+				  	{% endif %}
+			 	{% endwith %}
+				
+
+				<a class="w3-btn-1 w3-blue w3-padding w3-margin w3-round" onclick="document.getElementById('add_photo').style.display='block'"><i class="fa fa-plus-square"></i> добавить фото</a>
+				<p class="w3-tiny w3-text-grey w3-margin-bottom">Для заглавного фото рекомендуется: пропорция 3:2, рарешение не ниже 1200:150pх и размер файла не более 100Кб, иначе будет выглядеть убого.</p>
+
+				<div style="display:flex; flex-flow: row wrap;" >
+
+					<div style="margin: 0 2px 2px 0; border: #000 1px solid; height: 100px; width: 150px;" class="w3-display-container" onclick="make_logo_active('0')">
+						<p class="w3-display-middle">пусто</p>
+					
+					<div class="w3-display-bottomleft w3-text-blue w3-xlarge w3-padding-small {% if blank %}{% else %}w3-hide{% endif %}"><i class="fa fa-check-circle"></i></div>
+					
+				</div>
+
+				{% for logo in logos %}
+					<div style="margin: 0 2px 2px 0;" class="w3-display-container " onclick="make_logo_active({{ logo.id }})">
+					<img src="{{ logo.imgURL }}"/  style="border: #000 1px solid; height: 100px; " class="w3-hover-opacity">
+					<div class="w3-display-topright w3-text-red w3-large w3-hover-black w3-padding-small" onclick="delete_logo(this, {{ logo.id }})"><i class="fa fa-trash-o"></i></div>
+					
+					<div class="w3-display-bottomleft w3-text-blue w3-xlarge w3-padding-small  {% if logo.status == 'active' %}{% else %}w3-hide{% endif %}"><i class="fa fa-check-circle"></i></div>
+					
+					</div>
+
+				{% endfor %}
+				</div>
+				
+				<!-- Add logo modal window -->
+
+				<div id="add_photo" class="w3-modal" style="display: {{ request.args.get('displayNewPhoto') }}">
+					<div class="w3-modal-content w3-animate-zoom w3-padding w3-center" style="max-width: 320px">
+						<button onclick="document.getElementById('add_photo').style.display='none'" class="w3-button w3-right w3-hover-red-d3 w3-red w3-padding-small"><i class="fa fa-close"></i></button>	
+
+						<h3 class="w3-text-blue">Добавление логотипа</h3>
+						{% with messages = get_flashed_messages() %}
+						    {% if messages %}
+						    
+						    {% for message in messages %}
+						        <p class="w3-text-red w3-padding">{{ message }}</p>
+						    {% endfor %}
+						    
+						  {% endif %}
+						{% endwith %} 	
+
+						<form action="{{ url_for('site.add_logo') }}" class="w3-container w3-padding" method="POST" enctype="multipart/form-data" name="photo">
+							<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+							<br>
+							<br>
+						 	<p class="w3-small">Выберите фотографии для загрузки,</p>
+						 	<p class="w3-small">допустимый размер файла до 3 МБ:</p>
+						 	<br>
+						 	<input required type="file" id="docs" name="docs" class="w3-margin-bottom w3-small" multiple>
+						 	<br>
+						 	<br>
+						 	<input type="submit" class="w3-button w3-green w3-margin" value="добавить лого">
+						</form>
+					
+					</div>	
+				</div><!-- End add logo modal -->
+
+
+
+				<!-- Menu strubture block -->
+				<hr>
+				<h3 class="">Создание новых страниц</h3>
+				
+
+				<section id="menu_items" >
+
+					<div class="w3-border-red w3-red-d3 w3-round-xlarge w3-display-container"  style="border: 3px solid; padding-left:8px; display: inline-block; margin:32px 6px 0 0;">
+
+						<div style="position: absolute; top:-26px; left: 8px; display: inline-block; border-radius: 8px 8px 0 0;"  class="w3-red w3-padding-small w3-small">Инфо</div>
+
+							
+						<div class="w3-red w3-round-xlarge w3-btn" title="добавить новую страницу в меню ИНФО" style="display: inline-block; margin: 12px 8px 12px 0px" ><span  class="w3-padding" style="font-size: 46px;" onclick="document.getElementById('add_page').style.display='block';$('#section').val('info')">+</span></div>
+						{% for info in infos %}
+						
+							<div class="w3-red w3-round-xlarge w3-btn w3-display-container" title="добавить новую страницу в меню ИНФО" style="display: inline-block; margin: 12px 8px 12px 0px;" >
+								<a href="{{url_for('site.page',iconDescriptionEng=info.iconDescriptionEng)}}">
+									<i class="{{info.icon}} w3-xxlarge w3-padding"></i>
+									<p class="w3-tiny">{{ info.iconDescription }}</p>
+								</a>
+								<i class="fa fa-trash-o w3-display-topright w3-padding w3-hover-black w3-round-xlarge w3-text-black" onclick="delete_page(this, {{ info.id }})"></i>
+
+								<a href="{{ url_for('site.edit_page', iconDescriptionEng=info.iconDescriptionEng) }}">
+									<i class="fa fa-pencil w3-display-topleft w3-padding w3-hover-black w3-round-xlarge w3-text-black"></i>
+								</a>
+							</div>
+						
+						{% endfor %}
+					</div>
+
+
+					<div class="w3-border-red w3-red-d3 w3-round-xlarge w3-display-container"  style="border: 3px solid; padding-left:8px; display: inline-block; margin:32px 6px 0 0;">
+
+						<div style="position: absolute; top:-26px; left: 8px; display: inline-block; border-radius: 8px 8px 0 0;"  class="w3-red w3-padding-small w3-small">Медиа</div>
+
+							
+						<div class="w3-red w3-round-xlarge w3-btn" title="добавить новую страницу в меню ИНФО" style="display: inline-block; margin: 12px 8px 12px 0px" ><span  class="w3-padding" style="font-size: 46px;" onclick="document.getElementById('add_page').style.display='block';$('#section').val('media')">+</span></div>
+
+						{% for media in medias %}
+						
+							<div class="w3-red w3-round-xlarge w3-btn w3-display-container" title="добавить новую страницу в меню ИНФО" style="display: inline-block; margin: 12px 8px 12px 0px;" >
+								<a href="{{url_for('site.page',iconDescriptionEng=media.iconDescriptionEng)}}">
+									<i class="{{media.icon}} w3-xxlarge w3-padding"></i>
+									<p class="w3-tiny">{{ media.iconDescription }}</p>
+								</a>
+
+								<i class="fa fa-trash-o w3-display-topright w3-padding w3-hover-black w3-round-xlarge w3-text-black" onclick="delete_page(this, {{ media.id }})"></i>
+								
+								<a href="{{ url_for('site.edit_page', iconDescriptionEng=media.iconDescriptionEng) }}">
+									<i class="fa fa-pencil w3-display-topleft w3-padding w3-hover-black w3-round-xlarge w3-text-black"></i>
+								</a>
+							</div>
+						
+						{% endfor %}
+					</div>
+
+					<div class="w3-border-red w3-red-d3 w3-round-xlarge w3-display-container"  style="border: 3px solid; padding-left:8px; display: inline-block; margin:32px 6px 0 0;">
+
+						<div style="position: absolute; top:-26px; left: 8px; display: inline-block; border-radius: 8px 8px 0 0;"  class="w3-red w3-padding-small w3-small">Соревнования</div>
+
+							
+						<div class="w3-red w3-round-xlarge w3-btn" title="добавить новую страницу в меню ИНФО" style="display: inline-block; margin: 12px 8px 12px 0px" ><span  class="w3-padding" style="font-size: 46px;" onclick="document.getElementById('add_page').style.display='block';$('#section').val('competition')">+</span></div>
+
+						{% for competition in competitions %}
+						
+							<div class="w3-red w3-round-xlarge w3-btn w3-display-container" title="добавить новую страницу в меню ИНФО" style="display: inline-block; margin: 12px 8px 12px 0px;" >
+								<a href="{{url_for('site.page',iconDescriptionEng=competition.iconDescriptionEng)}}">
+									<i class="{{competition.icon}} w3-xxlarge w3-padding"></i>
+									<p class="w3-tiny">{{ competition.iconDescription }}</p>
+								</a>
+								<i class="fa fa-trash-o w3-display-topright w3-padding w3-hover-black w3-round-xlarge w3-text-black" onclick="delete_page(this, {{ competition.id }})"></i>
+
+								<a href="{{ url_for('site.edit_page', iconDescriptionEng=competition.iconDescriptionEng) }}">
+									<i class="fa fa-pencil w3-display-topleft w3-padding w3-hover-black w3-round-xlarge w3-text-black"></i>
+								</a>
+							</div>
+						
+						{% endfor %}
+					</div>
+					<br>
+					<br>
+
+				</section>
+
+
+
+
+
+
+				<!-- Add page modal window -->
+
+				<div id="add_page" class="w3-modal" style="display: {{ request.args.get('displayNewPage') }}">
+					<div class="w3-modal-content w3-animate-zoom w3-padding w3-center" style="max-width: 320px">
+						<button onclick="document.getElementById('add_page').style.display='none'" class="w3-button w3-right w3-hover-red-d3 w3-red w3-padding-small"><i class="fa fa-close"></i></button>	
+						<h3 class="w3-text-blue">Новая страница</h3>
+						{% with messages = get_flashed_messages() %}
+						    {% if messages %}
+						    
+						    {% for message in messages %}
+						        <p class="w3-text-red w3-padding">{{ message }}</p>
+						    {% endfor %}
+						    
+						  {% endif %}
+						{% endwith %} 	
+
+						<form action="{{ url_for('site.create_page') }}" class="w3-container w3-padding" method="POST">
+							<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+							<input type="hidden" name="section" value="" id="section">
+							<input type="hidden" name="icon" value="fa fa-file-text-o" id="icon">
+
+							<input required type="text" class="w3-input  w3-animate-input w3-border-blue w3-center" placeholder="Название в меню" name="description" style="width: 60%; margin: auto;" maxlength="32">
+							<p class="w3-tiny w3-text-grey">*не более 2х слов</p>
+
+							<p class="w3-small w3-margin">Иконка:</p>
+
+							<div class="w3-clear" style="display:flex; flex-flow: row wrap; justify-content: center;">
+								<div style="display: inline-block; cursor:pointer;" class=" w3-display-container" onclick="$('#icon').val('fa fa-file-text-o');check_icon(this)">
+								<i class="fa fa-file-text-o w3-xlarge w3-padding"></i>
+								<i class="fa fa-check-circle w3-display-bottomleft w3-text-blue circle" style="padding: 2px; display: block;"></i>
+								</div>
+
+
+								<div style="display: inline-block; cursor:pointer;" class=" w3-display-container" onclick="$('#icon').val('fa fa-history');check_icon(this)">
+								<i class="fa fa-history w3-xlarge w3-padding"></i>
+								<i class="fa fa-check-circle w3-display-bottomleft w3-text-blue circle" style="padding: 2px;display: none;"></i>
+								</div>
+
+								<div style="display: inline-block; cursor:pointer;" class="w3-display-container" onclick="$('#icon').val('fa fa-chain-broken');check_icon(this)">
+								<i class="fa fa-chain-broken w3-xlarge w3-padding"></i>
+								<i class="fa fa-check-circle w3-display-bottomleft w3-text-blue circle" style="padding: 2px;display: none;"></i>
+								</div>
+
+								<div style="display: inline-block; cursor:pointer;" class="w3-display-container" onclick="$('#icon').val('fa fa-chain');check_icon(this)">
+								<i class="fa fa-chain w3-xlarge w3-padding"></i>
+								<i class="fa fa-check-circle w3-display-bottomleft w3-text-blue circle" style="padding: 2px;display: none;"></i>
+								</div>
+
+								<div style="display: inline-block; cursor:pointer;" class="w3-display-container" onclick="$('#icon').val('fa fa-bomb');check_icon(this)">
+								<i class="fa fa-bomb w3-xlarge w3-padding"></i>
+								<i class="fa fa-check-circle w3-display-bottomleft w3-text-blue circle" style="padding: 2px;display: none;"></i>
+								</div>
+
+								<div style="display: inline-block; cursor:pointer;" class="w3-display-container" onclick="$('#icon').val('fa fa-address-card-o');check_icon(this)">
+								<i class="fa fa-address-card-o w3-xlarge w3-padding"></i>
+								<i class="fa fa-check-circle w3-display-bottomleft w3-text-blue circle" style="padding: 2px;display: none;"></i>
+								</div>
+
+								<div style="display: inline-block; cursor:pointer;" class="w3-display-container" onclick="$('#icon').val('fa fa-list');check_icon(this)">
+								<i class="fa fa-list w3-xlarge w3-padding"></i>
+								<i class="fa fa-check-circle w3-display-bottomleft w3-text-blue circle" style="padding: 2px;display: none;"></i>
+								</div>
+
+								<div style="display: inline-block; cursor:pointer;" class="w3-display-container" onclick="$('#icon').val('fa fa-book');check_icon(this)">
+								<i class="fa fa-book w3-xlarge w3-padding"></i>
+								<i class="fa fa-check-circle w3-display-bottomleft w3-text-blue circle" style="padding: 2px;display: none;"></i>
+								</div>
+
+								<div style="display: inline-block; cursor:pointer;" class="w3-display-container" onclick="$('#icon').val('fa fa-calendar');check_icon(this)">
+								<i class="fa fa-calendar w3-xlarge w3-padding"></i>
+								<i class="fa fa-check-circle w3-display-bottomleft w3-text-blue circle" style="padding: 2px;display: none;"></i>
+								</div>
+
+								<div style="display: inline-block; cursor:pointer;" class="w3-display-container" onclick="$('#icon').val('fa fa-male');check_icon(this)">
+								<i class="fa fa-male w3-xlarge w3-padding"></i>
+								<i class="fa fa-check-circle w3-display-bottomleft w3-text-blue circle" style="padding: 2px;display: none;"></i>
+								</div>
+
+								<div style="display: inline-block; cursor:pointer;" class="w3-display-container" onclick="$('#icon').val('fa fa-comments-o');check_icon(this)">
+								<i class="fa fa-comments-o w3-xlarge w3-padding"></i>
+								<i class="fa fa-check-circle w3-display-bottomleft w3-text-blue circle" style="padding: 2px;display: none;"></i>
+								</div>
+
+								<div style="display: inline-block; cursor:pointer;" class="w3-display-container" onclick="$('#icon').val('fa fa-edit');check_icon(this)">
+								<i class="fa fa-edit w3-xlarge w3-padding"></i>
+								<i class="fa fa-check-circle w3-display-bottomleft w3-text-blue circle" style="padding: 2px;display: none;"></i>
+								</div>
+
+								<div style="display: inline-block; cursor:pointer;" class="w3-display-container" onclick="$('#icon').val('fa fa-expeditedssl');check_icon(this)">
+								<i class="fa fa-expeditedssl w3-xlarge w3-padding"></i>
+								<i class="fa fa-check-circle w3-display-bottomleft w3-text-blue circle" style="padding: 2px;display: none;"></i>
+								</div>
+
+								<div style="display: inline-block; cursor:pointer;" class="w3-display-container" onclick="$('#icon').val('fa fa-image');check_icon(this)">
+								<i class="fa fa-image w3-xlarge w3-padding"></i>
+								<i class="fa fa-check-circle w3-display-bottomleft w3-text-blue circle" style="padding: 2px;display: none;"></i>
+								</div>
+
+								<div style="display: inline-block; cursor:pointer;" class="w3-display-container" onclick="$('#icon').val('fa fa-folder-open-o');check_icon(this)">
+								<i class="fa fa-folder-open-o w3-xlarge w3-padding"></i>
+								<i class="fa fa-check-circle w3-display-bottomleft w3-text-blue circle" style="padding: 2px;display: none;"></i>
+								</div>
+
+								<div style="display: inline-block; cursor:pointer;" class="w3-display-container" onclick="$('#icon').val('fa fa-home');check_icon(this)">
+								<i class="fa fa-home w3-xlarge w3-padding"></i>
+								<i class="fa fa-check-circle w3-display-bottomleft w3-text-blue circle" style="padding: 2px;display: none;"></i>
+								</div>
+
+							</div>
+						 	<br>
+
+						 	<input type="submit" class="w3-button w3-green w3-margin" value="создать">
+						</form>
+					
+					</div><!-- End add page modal -->	
+				</div>
+
+				<!-- End of Text - Content block -->
+		</div>
+
+		<div class="w3-col m1 l2 w3-hide-small"> &nbsp;</div>
+			
+			
+	</section>
+
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div class="w3-hide-small" style="height: 43px;"></div>
+	
+	<section class="w3-row w3-margin-top">
+		<div class="w3-col m1 l2 w3-hide-small"> &nbsp;</div>
+
+		<div class="w3-col m10 l8 s12 w3-padding " id="content">
+
+			<!-- Start of Text - Content block -->
+	<!-- Шапка --> 
+			<h2 class="w3-text-red">Список всех pагруженных документов</h2>
+			<p class="w3-tiny w3-text-grey"><sup>*</sup>Эта страничка предназначена для администратора и модератора сайта. Здесь можно смотреть список всех загруженных файлов-документов и URL путь к ним. Этот путь можно использовать для ссылок в своих статьях если это необходимо. Например для публикации нового положения или правил!</p>
+			<br>
+
+			{% with messages = get_flashed_messages() %}
+			    {% if messages %}
+			    <div class="w3-pale-green w3-border-green w3-border w3-round" style="margin: 16px 0 0 0;">
+			    <a href="#" class="w3-right w3-padding w3-text-green w3-large w3-hover-text-red w3-round w3-padding" onclick="assign_id(this);delete_element()" style="position: relative; top:-3px">x</a>
+			    {% for message in messages %}
+			    	
+			        <p class="w3-padding">{{ message }}</p>
+
+			    {% endfor %}
+			    </div>
+			    <br>
+			  {% endif %}
+			{% endwith %}				
+			<input class="w3-input w3-border-bottom w3-border-blue w3-blue-l5 input-filter" type="text" placeholder="фильтр..." onkeyup="myFilter(0)" id="inputFilter" style="font-size: 13px; padding: 4px;">
+
+		<!-- Участники -->	
+			<ul class="w3-ul ul-filter" style="white-space: nowrap; overflow: auto;">
+			{% set count = 1 %}
+			{% for doc in docList %}
+				<li class="w3-tiny w3-row doc">
+					<a href="{{ doc.url }}" class="w3-hover-text-gray w3-text-blue" target="blank">
+					<div class="name" style="width: 150px; display: inline-block;text-overflow: ellipsis;overflow: hidden;">{{ doc.name }}</div>
+					</a>
+					<div class="url" style="width: 200px; display: inline-block;text-overflow: ellipsis;overflow: hidden;">{{ doc.url }}</div>
+					
+					<div class="w3-hover-red w3-round w3-text-red w3-padding-small w3-right" style="width: 32px; display: inline-block;" onclick="assign_id(this);delete_doc()"><i class="fa fa-trash-o  w3-large"></i></div>
+				</li>
+			{% set count = count + 1 %}
+			{% endfor %}			
+
+			</ul>	
+			
+
+				<!-- End of Text - Content block -->
+			</div>
+
+			<div class="w3-col m1 l2 w3-hide-small"> &nbsp;</div>
+			
+			
+		</section>
+
+{% endblock %}

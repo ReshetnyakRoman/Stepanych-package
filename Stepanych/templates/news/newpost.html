@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}
+
+{% block content %}
+<!-- SIMDITOR scripts -->
+<link rel="stylesheet" type="text/css" href="/css/simditor.css" media="screen" />
+
+<script type="text/javascript" src="/static/js/module.js"></script>
+<script type="text/javascript" src="/static/js/hotkeys.js"></script>
+<script type="text/javascript" src="/static/js/uploader.js"></script>
+<script type="text/javascript" src="/static/js/simditor.js"></script>
+<script type="text/javascript" src="/static/js/simditor-autosave.js"></script>
+
+<script>
+ $(function() {
+	var editor = new Simditor({
+  	textarea: $('#txt-editor'),
+  	defaultImage:'/img/',
+  	upload:false,
+  	pasteImage:false,
+  	imageButton:['external'],
+  	autosave: 'editor-content',
+  	autosavePath: '/doc/editor-content/autosave',
+  	code:false,
+  	toolbar:[
+  	'title',
+  	'bold',
+  	'italic',
+  	'underline',
+  	'strikethrough',
+  	'fontScale',
+  	'color',
+  	'indent',
+  	'outdent',
+  	'alignment',
+  	'hr',
+  	'ol',
+  	'ul',
+  	'blockquote',
+  	'table',
+  	'link',
+  	'image',
+  	'code']
+	});
+
+ });
+</script>
+
+
+
+<!-- End of SIMDITOR scripts -->
+	<section class="w3-row w3-margin-top">
+		<div class="w3-col m1 l2 w3-hide-small"> &nbsp;</div>
+
+		<div class="w3-col m10 l8 s12 w3-padding " id="news">
+			<!-- Start of Text - Content block -->
+
+
+			<div class="w3-hide-small" style="height: 43px;"></div>
+			<div class="w3-display-container">
+				{% with messages = get_flashed_messages() %}
+				    {% if messages %}
+				    <div class="w3-pale-red w3-border-red w3-border w3-round" style="margin: 16px 0 0 0;">
+				    <a href="#" class="w3-right w3-padding w3-text-red w3-large w3-hover-text-black w3-round w3-padding" onclick="assign_id(this);delete_element()" style="position: relative; top:-3px">x</a>
+				    {% for message in messages %}
+				    	
+				        <p class="w3-padding">{{ message }}</p>
+
+				    {% endfor %}
+				    </div>
+				    <br>
+				  {% endif %}
+				{% endwith %} 	
+
+				
+				<h1>Новый пост</h1>
+				{% if current_user.can(Permission.WRITE_ARTICLES) or current_user.can(Permission.ADMINVIEW) %}
+				<form method="POST" action="{{ url_for('news.new_post') }}" class="w3-container" enctype="multipart/form-data">
+
+							{{ NewsForm.csrf_token }}
+							<div class="w3-section">
+								<br>
+								
+
+								 {{ NewsForm.header(class="w3-input w3-border w3-margin-bottom") }}	
+								 	<p class="w3-tiny w3-text-red">
+										{% for message in NewsForm.header.errors %}
+										{{ message }}
+										{% endfor %}
+									</p>	
+								 <br>
+
+								{{ NewsForm.body(class="w3-input w3-border w3-margin-bottom", id="txt-editor") }}
+									<p class="w3-tiny w3-text-red">
+										{% for message in NewsForm.body.errors %}
+										{{ message }}
+										{% endfor %}
+									</p>
+									<br>
+									<p class="w3-small">добавьте фотографии для создания галлереи</p>
+								 	<p class="w3-small">допустимый размер файла до 3 МБ:</p>
+								 	
+								 	<input type="file" id="docs" name="docs" class="w3-margin-bottom w3-small" multiple>
+
+								{{ NewsForm.submit(class="w3-btn-1 w3-border-blue w3-border w3-round w3-margin w3-right w3-text-blue") }}
+
+							</div>
+				</form>
+				{% else %}
+				<p>Сожалеем, но у вас нет прав для добавления новостей</p>
+				{% endif %}
+
+			</div>
+
+			<!-- End of Text - Content block -->
+		<div class="w3-col m1 l2 w3-hide-small"> &nbsp;</div>
+		
+		
+	</section>
+{% endblock %}

@@ -1,0 +1,35 @@
+
+{% for comments in comments %}
+<div >
+	<div class="w3-bar">
+		<p class="w3-small w3-bar-item"><b>{{ comments.author.teamName }}</b> <span class="w3-text-gray">{{ moment(comments.timestamp).fromNow() }}</span></p>
+		{% if current_user.can(Permission.ADMIN) or current_user == comments.author %}
+		
+			<a href="{{ url_for('news.delete_comment', id=comments.id, currentURL=request.path) }}" title="удалить комментарий" class="w3-bar-item w3-right w3-text-red  w3-hover-red w3-round-large" style="padding: 2px 6px; position: relative; top:8px; left: -10px;" >
+				<i class="fa fa-trash-o"></i>
+			</a>
+
+		{% elif session['role'] == 'guest'  %}
+
+			<a href="{{ url_for('news.delete_comment', id=comments.id) }}" title="удалить пост" class="w3-bar-item w3-right w3-text-red  w3-hover-red w3-round-large">
+				<i class="fa fa-trash-o"></i>
+			</a>
+
+		{% endif %}
+	</div>
+	
+	<div style="padding-left: 16px; position: relative;" class="blue-links">
+	{% if comments.bodyHTML %}
+
+        {{ comments.bodyHTML | safe }}
+		
+    {% else %}
+
+        {{ comments.body | safe }}
+
+    {% endif %}
+	</div>
+	<hr style="margin: 8px;">
+	
+</div>
+{% endfor %}

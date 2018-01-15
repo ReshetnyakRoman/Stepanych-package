@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div class="w3-hide-small" style="height: 43px;"></div>
+	
+	<section class="w3-row w3-margin-top">
+		<div class="w3-col m1 l2 w3-hide-small"> &nbsp;</div>
+
+		<div class="w3-col m10 l8 s12 w3-padding " id="content">
+
+	<!-- Start of Text - Content block -->
+
+		<h1 class="w3-text-red w3-center">Фото-отчеты о "Степанычах"</h1>
+		<hr style="width: 90%; margin:auto;" >
+		
+		{% with messages = get_flashed_messages() %}
+			    {% if messages %}
+				    <div class="w3-pale-green w3-border-green w3-border w3-round" style="margin: 16px 0 0 0; width: 80%">
+				    <a href="#" class="w3-right w3-padding w3-text-green w3-large w3-hover-text-red w3-round w3-padding" onclick="assign_id(this);delete_element()" style="position: relative; top:-3px">x</a>
+					    {% for message in messages %}
+					    	
+					        <p class="w3-padding">{{ message }}</p>
+
+					    {% endfor %}
+			    	</div>
+			   	 <br>
+			  	{% endif %}
+		 	{% endwith %}
+		
+			{% if current_user.teamName != 'anonymous' %}
+			<a class="w3-btn-1 w3-lime w3-padding w3-margin w3-round" onclick="document.getElementById('add_galery').style.display='block'"><i class="fa fa-plus-square"></i> добавить новый альбом</a>
+			{% else %}
+			<a class="w3-btn-1 w3-lime w3-padding w3-margin w3-round" onclick="document.getElementById('add_galery2').style.display='block'"><i class="fa fa-plus-square"></i> добавить новый альбом</a>
+			{% endif %}
+		
+
+
+		<!-- Galeries section -->
+			<div class="my-flex">
+				
+				{% for gallery in galleries %}
+				<div  class="w3-card-1 w3-left my-galery w3-black w3-display-container">
+						<a href="{{ url_for('media.photo_gallery', id=gallery.galleryID ) }}">
+						<img src="{{ gallery.imgURL }}" alt="{{ gallery.galleryName }}" class="w3-greyscale-max w3-grayscale-off">
+						<p class="w3-display-bottomleft w3-text-white w3-padding"><b>{{ gallery.galleryName }}</b></p>
+						</a>
+						{% if current_user.teamName == gallery.authorName or current_user.can(Permission.ADMIN) %}
+						<div class="w3-display-topright w3-text-red w3-large w3-hover-black w3-padding" onclick="assign_id(this);delete_gallery({{ gallery.galleryID }})"><i class="fa fa-trash-o"></i></div>
+						{% else %}		
+						{% endif %}
+				</div>	
+				{% endfor %}
+				
+		
+
+			</div>
+
+	<!-- New galary  modal window -->
+
+		<div id="add_galery" class="w3-modal" style="display: {{ request.args.get('displayNewGallery') }}">
+			<div class="w3-modal-content w3-animate-zoom w3-padding w3-center" style="max-width: 320px">
+				<button onclick="document.getElementById('add_galery').style.display='none'" class="w3-button w3-right w3-hover-red-d3 w3-red"><i class="fa fa-close"></i></button>	
+
+				<h3 class="w3-text-blue">Создание нового альбома</h3>
+				{% with messages = get_flashed_messages() %}
+				    {% if messages %}
+				    
+				    {% for message in messages %}
+				        <p class="w3-text-red w3-padding">{{ message }}</p>
+				    {% endfor %}
+				    
+				  {% endif %}
+				{% endwith %} 	
+
+				<form action="{{ url_for('media.add_gallery') }}" class="w3-container w3-padding" method="POST" enctype="multipart/form-data" name="photo">
+					<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+					<input type="text" placeholder="название альбома" name="galleryName" class="w3-input  w3-animate-input w3-border-blue w3-center w3-small w3-margin-bottom" style="width: 60%; margin: auto;" required>
+					<br>
+					<br>
+				 	<p class="w3-small">Выберите фотографии для загрузки,</p>
+				 	<p class="w3-small">допустимый размер файла до 3 МБ:</p>
+				 	<br>
+				 	<input required type="file" id="docs" name="docs" class="w3-margin-bottom w3-small" multiple>
+				 	<br>
+				 	<br>
+				 	<input type="submit" class="w3-button w3-green w3-margin" value="Создать альбом">
+				</form>
+			
+			</div>	
+		
+		</div>
+
+		<div id="add_galery2" class="w3-modal">
+			<div class="w3-modal-content w3-animate-zoom w3-padding w3-center" style="max-width: 320px">
+				<button onclick="document.getElementById('add_galery2').style.display='none'" class="w3-button w3-right w3-hover-red-d3 w3-red"><i class="fa fa-close"></i></button>	
+
+				<h3 class="w3-text-blue"> </h3>
+	 			<br>
+	 			<br>
+				<p>Для того чтобы добавить фотографии вам нужно <a href="#" onclick="getElementById('login-window').style.display='block';document.getElementById('add_galery2').style.display='none'" class="w3-text-blue">воити</a></p>
+				<br>
+				<br>
+			
+			</div>	
+				
+		</div>
+		<!-- End of Text - Content block -->
+		<div class="w3-col m1 l2 w3-hide-small"> &nbsp;</div>
+		
+		
+	</section>
+
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div class="w3-hide-small" style="height: 43px;"></div>
+	
+	<section class="w3-row w3-margin-top">
+		<div class="w3-col m1 l2 w3-hide-small"> &nbsp;</div>
+
+		<div class="w3-col m10 l8 s12 w3-padding " id="content">
+
+			<!-- Start of Text - Content block -->
+	<!-- Шапка --> 
+			<h2 class="w3-text-red">Список всех зарегестрированных участников</h2>
+			<p class="w3-tiny w3-text-grey"><sup>*</sup>Эта страничка предназначена для администратора соревнования. Здесь можно смотреть всех участников когла либо регестрировавшихся в соревнованиях, удалять их из базы данных если они козлы, или попали сюда по ошибке! А так же посмотреть в каких командах состоял участник.</p>
+			<br>
+			<br>
+
+			{% with messages = get_flashed_messages() %}
+			    {% if messages %}
+			    <div class="w3-pale-green w3-border-green w3-border w3-round" style="margin: 16px 0 0 0;">
+			    <a href="#" class="w3-right w3-padding w3-text-green w3-large w3-hover-text-red w3-round w3-padding" onclick="assign_id(this);delete_element()" style="position: relative; top:-3px">x</a>
+			    {% for message in messages %}
+			    	
+			        <p class="w3-padding">{{ message }}</p>
+
+			    {% endfor %}
+			    </div>
+			    <br>
+			  {% endif %}
+			{% endwith %}				
+
+			<input class="w3-input w3-border-bottom w3-border-blue w3-blue-l5 input-filter" type="text" placeholder="фильтр..." onkeyup="myFilter(0)" id="inputFilter" style="font-size: 13px; padding: 4px;">
+
+		<!-- Участники -->	
+			<ul class="w3-ul ul-filter" style="white-space: nowrap; overflow: auto;">
+			{% set count = 1 %}
+			{% for member in memberList %}
+				<li class="w3-tiny w3-row user">
+					<a href="{{ url_for('competition.profile', name=member.name, sname=member.sname, year=member.year)}}" class="w3-hover-text-blue">
+					<div class="sname" style="width: 30px; display: inline-block;">{{ loop.index }} </div>
+					<div class="sname" style="width: 100px; display: inline-block;"> {{ member.sname }}</div>
+					<div class="name" style="width: 100px; display: inline-block;">{{ member.name }}</div>
+					<div class="year" style="width: 50px; display: inline-block;">{{ member.year }}</div>
+					<div class="male" style="width: 55px; display: inline-block;">{{ member.male }}</div>
+					<div class="club" style="width: 150px; display: inline-block;">{{ member.club }}</div>
+					<div class="alpSkill" style="width: 40px; display: inline-block;">{{ member.alpSkill }}</div>
+					<div class="climbSkill" style="width: 40px; display: inline-block;">{{ member.climbSkill }}</div>
+					</a>
+					<div class="w3-hover-red w3-round w3-text-red w3-padding-small" style="width: 32px; display: inline-block;" onclick="document.getElementById('delete_user').style.display='block';assign_id(this)"><i class="fa fa-trash-o  w3-large"></i></div>
+				</li>
+			{% set count = count + 1 %}
+			{% endfor %}			
+
+			</ul>	
+		<!-- Модальное окно удаление участника -->
+			<div id="delete_user" class="w3-modal">
+				<div class="w3-modal-content w3-animate-zoom w3-padding w3-center" style="max-width: 600px">
+					<button onclick="this.parentElement.parentElement.style.display='none'" class="w3-button w3-right w3-hover-gren w3-green"><i class="fa fa-close"></i></button>	
+					<h2 class="w3-text-blue">Удаление участника</h2>
+					
+						<p class="w3-small">Вы уверены что хотите удалить этого пацана? Он будет удален с сервера!</p>
+					 	<button class="w3-button w3-red w3-margin" onclick="delete_user_modal('delete_user')"><i class="fa fa-trash-o" ></i> удалить</button>
+					
+				</div>	
+			</div>				
+
+
+
+
+				<!-- End of Text - Content block -->
+			</div>
+
+			<div class="w3-col m1 l2 w3-hide-small"> &nbsp;</div>
+			
+			
+		</section>
+
+{% endblock %}

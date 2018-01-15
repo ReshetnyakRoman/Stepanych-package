@@ -1,0 +1,4 @@
+commands
+$ pip freeze >common.txt
+$ pip install -r requirements/dev.txt
+$ pip install -r requirements/common.txt

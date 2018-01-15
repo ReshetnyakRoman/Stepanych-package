@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div class="w3-hide-small" style="height: 43px;"></div>
+	
+	<section class="w3-row w3-margin-top">
+		<div class="w3-col m1 l2 w3-hide-small"> &nbsp;</div>
+
+		<div class="w3-col m10 l8 s12 w3-padding " id="content">
+
+	<!-- Start of Text - Content block -->
+	<h2>Продолжение...</h2>
+	{% with messages = get_flashed_messages() %}
+	{% if messages %}
+	
+	{% for message in messages %}
+	<p class="w3-margin-top">{{ message }}</p>
+	{% endfor %}
+
+	{% endif %}		
+	{% endwith %}
+
+
+
+
+	<!-- End of Text - Content block -->
+		</div>
+
+		<div class="w3-col m1 l2 w3-hide-small"> &nbsp;</div>
+		
+		
+	</section>
+
+{% endblock %}

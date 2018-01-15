@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<!-- SIMDITOR scripts -->
+<link rel="stylesheet" type="text/css" href="/css/simditor-comments.css" media="screen" />
+<link rel="stylesheet" href="/css/gallery.css">
+
+
+<style>
+	
+</style>	
+<script>
+ $(function() {
+	var editor = new Simditor({
+  	textarea: $('#txt-editor'),
+  	defaultImage:'/img/comments',
+  	upload:false,
+  	pasteImage:false,
+  	imageButton:['external'],
+  	code:false,
+  	toolbarFloat:false,
+  	toolbar:[
+  	'title',
+  	'bold',
+  	'italic',
+  	'underline',
+  	'strikethrough',
+  	'fontScale',
+  	'color',
+  	'indent',
+  	'outdent',
+  	'alignment',
+  	'blockquote',
+  	'link',
+  	'image',
+  	]
+	});
+
+ });
+</script>
+
+<!-- End of SIMDITOR scripts -->
+	<div class="w3-hide-small" style="height: 43px;"></div>
+	
+	<section class="w3-row w3-margin-top">
+		<div class="w3-col m1 l2 w3-hide-small"> &nbsp;</div>
+
+		<div class="w3-col m10 l8 s12 w3-padding blue-links" id="content">
+
+	<!-- Start of Text - Content block -->
+		
+			
+			<h2 class="w3-text-red">{{ posts.header }}</h2>
+			<br>
+			<p class="blue-links">
+			{% if posts.bodyHTML %}
+		        {{ posts.bodyHTML | safe }}
+		    {% else %}
+		        {{ posts.body }}
+		    {% endif %}
+			</p>
+			<!-- Galeries section -->
+			<br>
+			<div id="grid-gallery" class="grid-gallery" >
+				<section class="grid-wrap">
+					<ul class="grid">
+						<li class="grid-sizer"></li><!-- for Masonry column width -->
+						{% for photo in gallery %}
+							<li class="photo{{ photo.id }}">
+							<figure>
+
+							<img src="{{ photo.imgURL }}" alt="{{ photo.imgName }}">
+							
+							</figure>
+							</li>
+						{% endfor %}
+					</ul>
+				</section><!-- // grid-wrap -->
+				
+
+				<section class="slideshow" >
+					
+					<ul>
+
+						{% for photo in gallery %}
+							<li class="photo{{ photo.id }}">
+								<figure>
+									<img src="{{ photo.imgURL }}" alt="{{ photo.imgName }}"/>
+								</figure>
+							</li>
+						{% endfor %}
+
+					</ul>
+					<nav>
+						<span class="icon nav-prev"><i class="fa fa-chevron-left"></i></span>
+						<span class="icon nav-next"><i class="fa fa-chevron-right"></i></span>
+						<span class="icon nav-close"><i class="fa fa-close"></i></span>
+					</nav>
+
+				</section><!-- // slideshow -->
+
+			</div><!-- // grid-gallery -->
+			<hr>
+			<div class="w3-container ">
+			<p class="w3-right w3-text-gray w3-small">автор: <i>{{ posts.author.teamName }}</i> </p>
+			<div class="w3-clear"></div>
+			<p class="w3-right w3-text-gray w3-small"> <i>{{ moment(posts.timestamp).fromNow() }}</i></p>
+			</div>
+
+			
+		<a href="{{ '/?'+prevURL }}" class="w3-btn-1 w3-border w3-border-blue w3-round w3-text-blue"><< Назад</a>
+		{% with messages = get_flashed_messages() %}
+		    {% if messages %}
+		    <div class="w3-pale-green w3-border-green w3-border w3-round" style="margin: 16px 0 0 0;">
+		    <a href="#" class="w3-right w3-padding w3-text-green w3-large w3-hover-text-red w3-round w3-padding" onclick="assign_id(this);delete_element()" style="position: relative; top:-3px">x</a>
+		    {% for message in messages %}
+		    	
+		        <p class="w3-padding">{{ message }}</p>
+		    {% endfor %}
+		    </div>
+		  {% endif %}
+		 {% endwith %}
+
+		{% if current_user.is_authenticated %}
+		<form action="{{ url_for('news.post', id=posts.id, currentURL=request.path) }}" method="POST" class="w3-container">
+			
+			{{ form.csrf_token }}
+				<div class="w3-section">
+					<br>
+					
+					{{ form.body(class="small-area", id="txt-editor") }}
+						<p class="w3-tiny w3-text-red">
+							{% for message in form.body.errors %}
+							{{ message }}
+							{% endfor %}
+						</p>
+
+					{{ form.submit(class="w3-btn-1 w3-blue w3-round w3-margin ") }}
+
+				</div>
+		</form>
+		{% else %}
+		<br>
+		<br>
+		
+		<p class="w3-small"><i><a onclick="getElementById('login-window').style.display='block' " href="#" class="w3-text-blue">Авторизуйтесь</a> что-бы прокоментировать...</p></i>
+		<br>
+		{% endif %}
+		<div class="w3-clear"></div>
+
+ 
+		{% include '/news/_comments.html' %}
+
+	<!-- End of Text - Content block -->
+		</div>
+
+		<div class="w3-col m1 l2 w3-hide-small"> &nbsp;</div>
+		
+		
+	</section>
+
+	<script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+	<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+	<script src="/static/js/classie.js"></script>
+	<script src="/static/js/modernizr.custom.js"></script>
+	<script src="/static/js/cbpGridGallery.js"></script>
+	<script>
+		
+			new CBPGridGallery( document.getElementById( 'grid-gallery' ) );
+		
+	</script>
+
+	<script type="text/javascript" src="/static/js/module.js"></script>
+	<script type="text/javascript" src="/static/js/hotkeys.js"></script>
+	<script type="text/javascript" src="/static/js/uploader.js"></script>
+	<script type="text/javascript" src="/static/js/simditor.js"></script>
+
+		{% endblock %}

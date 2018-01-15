@@ -1,0 +1,56 @@
+
+{% for posts in posts %}
+<div class="w3-display-container {% if loop.index<3 %}{% else %} slideanim {% endif %} blue-links" >
+	
+		
+		<a href="{{ url_for('news.post', id=posts.id, prevURL=request.full_path) }}"><h3 class="w3-text-red">{{ posts.header }}</h3></a>		
+		<p>
+		{% if posts.bodyHTML %}
+
+	        {{ posts.snippet() | safe }}
+			
+	    {% else %}
+
+	        {{ posts.body }}
+
+	    {% endif %}
+		</p>
+		
+	<div class="w3-bar">
+		<a href="{{ url_for('news.post', id=posts.id, prevURL=request.full_path) }}" class="w3-text-blue w3-bar-item" >Далее >></a>
+
+		{% if current_user.can(Permission.ADMIN) or current_user == posts.author %}
+
+			<a href="{{ url_for('news.delete', id=posts.id) }}" title="удалить пост" class="w3-bar-item w3-right w3-text-red  w3-hover-red w3-round-large">
+				<i class="fa fa-trash-o"></i>
+			</a>
+			<a href="{{ url_for('news.edit_post', id=posts.id, prevURL=request.full_path) }}" title="редактировать пост" class="w3-bar-item w3-right w3-text-blue  w3-hover-blue w3-round-large">
+				<i class="fa fa-pencil"></i>
+			</a>	
+
+		{% elif session['role'] == 'guest'  %}
+			<a href="{{ url_for('news.delete', id=posts.id) }}" title="удалить пост" class="w3-bar-item w3-right w3-text-red  w3-hover-red w3-round-large">
+				<i class="fa fa-trash-o"></i>
+			</a>
+		{% endif %}
+	</div>
+	     
+		<hr style="margin: 8px 0;">
+		
+		<div class="w3-bar">
+
+			<p class="w3-right w3-text-gray w3-small w3-bar-item" style="position: relative; top:-8px;">
+				автор: <i>{{ posts.author.teamName }}</i> 
+			 <i>{{ moment(posts.timestamp).fromNow() }}</i>
+			</p>
+			<p class="w3-right w3-small w3-bar-item" style="position: relative; top:-8px;">
+				комметнариев: <b>{{ posts.comments.count() }}</b> <br>
+			</p>
+
+		</div>
+	
+	
+
+	<br>	
+</div>
+{% endfor %}

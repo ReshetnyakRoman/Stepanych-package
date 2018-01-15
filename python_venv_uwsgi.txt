@@ -1,0 +1,129 @@
+ PYTON & uWSGI
+
+установка на CentOS 7:
+
+Устанавливаем питон и виртуальное окружение
+$sudo yum install python34.x86_64
+$sudo yum install virtualenv
+
+Создаем отдельного пользователя для запуска приложений flask с домашней дерикторией /home/flask и запретом на запуск шела:
+$sudo useradd -s /bin/false -d /home/flask/ flask-uwsgi
+$sudo mkdir /home/flask/stepanich созадаем каталог для приожения
+
+Добавляем группу nginx во владельцы папкой, и даем ей прова на чтение и исполнение
+$sudo chown -cR flask-uwsgi:nginx /home/flask
+$sudo chmod -R 0775 /home/flask
+
+добавляем меня в группу nginx, что бы иметь возможность заливать файлы в папку приложения
+$sudo usermod -a -G nginx roman
+
+входим под пользователем flask-wsgi
+$sudo su - flask-uwsgi -s /bin/bash
+
+устанавливаем виртуальное окружение в домашний каталог или в каталог приложения
+$virtualenv -p python3 venv
+активируем его
+$source venv-pyth3/bin/activate
+
+устанавливаем фласк
+$pip install Flask
+
+Создаем простейшей приложение 
+$nano test.py
+
+		# -*- coding: utf-8 -*-
+		from flask import Flask
+		app = Flask(__name__)
+
+		@app.route('/')
+		def hello_world():
+		    return 'Hello, Sex!!!!!'
+
+Создаем каталог для статических файлов
+
+$mkdir static
+
+и выходим из под пользователя фласк
+$exit
+
+Запускаем uwsgi сервер.
+устанавливаем пакет для разработки 
+$ sudo yum install python34-devel.x86_64
+
+Заходим под фласковым пользователем
+$ sudo su - flask-uwsgi -s /bin/bash
+
+Установим uwsgi в виртуальном окружнии
+$source venv-pyth3/bin/activate
+
+$ pip install uwsgi
+Создадим файл uwsgi.ini в директории /home/flask:
+
+		[uwsgi]
+		# Имя модуля и приложения, которое запустит uWSGI
+		wsgi-file = /home/flask/Stepanych/__init__.py
+		callable = app
+		py-autoreload = 1
+
+		# Поуть до виртуального окружения
+		virtualenv = /home/flask/venv-pyth3
+
+
+		master = true
+		# Количество процессов uWSGI
+		processes = 5
+
+		# Указываем где создавать файл-сокет
+		socket = /tmp/flask-uwsgi.sock
+
+		# Указываем пользователя и группу под которыми выполнять приложение
+		uid = flask-uwsgi
+		gid = nginx
+
+		# Удаляем временные файлы uWSGI при выключении
+		vacuum = true
+
+		# При закрытии терминала - завершать работу
+		# Необходимо для корректного запуска с помощью systemd
+		die-on-term = true
+
+Проверяем что все работает.
+Заходим в папку проекта
+$ cd /home/flask
+запускаем uwsgi sever:
+$ uwsgi --ini uwsgi.ini
+
+Если все работает то осталось создать службу для запуска демона нашего uwsgi сервера
+идем в папку /etc/systemd/system
+$ cd /etc/systemd/system
+$ sudo touch flask-uwsgi.service
+$ sudo vim flask-uwsgi.service
+
+Записываем в файл:
+		[Unit]
+		Description=uWSGI instance to serve flask-uwsgi project
+		After=network.target
+
+		[Service]
+		User=nginx
+		Group=nginx
+		WorkingDirectory=/home/flask
+		Environment="PATH=/home/flask/venv-pyth3/bin"
+		ExecStart=/home/flask/venv-pyth3/bin/uwsgi --ini uwsgi.ini
+
+		[Install]
+		WantedBy=multi-user.target
+
+Запускаем сервис $sudo systemctl start flask-uwsgi
+Проверка статуса $sudo systemctl status flask-uwsgi
+Разрешаем службе запускатся при загрузке $sudo systemctl enable flask-uwsgi
+
+Устанавливаем модули в виртуальном окружении необходимые для работы приолжения:
+(venv) $ pip install -r Stepanych/requirements/common.txt
+
+
+
+!запуск usgi на Маке!
+$ source ~/Documents/programming/Stepanych/venv-pyth36/bin/activate
+$ uwsgi --ini uwsgi.ini
+

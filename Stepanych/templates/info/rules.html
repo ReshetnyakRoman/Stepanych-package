@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+	<div class="w3-hide-small" style="height: 43px;"></div>
+	
+	<section class="w3-row w3-margin-top">
+		<div class="w3-col m1 l2 w3-hide-small"> &nbsp;</div>
+
+		<div class="w3-col m10 l8 s12 w3-padding " id="content">
+
+	<!-- Start of Text - Content block -->
+			{% with messages = get_flashed_messages() %}
+			    {% if messages %}
+			    <div class="w3-pale-green w3-border-green w3-border w3-round" style="margin: 16px 0 0 0;">
+			    <a href="#" class="w3-right w3-padding w3-text-green w3-large w3-hover-text-red w3-round w3-padding" onclick="assign_id(this);delete_element()" style="position: relative; top:-3px">x</a>
+			    {% for message in messages %}
+			    	
+			        <p class="w3-padding">{{ message }}</p>
+
+			    {% endfor %}
+			    </div>
+			    <br>
+			  {% endif %}
+			 {% endwith %}			
+
+			<h3 class="w3-center w3-text-red">Документы:</h3>
+			<div  class="my-flex">
+				{% if current_user.can(Permission.ADMINVIEW) %}
+				<div class="w3-border my-card w3-round-large  w3-left my-btn-1 " onclick="document.getElementById('add_doc').style.display='block'">
+					<div class="w3-lime my-card-top w3-display-container" ><div class="w3-display-middle my-route-center w3-xxlarge"><i class="fa fa-plus"></i></div></div>
+					<div class="w3-padding w3-container" style="height: 70px"><b>добавить документ</b></div>
+				</div>
+				{% else %}
+				{% endif %}
+				
+				
+				{% set count = 1 %}
+				{% for doc in docList %}
+					
+					<div class="w3-border my-card w3-round-large  w3-left my-btn-1 w3-display-container">
+						{% if current_user.can(Permission.ADMINVIEW) %}
+						<div class="w3-display-topleft w3-padding w3-text-red w3-large w3-hover-red w3-round-large" onclick="assign_id(this);delete_rules('{{ doc.nameRus }}')"><i class="fa fa-trash-o"></i></div>
+						{% else %}		
+						{% endif %}	
+						<a href="{{ doc.url }}" target="blank">
+						<div class="{{ colors[doc.color]}} my-card-top" ><p class="step45">&nbsp;Степаныч &nbsp;</p></div>
+								
+						
+						<div class="w3-padding-16 w3-container" style="height: 70px"><b><span class="nameRus">{{ doc.nameRus }}</span></b></div>
+						</a>
+					</div>
+					
+				{% set count = count + 1 %}
+				{% endfor %}
+			</div>	
+		
+			<p class="w3-tiny w3-text-grey w3-center"><sup>*</sup>дополнительную информацию уточняйте напрямую у организаторов</p>
+			<br>
+			<hr style="width: 90%; margin:auto;">
+			<h3 class="w3-center w3-text-red">Протоколы соревнований предыдущих лет:</h3>
+			<div class="my-flex w3-continer w3-margin-bottom">
+				
+
+			
+					{% for competition in competitionArchive %}
+					<div class="archive w3-border my-card w3-round-large my-btn-1 w3-text-grey w3-display-container"> 
+						<a href="{{ url_for('competition.archive', competitionName=competition.competitionName, prevURL=request.full_path) }}">
+							<div class=" my-card-top" ><p class="step45 competitionName">{{competition.competitionName}}</p></div>
+					
+							<div class="w3-padding-24 w3-container" style="height: 70px"><i class="fa fa-lock w3-xxlarge"></i></div>
+						</a>
+					</div>
+					{% endfor %}
+						
+				<br>
+
+			</div>
+
+
+	<!-- End of Text - Content block -->
+		</div>
+
+		<div class="w3-col m1 l2 w3-hide-small"> &nbsp;</div>
+		
+		<!-- Modal window to add new document -->
+		<div id="add_doc" class="w3-modal" style="display: {{ request.args.get('displayNewRule') }}">
+			<div class="w3-modal-content w3-animate-zoom w3-padding w3-center" style="max-width: 320px;">
+				<button onclick="document.getElementById('add_doc').style.display='none'" class="w3-button w3-right w3-hover-red-d3 w3-red"><i class="fa fa-close"></i></button>	
+
+				<h3 class="" style="text-align: center;">Добавление нового документа</h3>
+					{% with messages = get_flashed_messages() %}
+					    {% if messages %}
+					    
+					    {% for message in messages %}
+					        <p class="w3-text-red w3-padding">{{ message }}</p>
+					    {% endfor %}
+					    
+					  {% endif %}
+					{% endwith %} 				
+				<form action="{{ url_for('info.add_rules') }}" class="w3-container w3-padding" method="POST" enctype="multipart/form-data" name="route">
+					<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+					<input type="text" class="w3-input w3-border-blue w3-small w3-center w3-margin-bottom w3-animate-input" placeholder="название" name="nameRus" style="width: 50%; margin: auto;">
+					<p class="w3-tiny w3-text-grey">*желательно покороче и не больше 2х слов, что бы поместилось на карточку</p>
+					<br>
+					<br>
+					<input type="file" id="docs" name="docs" class="w3-margin-bottom w3-small">
+				 	<br>
+				 	<br>
+				 	<input type="submit" class="w3-button w3-green w3-margin" value="загрузить" id="button-upload">
+					
+
+				</form>
+			</div>	
+		</div>
+		
+	</section>
+
+{% endblock %}

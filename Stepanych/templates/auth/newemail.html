@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+	<div class="w3-hide-small" style="height: 43px;"></div>
+	
+	<section class="w3-row w3-margin-top">
+		<div class="w3-col m1 l2 w3-hide-small"> &nbsp;</div>
+
+		<div class="w3-col m10 l8 s12 w3-padding " id="content">
+
+	<!-- Start of Text - Content block -->
+
+
+
+		
+		<p class="w3-margin-bottom"> Введите ваш новый email:</p>
+		<form method="POST" action="{{ url_for('auth.new_email') }}">
+			{{ newEmailForm.csrf_token }}
+			{{ newEmailForm.email(class="w3-input w3-border-bottom w3-margin-bottom") }}
+			<p class="w3-text-red w3-padding">
+				{% for message in newEmailForm.email.errors %}
+				{{ message }}
+				{% endfor %}
+
+			{% with messages = get_flashed_messages() %}
+			    {% if messages %}
+			    
+			    {% for message in messages %}
+			    {{ message }}
+			    {% endfor %}
+			    
+			  {% endif %}
+			 {% endwith %}
+			 </p>
+			 
+			{{ newEmailForm.submit(class="w3-btn-1 w3-border-blue w3-border w3-round w3-margin w3-right w3-text-blue") }}
+			
+			
+		</form>
+
+
+
+	<!-- End of Text - Content block -->
+		</div>
+
+		<div class="w3-col m1 l2 w3-hide-small"> &nbsp;</div>
+		
+		
+	</section>
+
+{% endblock %}

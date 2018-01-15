@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<link rel="icon" type="image/png" href="/img/favicon.png" />
+	<link rel="stylesheet" href="/css/mystyles.css">
+	<link rel="stylesheet" href="/css/w3.css">
+	
+	
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<title>Cтепаныч - Соревнования альпинистких связок </title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')
+	</script>
+	<script type="text/javascript">
+    	var csrf_token = "{{ csrf_token() }}";
+
+	    $.ajaxSetup({
+	        beforeSend: function(xhr, settings) {
+	            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+	                xhr.setRequestHeader("X-CSRFToken", csrf_token);
+	            }
+	        }
+	    });
+	</script>
+	{% block scripts %}
+	{{ moment.include_moment() }}
+	{% endblock %}
+	
+	{% block style %}
+	{% endblock %}
+
+	
+	<script src="/static/js/myjscript.js"></script>
+	<script type="text/javascript">
+
+	</script>
+</head>
+<body>
+<!-- Start of navigation block -->
+
+		<header class="w3-top">
+	<!-- Start of Mobile menu -->
+		<topnav class="w3-bar w3-top w3-hide-large w3-hide-medium w3-animate-opacity">
+			<a class="w3-bar-item w3-hide-large w3-hide-medium" onclick="document.getElementById('mobile_menu').style.display='block'"><i class="fa fa-navicon w3-text-red w3-xlarge w3-hover-text-grey"></i></a>
+		</topnav>
+
+		<div class="w3-modal" id="mobile_menu">
+				<div class="w3-modal-content w3-red w3-animate-zoom" style="width:95%; height: 90%;">
+					
+					<div class="w3-row w3-small" style="height: 10%;">
+						<a style="height: 100%;" onclick="document.getElementById('mobile_menu').style.display='none' " class="w3-display-container w3-hover-red-d3 w3-red w3-col s6 w3-border-bottom  w3-border-white w3-border-right">
+						<div class="w3-display-middle w3-center" >Закрыть <i class="fa fa-close"></i></div>
+						</a>
+						{% if current_user.is_authenticated %}
+						<a href="/auth/teamoffice" style="height: 100%;" class="w3-display-container w3-red w3-col s6 w3-hover-red-d3 w3-border-bottom w3-border-white"><div class="w3-display-middle w3-center">Кабинет </span><i class="fa fa-address-card-o"></i>
+						</div>
+						</a>
+						{% else %}
+						<a onclick="document.getElementById('mobile_menu').style.display='none'; getElementById('login-window').style.display='block'" style="height: 100%;" class="w3-display-container w3-red w3-col s6 w3-hover-red-d3 w3-border-bottom w3-border-white"><div class="w3-display-middle w3-center">Войти <i class="fa fa-user-circle-o"></i>
+						</div>
+						</a>
+						{% endif %}
+					</div>
+						
+					
+					<div class="w3-row" style="height: 45%; vertical-align: center;">
+						<a href="/index"  style="height: 100%;" class="w3-display-container w3-middle w3-red w3-col s6 w3-hover-red-d3 w3-border-bottom w3-center w3-border-white w3-border-right">
+						<div class="w3-display-middle ">
+						<i class="w3-block fa fa-home w3-xxlarge"></i>
+						<p>Главная</p>	
+						</div>	
+						</a>
+
+						<a onclick="document.getElementById('mobile_menu').style.display='none'; getElementById('menu_competition').style.display='block'" style="height: 100%;"  class="w3-display-container w3-red w3-col s6 w3-hover-red-d3 w3-border-bottom w3-center w3-border-white">
+						<div class="w3-display-middle">
+						<img src="/img/icetool_ico_white.png" alt="соревнования" width="46px" height="46px" style="margin-top: 0px;">
+						<p>Соревнования</p>
+						</div>
+						</a>
+					</div>
+					
+					<div class="w3-row" style="height: 45%;">
+						<a onclick="document.getElementById('mobile_menu').style.display='none'; getElementById('menu_info').style.display='block'"  style="height: 100%;" class="w3-display-container w3-red w3-col s6 w3-hover-red-d3 w3-center w3-border-white w3-border-right">
+						<div class="w3-display-middle">
+						<i class="w3-block fa fa-info-circle w3-xxlarge"></i>
+						<p>Инфо</p>	
+						</div>
+						</a>
+						
+						
+						<a onclick="document.getElementById('mobile_menu').style.display='none'; getElementById('other').style.display='block'" style="height: 100%;" class="w3-display-container w3-red w3-padding w3-col s6 w3-hover-red-d3 w3-center">
+						<div class="w3-display-middle">
+						<i class="w3-block fa fa-folder-open-o w3-xxlarge"></i>
+						<p>Еще</p>
+						</div>
+						</a>
+					</div>
+				</div>
+			</div>
+
+	<!-- Start of Other-mobile menu -->
+		<div class="w3-modal" id="other">
+			<div class="w3-modal-content w3-red w3-animate-zoom" style="max-width:600px; height: 80%;">
+				
+				<div class="w3-row w3-small" style="height: 10%;">
+					<a style="height: 100%;" onclick="document.getElementById('other').style.display='none' " class="w3-display-container w3-red  w3-hover-red-d3 w3-col s6 w3-border-bottom w3-center w3-border-white w3-border-right">
+					<div class="w3-display-middle">Закрыть <i class="fa fa-close"></i></div>
+					</a>
+					
+					<a onclick="document.getElementById('other').style.display='none'; getElementById('mobile_menu').style.display='block'" href="#" style="height: 100%;" class="w3-display-container w3-red  w3-hover-red-d3 w3-padding w3-col s6 w3-border-bottom w3-center"><div class="w3-display-middle">Назад <i class="fa fa-arrow-circle-o-left"></i>
+					</div>
+					</a>
+				</div>
+				<!-- ====================================================================== -->
+				{% for info in infos %}
+				<a href="{{ url_for('site.page', iconDescriptionEng=info.iconDescriptionEng)}}">
+				<div class="w3-row w3-border-white w3-border-bottom w3-padding w3-center"> <i class="{{info.icon}}  w3-large"></i> <span class="w3-padding-small">{{info.iconDescription}}</span></div>
+				</a>
+				{% endfor %}
+
+				{% for media in medias %}
+				<a href="{{ url_for('site.page', iconDescriptionEng=media.iconDescriptionEng)}}">
+				<div class="w3-row w3-border-white w3-border-bottom w3-padding w3-center"> <i class="{{media.icon}}  w3-large"></i> <span class="w3-padding-small">{{media.iconDescription}}</span></div>
+				</a>
+				{% endfor %}
+
+				{% for competition in competitions %}
+				<a href="{{ url_for('site.page', iconDescriptionEng=competition.iconDescriptionEng)}}">
+				<div class="w3-row w3-border-white w3-border-bottom w3-padding w3-center"> <i class="{{competition.icon}}  w3-large"></i> <span class="w3-padding-small">{{competition.iconDescription}}</span></div>
+				</a>
+				{% endfor %}
+
+				
+			</div>
+		</div>
+
+	<!-- Start of Info-mobile menu -->
+		<div class="w3-modal" id="menu_info">
+				<div class="w3-modal-content w3-red w3-animate-zoom" style="max-width:600px; height: 80%;">
+					
+					<div class="w3-row w3-small" style="height: 10%;">
+						<a href="#" style="height: 100%;" onclick="document.getElementById('menu_info').style.display='none' " class="w3-display-container  w3-hover-red-d3 w3-red w3-padding w3-col s6 w3-hover-red-d3 w3-border-bottom w3-center w3-border-white w3-border-right">
+						<div class="w3-display-middle">Закрыть <i class="fa fa-close"></i></div>
+						</a>
+						
+						<a onclick="document.getElementById('menu_info').style.display='none'; getElementById('mobile_menu').style.display='block'" href="#" style="height: 100%;" class="w3-display-container w3-red w3-padding  w3-hover-red-d3 w3-col s6 w3-border-white w3-border-bottom w3-center"><div class="w3-display-middle">Назад <i class="fa fa-arrow-circle-o-left"></i>
+						</div>
+						</a>
+					</div>
+					<!-- ====================================================================== -->
+					<div class="w3-row" style="height: 45%; vertical-align: center;">
+						<a href="{{ url_for('info.sponsors') }}" style="height: 100%;"  class="w3-display-container w3-red w3-col s6 w3-hover-red-d3 w3-border-bottom w3-border-right w3-center w3-border-white">
+						<div class="w3-display-middle">
+						<i class="w3-block fa fa-rouble w3-xxlarge"></i>
+						<p>спонсоры</p>
+						</div>
+						</a>
+
+						<a href="{{ url_for('media.press') }}" style="height: 100%;" class="w3-display-container w3-middle w3-red w3-col s6 w3-hover-red-d3 w3-border-bottom w3-center w3-border-white w3-border-right">
+						<div class="w3-display-middle">
+						<i class="w3-block fa fa-file-text-o  w3-xxlarge"></i>
+						<p>пресса</p>	
+						</div>	
+						</a>
+
+					</div>
+					<!-- ====================================================================== -->
+					<div class="w3-row" style="height: 45%;">
+						
+						<a href="{{ url_for('media.video') }}" style="height: 100%;" class="w3-display-container w3-red w3-col s6 w3-hover-red-d3 w3-center w3-border-white w3-border-right">
+						<div class="w3-display-middle">
+						<i class="w3-block fa fa-youtube-play w3-xxlarge"></i>
+						<p>видео</p>	
+						</div>
+						</a>
+						
+						
+						<a href="{{ url_for('media.photo') }}" style="height: 100%;" class="w3-display-container w3-red	 w3-padding w3-col s6 w3-hover-red-d3 w3-center">
+						<div class="w3-display-middle">
+						<i class="w3-block fa fa-file-photo-o w3-xxlarge"></i>
+						<p>фото</p>
+						</div>
+						</a>
+
+					</div>
+				</div>
+			</div>
+
+	<!-- Start of Competition-mobile menu -->
+		<div class="w3-modal" id="menu_competition">
+				<div class="w3-modal-content w3-red w3-animate-zoom" style="max-width:600px; height: 80%;">
+					
+					<div class="w3-row w3-small" style="height: 10%;">
+						<a href="#" style="height: 100%;" onclick="document.getElementById('menu_competition').style.display='none' " class="w3-display-container  w3-hover-red-d3 w3-red w3-col s6 w3-border-bottom w3-center w3-border-white w3-border-right">
+						<div class="w3-display-middle">Закрыть <i class="fa fa-close"></i></div>
+						</a>
+						
+						<a onclick="document.getElementById('menu_competition').style.display='none'; getElementById('mobile_menu').style.display='block'" href="#" style="height: 100%;" class="w3-display-container w3-red w3-padding  w3-hover-red-d3 w3-col s6 w3-hover-red w3-border-bottom w3-center"><div class="w3-display-middle">Назад <i class="fa fa-arrow-circle-o-left"></i>
+						</div>
+						</a>
+					</div>
+					<!-- ====================================================================== -->
+					<div class="w3-row" style="height: 45%; vertical-align: center;">
+						<a href="{{ url_for('competition.routes') }}" style="height: 100%;" class="w3-display-container w3-middle w3-red w3-col s6 w3-hover-red-d3 w3-border-bottom w3-center w3-border-white w3-border-right">
+						<div class="w3-display-middle">
+						<img src="/img/icetool_ico_white.png" alt="трассы" width="46px" height="46px" style="margin-top: 10px;">
+						<p>Трассы</p>	
+						</div>	
+						</a>
+
+						<a href="{{ url_for('competition.results') }}" style="height: 100%;"  class="w3-display-container w3-red w3-col s6 w3-hover-red-d3 w3-border-bottom w3-center w3-border-white">
+						<div class="w3-display-middle">
+						<i class="w3-block fa fa-flag-checkered w3-xxlarge"></i>
+						<p>Результаты</p>
+						</div>
+						</a>
+					</div>
+					<!-- ====================================================================== -->
+					<div class="w3-row" style="height: 45%;">
+						<a href="{{ url_for('competition.registred_teams') }}" style="height: 100%;" class="w3-display-container w3-red w3-col s6 w3-hover-red-d3 w3-center w3-border-white w3-border-right">
+						<div class="w3-display-middle">
+						<i class="w3-block fa fa-list w3-xxlarge"></i>
+						<p>Команды</p>	
+						</div>
+						</a>
+						
+						<a href="{{ url_for('info.rules') }}" style="height: 100%;" class="w3-display-container w3-red	 w3-padding w3-col s6 w3-hover-red-d3 w3-center">
+						<div class="w3-display-middle">
+						<i class="w3-block fa fa-file-text-o w3-xxlarge"></i>
+						<p>Положение</p>
+						</div>
+						</a>
+					</div>
+				</div>
+		</div>
+
+	<!-- Start of Desktop top-menu -->
+		<menu class="w3-bar w3-card-2 w3-red w3-hide-small w3-animate-opacity">
+
+			<a href="/"  class="w3-bar-item  w3-red w3-hide-small w3-hover-red-d3 w3-large my-menuitem-animation"><p id="logo">Степаныч</p></a>
+
+			<div class="my-dropdown-hover">
+			<a  class="w3-bar-item w3-padding w3-red w3-hide-small w3-hover-red-d3 w3-large my-menuitem-animation">Инфо</a>
+				<div class="my-dropdown-content  w3-card-2 w3-bar w3-red-d3">
+					
+					<a href="{{ url_for('info.rules') }}" class="w3-bar-item w3-red-d3 w3-hover-red my-menuitem-animation my-bar-item-transition w3-center" style="height: 100%">
+					<i class="fa fa-file-text-o w3-xxlarge w3-padding"></i>
+					<p class="w3-tiny">Положение и протоколы</p> 
+					</a>
+					
+					<a href="{{ url_for('info.sponsors') }}" class="w3-bar-item w3-red-d3 w3-hover-red my-menuitem-animation my-bar-item-transition w3-center" style="height: 100%">
+					<i class="fa fa-rouble w3-xxlarge w3-padding"></i>
+					<p class="w3-tiny">Спонсоры и партнеры</p>
+					</a>
+
+					{% for info in infos %}
+					<a href="{{ url_for('site.page',iconDescriptionEng=info.iconDescriptionEng) }}" class="w3-bar-item w3-red-d3 w3-hover-red my-menuitem-animation my-bar-item-transition w3-center" style="height: 100%">
+					<i class="{{ info.icon }} w3-xxlarge w3-padding"></i>
+					<p class="w3-tiny">{{info.iconDescription}}</p>
+					</a>
+					{% endfor %}
+
+				</div>
+			</div>
+				
+			<div class="my-dropdown-hover">
+			<a class="w3-bar-item w3-padding w3-red w3-hide-small w3-hover-red-d3 w3-large my-menuitem-animation">Медиа</a>
+				<div class="my-dropdown-content  w3-card-2 w3-bar w3-red-d3">
+					
+					<a href="{{ url_for('media.video') }}" class="w3-bar-item w3-red-d3 w3-hover-red my-menuitem-animation my-bar-item-transition w3-center" style="height: 100%">
+					<i class="fa fa-youtube-play w3-xxlarge w3-padding" ></i>
+					<p class="w3-small">Видео</p> 
+					</a>
+					
+					<a href="{{ url_for('media.photo') }}" class="w3-bar-item w3-red-d3 w3-hover-red my-menuitem-animation my-bar-item-transition w3-center" style="height: 100%">
+					<i class="fa fa-file-photo-o w3-xxlarge  w3-padding"></i>
+					<p class="w3-small">Фото</p> 
+					</a>
+					
+					<a href="{{ url_for('media.press') }}" class="w3-bar-item w3-red-d3 w3-hover-red my-menuitem-animation my-bar-item-transition w3-center" style="height: 100%">
+					<i class="fa fa-file-text-o w3-xxlarge  w3-padding"></i>
+					<p class="w3-small">Пресса</p>
+					</a>
+
+					{% for media in medias %}
+					<a href="{{ url_for('site.page',iconDescriptionEng=media.iconDescriptionEng) }}" class="w3-bar-item w3-red-d3 w3-hover-red my-menuitem-animation my-bar-item-transition w3-center" style="height: 100%">
+					<i class="{{ media.icon }} w3-xxlarge w3-padding"></i>
+					<p class="w3-tiny">{{media.iconDescription}}</p>
+					</a>
+					{% endfor %}
+
+				</div>
+			</div>
+
+			<div class="my-dropdown-hover">
+			<a class="w3-bar-item w3-padding w3-red w3-hide-small w3-hover-red-d3 w3-large my-menuitem-animation">Соревнования</a>
+				<div class="my-dropdown-content  w3-card-2 w3-bar w3-red-d3">
+
+					<a href="{{ url_for('competition.registred_teams') }}" class="w3-bar-item w3-red-d3 w3-hover-red my-menuitem-animation my-bar-item-transition w3-center" style="height: 100%">
+					<i class="fa fa-list w3-xxlarge w3-padding"></i>
+					<p class="w3-tiny">Список команд</p>
+					</a>
+					
+					<a href="{{ url_for('competition.routes') }}" class="w3-bar-item w3-red-d3 w3-hover-red my-menuitem-animation my-bar-item-transition w3-center" style="height: 100%">
+					<img src="/img/icetool_ico_white.png" alt="соревнования" width="40px" height="40px" style="margin:8px 16px 0px 16px;">
+					<p class="w3-small">Трассы</p> 
+					</a>
+					
+					<a href="{{ url_for('competition.results') }}" class="w3-bar-item w3-red-d3 w3-hover-red my-menuitem-animation my-bar-item-transition w3-center" style="height: 100%">
+					<i class="fa fa-flag-checkered w3-xxlarge  w3-padding"></i>
+					<p class="w3-small">Результаты</p> 
+					</a>
+
+					{% for competition in competitions %}
+					<a href="{{ url_for('site.page',iconDescriptionEng=competition.iconDescriptionEng) }}" class="w3-bar-item w3-red-d3 w3-hover-red my-menuitem-animation my-bar-item-transition w3-center" style="height: 100%">
+					<i class="{{ competition.icon }} w3-xxlarge w3-padding"></i>
+					<p class="w3-tiny">{{competition.iconDescription}}</p>
+					</a>
+					{% endfor %}
+
+				</div>
+			</div>
+
+			<a href="{{ url_for('main.contacts') }}" class="w3-bar-item w3-padding w3-red w3-hide-small w3-hover-red-d3 w3-large my-menuitem-animation">Контакты</a>
+			
+			{% if current_user.is_authenticated %}
+			<a href="/auth/teamoffice" class="w3-bar-item w3-padding w3-red w3-hide-small w3-hover-red-d3 w3-large my-menuitem-animation w3-right"> <span class="">Кабинет </span><i class="fa fa-address-card-o"></i></a>
+			{% else %}
+			<button onclick="getElementById('login-window').style.display='block' " class="w3-bar-item w3-padding w3-red w3-hide-small w3-hover-red-d3 w3-large my-menuitem-animation w3-right"> <span class="">Войти </span><i class="fa fa-user-circle-o"></i></button>
+			{% endif %}
+		</menu>
+		</header>
+
+	<!-- Start of Sidebar -->
+		
+		{% if current_user.can(Permission.ADMINVIEW) %}
+		<aside class="w3-bar-block w3-dark-grey w3-opacity w3-hover-opacity-off" style="display: block;">
+
+			<div class="my-tooltip">
+			<a href="{{ url_for('site.administration') }}" class="w3-padding w3-bar-item w3-hover-black my-menuitem-animation"><i class="fa fa-sitemap w3-xlarge"></i></a>
+			<div class="my-tooltip-text w3-blue w3-round-medium">поменять структуру сайта</div>
+			</div>
+			
+			<div class="my-tooltip">		
+			<a href="{{ url_for('competition.admin') }}" class="w3-padding w3-bar-item w3-hover-black my-menuitem-animation"><img src="/img/icetool_ico_white.png" alt="" width="30px" height="30px"></a>
+			<div class="my-tooltip-text w3-blue w3-round-medium">управлять соревнованями</div>
+			</div>
+
+
+			<div class="my-tooltip">
+			<a href="{{ url_for('news.new_post') }}" class="w3-padding w3-bar-item w3-hover-black my-menuitem-animation"><i class="fa fa-newspaper-o w3-xlarge"></i></a>
+			<div class="my-tooltip-text w3-blue w3-round-medium">добавить новость</div>
+			</div>
+
+			<div class="my-tooltip">
+			<a href="{{ url_for('site.docs') }}" class="w3-padding w3-bar-item w3-hover-black my-menuitem-animation"><i class="fa fa-folder-open-o w3-xlarge	"></i></a>
+			<div class="my-tooltip-text w3-blue w3-round-medium">все документы</div>
+			</div>
+
+			<div class="my-tooltip">
+			<a href="#" class="w3-padding w3-bar-item w3-hover-black my-menuitem-animation" onclick="document.getElementById('add_files').style.display='block'"><i class="fa fa-download w3-xlarge"></i></a>
+			<div class="my-tooltip-text w3-blue w3-round-medium">загрузить документ</div>
+			</div>
+
+		</aside>
+		{% else %}
+
+		{% endif %}
+
+	<!-- Start of Login modal window -->
+		<div id="login-window" class="w3-modal" style="display: {{ request.args.get('displayLoginForm') }}">
+
+			<div class="w3-modal-content w3-animate-zoom" style="max-width: 500px">
+						
+				<div class="w3-display-container w3-padding" style="padding-top: 40px; margin-bottom: -20px; height: 220px;">
+				<button onclick="document.getElementById('login-window').style.display='none'" class="w3-button w3-right w3-hover-red-d3 w3-red"><i class="fa fa-close w3-xlarge "></i></button>
+				<img src="/img/login.jpg" alt="login" width="200px" class="w3-circle w3-display-middle w3-margin-top">	
+				<br>
+				</div>
+				
+				<form method="post" action="{{ url_for('auth.login',currentURL = request.path) }}" class="w3-container">
+
+					{{ loginForm.csrf_token }}
+					<div class="w3-section">
+						<br>
+						{% with messages = get_flashed_messages() %}
+						    {% if messages %}
+						    
+						    {% for message in messages %}
+						        <p class="w3-text-red w3-padding">{{ message }}</p>
+						    {% endfor %}
+						    
+						  {% endif %}
+						{% endwith %} 						
+						<label for="" class="w3-small w3-text-dark-grey"><b>Название команды</b></label>
+						{{ loginForm.teamName(class="w3-input w3-border-bottom w3-margin-bottom") }}
+							<p class="w3-tiny w3-text-red">
+								{% for message in loginForm.teamName.errors %}
+								{{ message }}
+								{% endfor %}
+							</p>
+						<label for="" class="w3-small w3-text-dark-grey"><b>Пароль</b></label>
+						{{ loginForm.password(class="w3-input w3-border-bottom  w3-margin-bottom") }}
+							<p class="w3-tiny w3-text-red">
+								{% for message in loginForm.password.errors %}
+								{{ message }}
+								{% endfor %}
+							</p>
+
+						
+						{{ loginForm.remember_me(class="w3-check")}} Запомнить меня.
+						{{ loginForm.submit(class="w3-button w3-block w3-green w3-padding w3-hover-green-l1 w3-margin-top") }}
+
+					</div>
+				</form>
+
+				<div class="w3-cell-row">
+						
+					<div class="w3-container w3-cell" style="padding-bottom: 16px;">
+					<a href="{{ url_for('competition.registred_teams') }}" class="w3-text-blue w3-small w3-hover-text-red">спиок зарегестрированных команд</a></div>
+						
+					<div class="w3-container w3-cell">
+					<a href="{{url_for('auth.password_resend')}}" class="w3-text-blue w3-small w3-hover-text-red">забыли пароль?</a>
+					</div>
+				
+				</div>
+			</div>
+		</div>
+
+	<!-- Files upload modal winodw -->
+
+		<div id="add_files" class="w3-modal" style="display: {{ request.args.get('displayFileUpload') }}">
+			<div class="w3-modal-content w3-animate-zoom w3-padding w3-center" style="max-width: 500px">
+				<button onclick="document.getElementById('add_files').style.display='none'" class="w3-button w3-right w3-hover-red-d3 w3-red"><i class="fa fa-close"></i></button>	
+
+				<h2 class="w3-text-blue">Загрузка файлов на сервер</h2>
+				<br>
+				{% with messages = get_flashed_messages() %}
+				    {% if messages %}
+				    
+				    {% for message in messages %}
+				        <p class="w3-text-red w3-padding">{{ message }}</p>
+				    {% endfor %}
+				    
+				  {% endif %}
+				{% endwith %} 	
+				<div class="w3-container">	
+				<p style="text-align: left;">Сохраняйте обновленные: </p>
+				<br>
+				<p class="w3-margin-left" style="text-align: left; font-weight: bold;">правила</p>
+				<p class="w3-margin-left" style="text-align: left;font-weight: bold;">положение</p>
+				<p class="w3-margin-left" style="text-align: left;font-weight: bold;">протоколы </p>
+				<p class="w3-margin-left" style="text-align: left;font-weight: bold;">картинки и т.п. </p>
+				<br>
+				<p class="" style="text-align: left;">полученные ссылки на документы вы сможете исользовать на нужной странице</p>
+				</div>
+				<form action="{{url_for('site.file_upload',prevURL=request.path)}}" class="w3-container w3-padding" enctype="multipart/form-data" method="POST">
+				<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+					<br>
+				 	<p class="w3-small">Выберите файлы для загрузки,</p>
+				 	<p class="w3-small">допустимый размер файла до 8 МБ:</p>
+				 	<br>
+				 	<input type="file" multiple  id="docs" name="docs" size="50" class="w3-margin-bottom w3-button" style="width: 300px;">
+				 	<br>
+				 	<br>
+				 	<input type="submit" class="w3-button w3-green w3-margin" value="загрузить" id="button-upload">
+				</form>
+			</div>	
+		</div>	
+<!-- End of navigation block -->
+
+<!-- Start of content -->
+	<main>
+	
+
+	{% block content %}{% endblock %}
+
+	</main>
+<!-- End of content -->
+	<section id="loader_section" style="display: none;">
+		<div id="loader"></div>
+		<img src="/img/icetool_ico_white.png" alt="ice_tool" id="pic_icetool">
+	</section>
+<!-- Start of Footer -->
+	<footer class="w3-red w3-padding-48 w3-center">
+		<p class="w3-small">
+		<a href="http://straxy.net" target="blank" class="w3-hover-text-black">ЦСКА им "Демченко" </a> | 
+		<a href="https://vk.com/alpsvyazkistepanich" target="blank" class="w3-hover-text-black">Степаныч <i class="fa fa-vk"></i> </a> | 
+		<a href="https://www.facebook.com/alpsvyazkistepanich/" target="blank" class="w3-hover-text-black">Степаныч <i class="fa fa-facebook"></i> </a> | 
+		<a href="mailto:gskhanov@gmail.com?Subject=Mail%20from%20Stepanych%20web-site" target="blank" class="w3-hover-text-black">Контакты <i class="fa fa-envelope-o"></i> </a> | 
+		<a href="mailto:temp84g@gmail.com?Subject=Mail%20from%20Stepanych%20web-site" target="blank" class="w3-hover-text-black">Сайт: Решетняк Роман </a> | &copy; 2001 Степаныч & ЦСКА им.Демченко
+		</p>
+	</footer>
+<!-- End of Footer -->
+
+</body>
+</html>

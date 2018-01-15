@@ -1,0 +1,223 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+	<div class="w3-hide-small" style="height: 43px;"></div>
+	
+	<section class="w3-row w3-margin-top">
+		<div class="w3-col m1 l2 w3-hide-small"> &nbsp;</div>
+
+		<div class="w3-col m10 l8 s12 w3-padding " id="content">
+
+	<!-- Start of Text - Content block -->
+	
+
+	<h1 class="w3-text-red">Личный кабинет</h1>
+		<hr style="width: 90%; margin:auto;">
+		<h2 "><b>{{ competition }}</b></h2>
+		<br class="w3-hide-small">
+			
+		<h2>{{ teamName }}  <span class="w3-small w3-text-grey">({{email}})</span></h2>
+		{% with messages = get_flashed_messages() %}
+		    {% if messages %}
+		    <div class="w3-pale-green w3-border-green w3-border w3-round" style="margin: 16px 0 0 0;">
+		    <a href="#" class="w3-right w3-padding w3-text-green w3-large w3-hover-text-red w3-round w3-padding" onclick="assign_id(this);delete_element()" style="position: relative; top:-3px">x</a>
+		    {% for message in messages %}
+		    	
+		        <p class="w3-padding">{{ message }}</p>
+
+		    {% endfor %}
+		    </div>
+		    <br>
+		  {% endif %}
+		 {% endwith %}
+
+			{% if teamChange == 'Yes' %}
+						
+				<div id="member1" style="" class="w3-text-grey w3-small w3-border-bottom w3-margin-bottom w3-display-container">
+					
+					<input class="my-input" type="text" value="{{sname1}}" name="sname1" disabled id="fsname1" style="width: 100px">
+					<input class="my-input w3-mobile" type="text" value="{{name1}}" name="name1" disabled  id="fname1" style="width: 80px"> 
+					<input class="my-input w3-mobile" type="number" min=1950 value="{{year1}}" name="year1" id="fyear1" disabled style="width: 50px"><br class="w3-hide-medium">
+					<input class="my-input w3-mobile w3-margin-bottom" type="text" value="{{club1}}" name="club1" id="fclub1" disabled style="width: 150px">
+					<br class="w3-hide-small">
+					<label for="male1" class="w3-hide-small">Пол: </label>
+					<select class="w3-select my-input w3-margin-bottom w3-hide-small" id="fmale1" name="male1" disabled  style="width: 55px">
+						<option {% if male1 == 'М' %} selected {% else %}{% endif %} value="М">М</option>
+					    <option {% if male1 == 'Ж' %} selected {% else %}{% endif %} value="Ж">Ж</option>
+			 		</select>
+			 		<br>
+					<label for="{{alpSkill1}}">Разряд по Альпинизму: </label>
+					<select class="w3-select my-input w3-margin-bottom" id="falpSkill1" name="alpSkill1" disabled  style="width: 55px">
+						<option {% if alpSkill1 == 'б/р' %} selected {% else %}{% endif %} value="б/р">б/р</option>
+					    <option {% if alpSkill1 == '3й' %} selected {% else %}{% endif %} value="3й">3й</option>
+					    <option {% if alpSkill1 == '2й' %} selected {% else %}{% endif %} value="2й">2й</option>
+					    <option {% if alpSkill1 == '1й' %} selected {% else %}{% endif %} value="1й">1й</option>
+					    <option {% if alpSkill1 == 'кмс' %} selected {% else %}{% endif %} value="кмс">кмс</option>
+					    <option {% if alpSkill1 == 'мс' %} selected {% else %}{% endif %} value="мс">мс</option>
+					    <option {% if alpSkill1 == 'мсмк' %} selected {% else %}{% endif %} value="мсмк">мс мк</option>
+			 		</select>
+					<br>	
+					<label for="{{climbSkill1}}">Разряд по скалолазанию: </label>
+					<select class="w3-select my-input w3-margin-bottom" id="fclimbSkill1" name="climbSkill1"  disabled style="width: 55px">
+						<option {% if climbSkill1 == 'б/р' %} selected {% else %}{% endif %} value="б/р">б/р</option>
+					    <option {% if climbSkill1 == '3й' %} selected {% else %}{% endif %} value="3й">3й</option>
+					    <option {% if climbSkill1 == '2й' %} selected {% else %}{% endif %} value="2й" >2й</option>
+					    <option {% if climbSkill1 == '1й' %} selected {% else %}{% endif %} value="1й">1й</option>
+					    <option {% if climbSkill1 == 'кмс' %} selected {% else %}{% endif %} value="кмс">кмс</option>
+					    <option {% if climbSkill1 == 'мс' %} selected {% else %}{% endif %} value="мс">мс</option>
+					    <option {% if climbSkill1 == 'мсмк' %} selected {% else %}{% endif %} value="мсмк">мс мк</option>
+			 		</select>
+				</div>
+
+				<div id="member2" style="" class="w3-text-grey w3-small w3-border-bottom w3-margin-bottom w3-display-container">
+
+					<input class="my-input" type="text" value="{{sname2}}" name="sname2" id="fsname2" disabled style="width: 100px">
+					<input class="my-input w3-mobile" type="text" value="{{name2}}" name="name2" disabled="disabled" id="fname2" style="width: 80px"> 
+					<input class="my-input w3-mobile" type="number" min=1950 value="{{year2}}" name="year2" id="fyear2" disabled style="width: 50px"><br class="w3-hide-medium">
+					<input class="my-input w3-mobile w3-margin-bottom" type="text" value="{{club2}}" name="club2" disabled id="fclub2" style="width: 150px">
+					<br class="w3-hide-small">
+					<label for="male2" class="w3-hide-small">Пол: </label>
+					<select class="w3-select my-input w3-margin-bottom w3-hide-small" id="fmale2" name="male2" disabled  style="width: 55px">
+						<option {% if male2 == 'М' %} selected {% else %}{% endif %} value="М">М</option>
+					    <option {% if male2 == 'Ж' %} selected {% else %}{% endif %} value="Ж">Ж</option>
+			 		</select>		
+			 		<br>			
+					<label for="alpSkill2">Разряд по Альпинизму: </label>
+					<select class="w3-select my-input w3-margin-bottom" id="falpSkill2" disabled name="alpSkill2" style="width: 55px">
+						<option value="б/р" {% if alpSkill2 == 'б/р' %} selected {% else %}{% endif %}>б/р</option>
+					    <option value="3й" {% if alpSkill2 == '3й' %} selected {% else %}{% endif %}>3й</option>
+					    <option value="2й" {% if alpSkill2 == '2й' %} selected {% else %}{% endif %}>2й</option>
+					    <option value="1й" {% if alpSkill2 == '1й' %} selected {% else %}{% endif %}>1й</option>
+					    <option value="кмс" {% if alpSkill2 == 'кмс' %} selected {% else %}{% endif %}>кмс</option>
+					    <option value="мс" {% if alpSkill2 == 'мс' %} selected {% else %}{% endif %}>мс</option>
+					    <option value="мс мк" {% if alpSkill2 == 'мсмк' %} selected {% else %}{% endif %}>мсмк</option>
+			 		</select>
+					<br>	
+					<label for="сlimbSkill2" )">Разряд по скалолазанию: </label>
+					<select class="w3-select  my-input w3-margin-bottom" id="fclimbSkill2" name="climbSkill2" disabled style="width: 55px;" >
+						<option value="б/р" {% if climbSkill2 == 'б/р' %} selected {% else %}{% endif %} >б/р</option>
+					    <option value="3й" {% if climbSkill2 == '3й' %} selected {% else %}{% endif %}>3й</option>
+					    <option value="2й" {% if climbSkill2 == '2й' %} selected {% else %}{% endif %}>2й</option>
+					    <option value="1й"  {% if climbSkill2 == '1й' %} selected {% else %}{% endif %}>1й</option>
+					    <option value="кмс"  {% if climbSkill2 == 'кмс' %} selected {% else %}{% endif %}>кмс</option>
+					    <option value="мс" {% if climbSkill2 == 'мс' %} selected {% else %}{% endif %}>мс</option>
+					    <option value="мсмк" {% if climbSkill2 == 'мсмк' %} selected {% else %}{% endif %}>мсмк</option>
+			 		</select>
+				</div>
+
+			{% else %}
+
+			<form action="{{url_for('auth.team_member_change')}}" id="myForm" method="POST">
+				<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+				
+				<div id="member1" style="" class="w3-text-grey w3-small w3-border-bottom w3-margin-bottom w3-display-container">
+					
+					<input class="my-input" type="text" value="{{sname1}}" name="sname1" disabled id="fsname1" style="width: 100px">
+					<input class="my-input w3-mobile" type="text" value="{{name1}}" name="name1" disabled  id="fname1" style="width: 80px"> 
+					<input class="my-input w3-mobile" type="number" min=1950 value="{{year1}}" name="year1" id="fyear1" disabled style="width: 50px"><br class="w3-hide-medium">
+					<input class="my-input w3-mobile w3-margin-bottom" type="text" value="{{club1}}" name="club1" id="fclub1" disabled style="width: 150px">
+					<br class="w3-hide-small">
+					<label for="male1">Пол: </label>
+					<select class="w3-select my-input w3-margin-bottom" id="fmale1" name="male1" disabled  style="width: 55px">
+						<option {% if male1 == 'М' %} selected {% else %}{% endif %} value="М">М</option>
+					    <option {% if male1 == 'Ж' %} selected {% else %}{% endif %} value="Ж">Ж</option>
+			 		</select>
+			 		<br>
+					<label for="{{alpSkill1}}">Разряд по Альпинизму: </label>
+					<select class="w3-select my-input w3-margin-bottom" id="falpSkill1" name="alpSkill1" disabled  style="width: 55px">
+						<option {% if alpSkill1 == 'б/р' %} selected {% else %}{% endif %} value="б/р">б/р</option>
+					    <option {% if alpSkill1 == '3й' %} selected {% else %}{% endif %} value="3й">3й</option>
+					    <option {% if alpSkill1 == '2й' %} selected {% else %}{% endif %} value="2й">2й</option>
+					    <option {% if alpSkill1 == '1й' %} selected {% else %}{% endif %} value="1й">1й</option>
+					    <option {% if alpSkill1 == 'кмс' %} selected {% else %}{% endif %} value="кмс">кмс</option>
+					    <option {% if alpSkill1 == 'мс' %} selected {% else %}{% endif %} value="мс">мс</option>
+					    <option {% if alpSkill1 == 'мсмк' %} selected {% else %}{% endif %} value="мсмк">мс мк</option>
+			 		</select>
+					<br>	
+					<label for="{{climbSkill1}}">Разряд по скалолазанию: </label>
+					<select class="w3-select my-input w3-margin-bottom" id="fclimbSkill1" name="climbSkill1"  disabled style="width: 55px">
+						<option {% if climbSkill1 == 'б/р' %} selected {% else %}{% endif %} value="б/р">б/р</option>
+					    <option {% if climbSkill1 == '3й' %} selected {% else %}{% endif %} value="3й">3й</option>
+					    <option {% if climbSkill1 == '2й' %} selected {% else %}{% endif %} value="2й" >2й</option>
+					    <option {% if climbSkill1 == '1й' %} selected {% else %}{% endif %} value="1й">1й</option>
+					    <option {% if climbSkill1 == 'кмс' %} selected {% else %}{% endif %} value="кмс">кмс</option>
+					    <option {% if climbSkill1 == 'мс' %} selected {% else %}{% endif %} value="мс">мс</option>
+					    <option {% if climbSkill1 == 'мсмк' %} selected {% else %}{% endif %} value="мсмк">мс мк</option>
+			 		</select>
+
+					
+					
+					<a class="w3-btn-1 w3-round w3-lime w3-hide w3-display-topright" id="save_change_user1" onclick="save_change_user(this,'fsname2','fname2','fyear2','fclub2','falpSkill2','fclimbSkill2','fmale2','myForm')"><i class="fa fa fa-save"></i> Сохранить</a>
+					<br>
+					<a class="w3-btn-1 w3-round w3-red w3-show w3-display-topright" id="change_user1" onclick="change_user(this,'fsname1','fname1','fyear1','fclub1','falpSkill1','fclimbSkill1', 'fmale1','change_user2','save_change_user1')"><i class="fa fa-pencil"></i> Заменить участника</a>
+				</div>
+
+				<div id="member2" style="" class="w3-text-grey w3-small w3-border-bottom w3-margin-bottom w3-display-container">
+
+					<input class="my-input" type="text" value="{{sname2}}" name="sname2" id="fsname2" disabled style="width: 100px">
+					<input class="my-input w3-mobile" type="text" value="{{name2}}" name="name2" disabled="disabled" id="fname2" style="width: 80px"> 
+					<input class="my-input w3-mobile" type="number" min=1950 value="{{year2}}" name="year2" id="fyear2" disabled style="width: 50px"><br class="w3-hide-medium">
+					<input class="my-input w3-mobile w3-margin-bottom" type="text" value="{{club2}}" name="club2" disabled id="fclub2" style="width: 150px">
+					<br class="w3-hide-small">
+					<label for="male2">Пол: </label>
+					<select class="w3-select my-input w3-margin-bottom" id="fmale2" name="male2" disabled  style="width: 55px">
+						<option {% if male2 == 'М' %} selected {% else %}{% endif %} value="М">М</option>
+					    <option {% if male2 == 'Ж' %} selected {% else %}{% endif %} value="Ж">Ж</option>
+			 		</select>		
+			 		<br>			
+					<label for="alpSkill2">Разряд по Альпинизму: </label>
+					<select class="w3-select my-input w3-margin-bottom" id="falpSkill2" disabled name="alpSkill2" style="width: 55px">
+						<option value="б/р" {% if alpSkill2 == 'б/р' %} selected {% else %}{% endif %}>б/р</option>
+					    <option value="3й" {% if alpSkill2 == '3й' %} selected {% else %}{% endif %}>3й</option>
+					    <option value="2й" {% if alpSkill2 == '2й' %} selected {% else %}{% endif %}>2й</option>
+					    <option value="1й" {% if alpSkill2 == '1й' %} selected {% else %}{% endif %}>1й</option>
+					    <option value="кмс" {% if alpSkill2 == 'кмс' %} selected {% else %}{% endif %}>кмс</option>
+					    <option value="мс" {% if alpSkill2 == 'мс' %} selected {% else %}{% endif %}>мс</option>
+					    <option value="мс мк" {% if alpSkill2 == 'мсмк' %} selected {% else %}{% endif %}>мсмк</option>
+			 		</select>
+					<br>	
+					<label for="сlimbSkill2" )">Разряд по скалолазанию: </label>
+					<select class="w3-select  my-input w3-margin-bottom" id="fclimbSkill2" name="climbSkill2" disabled style="width: 55px;" >
+						<option value="б/р" {% if climbSkill2 == 'б/р' %} selected {% else %}{% endif %} >б/р</option>
+					    <option value="3й" {% if climbSkill2 == '3й' %} selected {% else %}{% endif %}>3й</option>
+					    <option value="2й" {% if climbSkill2 == '2й' %} selected {% else %}{% endif %}>2й</option>
+					    <option value="1й"  {% if climbSkill2 == '1й' %} selected {% else %}{% endif %}>1й</option>
+					    <option value="кмс"  {% if climbSkill2 == 'кмс' %} selected {% else %}{% endif %}>кмс</option>
+					    <option value="мс" {% if climbSkill2 == 'мс' %} selected {% else %}{% endif %}>мс</option>
+					    <option value="мсмк" {% if climbSkill2 == 'мсмк' %} selected {% else %}{% endif %}>мсмк</option>
+			 		</select>
+					
+					<a class="w3-btn-1 w3-round w3-lime w3-hide w3-display-topright" id="save_change_user2" onclick="save_change_user(this,'fsname1','fname1','fyear1','fclub1','falpSkill1','fclimbSkill1','fmale1','myForm')"><i class="fa fa fa-save"></i> Сохранить</a>
+					<br>
+					<a class="w3-btn-1 w3-round w3-red w3-show w3-display-topright" id="change_user2" onclick="change_user(this,'fsname2','fname2','fyear2','fclub2','falpSkill2','fclimbSkill2','fmale2','change_user1','save_change_user2')"><i class="fa fa-pencil"></i> Заменить участника</a>
+
+				</div>
+			</form>
+			{% endif %}
+
+			{% if teamChange == 'Yes' %}
+			<p class="w3-text-red" id="user_change_status"></p>
+			<p class="w3-small"><sup>*</sup>Вы уже один раз изменили участника</p>
+			{% else %}
+			<p class="w3-text-red" id="user_change_status"></p>
+			<p class="w3-small"><sup>*</sup>команде разрешено поменять одного участника, один раз</p>
+			{% endif %}
+			<a class="w3-btn-1 w3-round w3-green w3-margin-top" href="/auth/logout">
+				<i class="fa fa-arrow-circle-o-right"></i> Выйти
+			</a>
+			<a href="{{ url_for('auth.new_email') }}" class="w3-btn-1 w3-border-blue w3-border w3-round w3-margin w3-right w3-text-blue">Изменить Email</a>
+			<a href="{{ url_for('auth.password_resend') }}" class="w3-btn-1 w3-border-blue w3-border w3-round w3-margin w3-right w3-text-blue">Изменить пароль</a>
+			<br>
+			
+
+	<!-- End of Text - Content block -->
+		</div>
+
+		<div class="w3-col m1 l2 w3-hide-small"> &nbsp;</div>
+		
+
+		
+	</section>
+
+{% endblock %}

@@ -1,0 +1,216 @@
+{% extends "base.html" %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}
+
+{% block content %}
+<!-- SIMDITOR scripts -->
+<link rel="stylesheet" type="text/css" href="/css/simditor.css" media="screen" />
+<link rel="stylesheet" href="/css/gallery.css">
+
+
+
+
+ 
+
+<script>
+ $(function() {
+	var editor = new Simditor({
+  	textarea: $('#txt-editor'),
+  	defaultImage:'/img/',
+  	upload:false,
+  	pasteImage:false,
+  	imageButton:['external'],
+  	code:false,
+  	toolbar:[
+  	'title',
+  	'bold',
+  	'italic',
+  	'underline',
+  	'strikethrough',
+  	'fontScale',
+  	'color',
+  	'indent',
+  	'outdent',
+  	'alignment',
+  	'hr',
+  	'ol',
+  	'ul',
+  	'blockquote',
+  	'table',
+  	'link',
+  	'image',
+  	'code']
+	});
+
+ });
+</script>
+
+
+
+<!-- End of SIMDITOR scripts -->
+	<section class="w3-row w3-margin-top">
+		<div class="w3-col m1 l2 w3-hide-small"> &nbsp;</div>
+
+		<div class="w3-col m10 l8 s12 w3-padding " id="news">
+			<!-- Start of Text - Content block -->
+
+
+			<div class="w3-hide-small" style="height: 43px;"></div>
+			<div class="w3-display-container">
+			{% with messages = get_flashed_messages() %}
+			    {% if messages %}
+			    <div class="w3-pale-green w3-border-green w3-border w3-round">
+			    {% for message in messages %}
+			    	<a href="#" class="w3-right w3-padding w3-text-green w3-large w3-hover-text-red w3-round w3-padding" onclick="assign_id(this);delete_element()" style="position: relative; top:-3px">x</a>
+			        <p class="w3-padding">{{ message }}</p>
+			    {% endfor %}
+			    </div>
+			  {% endif %}
+			 {% endwith %} 		
+				
+				<h3>Редактирование записи.</h3>
+				{% if current_user.can(Permission.WRITE_ARTICLES) %}
+				<form method="POST" action="{{ url_for('news.edit_post', id=request.path[11:]) }}" class="w3-container">
+
+					{{ form.csrf_token }}
+					<div class="w3-section">
+
+						 {{ form.header(class="w3-input w3-border w3-margin-bottom") }}	
+						 	<p class="w3-tiny w3-text-red">
+								{% for message in form.header.errors %}
+								{{ message }}
+								{% endfor %}
+							</p>	
+						 <br>
+
+						{{ form.body(class="w3-input w3-border w3-margin-bottom", id="txt-editor") }}
+							<p class="w3-tiny w3-text-red">
+								{% for message in form.body.errors %}
+								{{ message }}
+								{% endfor %}
+							</p>
+
+
+						<a style="margin: 16px 0 0 16px;" href="{{ prevURL }}" class="w3-btn-1 w3-border w3-border-blue w3-round w3-text-blue"><< Назад</a >
+						{{ form.submit(class="w3-btn-1 w3-border-blue w3-border w3-round w3-margin w3-right w3-text-blue") }}
+
+					</div>
+
+				</form>
+				
+				<!-- Galeries section -->
+
+				<h3>Редактирование галлереи.</h3>
+				
+				{% if current_user.keyTeamCompetition == post.keyTeamCompetition or current_user.can(Permission.ADMIN) %}
+					<a class="w3-btn-1 w3-blue w3-padding w3-round" onclick="document.getElementById('add_photo').style.display='block'"><i class="fa fa-plus-square" ></i> добавить фото</a>
+				{% else %}
+				{% endif %}
+				<div id="grid-gallery" class="grid-gallery" style="margin-top: 16px;">
+					<section class="grid-wrap">
+						<ul class="grid">
+							<li class="grid-sizer"></li><!-- for Masonry column width -->
+							{% for photo in gallery %}
+								<li class="photo{{ photo.id }}">
+								<figure>
+								{% if current_user.keyTeamCompetition == post.keyTeamCompetition or session['role'] == 'admin' %}
+								<div class="w3-display-topright w3-text-red w3-large w3-hover-black w3-padding w3-round trash" onclick="assign_id(this);delete_post_photo(this, {{ photo.id }})"><i class="fa fa-trash-o"></i></div>
+								{% else %}		
+								{% endif %}	
+								<img src="{{ photo.imgURL }}" alt="{{ photo.imgName }}">
+								
+								</figure>
+								</li>
+							{% endfor %}
+						</ul>
+					</section><!-- // grid-wrap -->
+					
+
+					<section class="slideshow" >
+						
+						<ul>
+
+							{% for photo in gallery %}
+								<li class="photo{{ photo.id }}">
+									<figure>
+										<img src="{{ photo.imgURL }}" alt="{{ photo.imgName }}"/>
+									</figure>
+								</li>
+							{% endfor %}
+
+						</ul>
+						<nav>
+							<span class="icon nav-prev"><i class="fa fa-chevron-left"></i></span>
+							<span class="icon nav-next"><i class="fa fa-chevron-right"></i></span>
+							<span class="icon nav-close"><i class="fa fa-close"></i></span>
+						</nav>
+
+					</section><!-- // slideshow -->
+
+				</div><!-- // grid-gallery -->
+
+				{% else %}
+				<p>Сожалеем, но у вас нет прав для добавления новостей</p>
+				{% endif %}
+			</div>
+
+			<div id="add_photo" class="w3-modal" style="display: {{ request.args.get('displayNewPhoto') }}">
+				<div class="w3-modal-content w3-animate-zoom w3-padding w3-center" style="max-width: 320px">
+					<button onclick="document.getElementById('add_photo').style.display='none'" class="w3-button w3-right w3-hover-red-d3 w3-red"><i class="fa fa-close"></i></button>	
+
+					<h3 class="w3-text-blue">Добавление фото</h3>
+					{% with messages = get_flashed_messages() %}
+					    {% if messages %}
+					    
+					    {% for message in messages %}
+					        <p class="w3-text-red w3-padding">{{ message }}</p>
+					    {% endfor %}
+					    
+					  {% endif %}
+					{% endwith %} 	
+
+					<form action="{{ url_for('news.add_post_photo') }}" class="w3-container w3-padding" method="POST" enctype="multipart/form-data" name="photo">
+						<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+						<input name="postID" value="{{ post.id }}" type="hidden">
+						<br>
+					 	<p class="w3-small">Выберите фотографии для загрузки,</p>
+					 	<p class="w3-small">допустимый размер файла до 3 МБ:</p>
+					 	<br>
+					 	<br>
+					 	<input required type="file" id="docs" name="docs" class="w3-margin-bottom w3-small" multiple>
+					 	<br>
+					 	<br>
+					 	<input type="submit" class="w3-button w3-green w3-margin" value="добавить фото">
+					</form>
+				
+				</div>	
+			</div>
+
+
+			<!-- End of Text - Content block -->
+		<div class="w3-col m1 l2 w3-hide-small"> &nbsp;</div>
+		
+		
+	</section>
+	
+	<script type="text/javascript" src="/static/js/module.js"></script>
+	<script type="text/javascript" src="/static/js/hotkeys.js"></script>
+	<script type="text/javascript" src="/static/js/uploader.js"></script>
+	<script type="text/javascript" src="/static/js/simditor.js"></script>
+	<script type="text/javascript" src="/static/js/simditor-autosave.js"></script>
+
+	<script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+	<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+	<script src="/static/js/classie.js"></script>
+	<script src="/static/js/modernizr.custom.js"></script>
+	<script src="/static/js/cbpGridGallery.js"></script>
+	<script>
+		
+			yyy = new CBPGridGallery( document.getElementById( 'grid-gallery' ) );
+		
+	</script>
+{% endblock %}

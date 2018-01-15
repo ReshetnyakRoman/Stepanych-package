@@ -1,0 +1,29 @@
+{% macro pagination_widget(pagination, endpoint) %}
+
+<div class="w3-bar w3-center w3-margin">
+
+  	<a href="{% if pagination.has_prev %}{{ url_for(endpoint, page = pagination.page - 1, **kwargs) }}
+  			{% else %}#
+  			{% endif %}" class="w3-button 
+  			{% if not pagination.has_prev %} w3-disabled {% endif %}">«</a>
+
+  {% for p in pagination.iter_pages(left_edge=2, left_current=2, right_current=4, right_edge=2) %}
+  	{% if p %}
+  		{% if p == pagination.page %}
+  			<a href="{{ url_for(endpoint, page=p, **kwargs) }}" class="w3-button w3-blue">{{ p }}</a>
+  		{% else %}
+  			<a href="{{ url_for(endpoint, page=p, **kwargs)}}" class="w3-button">{{ p }}</a>
+  		{% endif %}
+  	{% else %}	
+  		<a href="#" class="w3-button w3-disabled">&hellip;</a>
+  	{% endif %}
+  {% endfor %}	
+
+	<a href="{% if pagination.has_next %}{{ url_for(endpoint, page = pagination.page + 1, **kwargs) }}
+  			{% else %}#
+  			{% endif %}" class="w3-button 
+  			{% if not pagination.has_next %} w3-disabled {% endif %}">»</a>
+
+
+</div>
+{% endmacro %}

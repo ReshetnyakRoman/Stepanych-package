@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+
+{% block content %}
+	
+	<section class="w3-row w3-margin-top">
+		<div class="w3-col m1 l2 w3-hide-small"> &nbsp;</div>
+
+		<div class="w3-col m10 l8 s12 w3-padding " id="content">
+
+	<!-- Start of Text - Content block -->
+
+		{% with messages = get_flashed_messages() %}
+		    {% if messages %}
+			    <div class="w3-pale-green w3-border-green w3-border w3-round" style="margin: 16px 0 0 0; width: 80%">
+
+			    <a href="#" class="w3-right w3-padding w3-text-green w3-large w3-hover-text-red w3-round w3-padding" onclick="assign_id(this);delete_element()" style="position: relative; top:-3px">x</a>
+				    {% for message in messages %}
+				    	
+				        <p class="w3-padding">{{ message }}</p>
+
+				    {% endfor %}
+		    	</div>
+		   	 <br>
+		  	{% endif %}
+	 	{% endwith %}
+
+		
+		{% if current_user.can(Permission.ADMINVIEW) %}
+		<!-- create new route  -->
+
+			<div class=" my-flex" style="margin-top: 20px;">
+				<div class="w3-display-container w3-round-xlarge w3-btn-1 w3-border w3-margin w3-center" title="добавить спонсора" onclick="document.getElementById('add_sponsor').style.display='block'" style="width: 250px;">
+					<span class="w3-text-blue w3-large"><i class="fa fa-rub"></i> добавить спонсора</span>
+				</div>
+			</div>		
+		{% else %}
+		{% endif %}
+
+		<br>
+		<hr style="width: 90%; margin:auto;" class="w3-padding-large">
+		
+		<h2 class="w3-text-red w3-center">Организатор соревнований</h2>
+		
+		<div class="my-flex">
+		
+			
+			<div class="w3-center">
+			<a href="http://straxy.net" target="blank">
+				<div class="w3-card-2 my-card-2 w3-hover-opacity w3-circle">
+				<img src="/img/demchenko.png"  alt="ЦСКА им.Демченко" >
+				</div>
+
+			</a>
+
+			<p class="w3-clear"><br></p>
+			</div>
+		</div>
+
+
+
+
+		
+		<hr style="width: 90%; margin:auto;" >
+		<h2 class="w3-text-red w3-center">Партнеры и генеральные спонсоры</h2>
+
+			<div class="my-flex">
+				{% for sponsor in generalSponsors %}
+					
+					<div class="w3-card-2 w3-hover-opacity w3-display-container w3-margin" style="max-width: 250px; max-height: auto;">
+					
+						<a href="{{ sponsor.linkToSponsor | safe }}" target="blank">
+							<img src="{{ sponsor.imgURL }}"  alt="{{ sponsor.sponsorName }}" style="width:100%; position: relative; top:50%; transform: translate(-0%, -50%);">
+						</a>	
+
+					{% if current_user.can(Permission.ADMINVIEW) %}
+						<div class="w3-display-topright w3-padding w3-text-red w3-large w3-hover-red w3-round-large" onclick="assign_id(this);delete_sponsor('{{sponsor.sponsorName}}')"><i class="fa fa-trash-o"></i></div>
+					{% else %}		
+					{% endif %}	
+
+					</div>
+					
+				{% endfor %}
+
+				{% for partner in partners %}
+					
+
+					<div class="w3-card-2 w3-hover-opacity w3-display-container w3-margin" style="max-width: 250px; ">
+
+						<a href="{{ partner.linkToSponsor | safe }}" target="blank">	
+							<img src="{{ partner.imgURL }}"  alt="{{ partner.sponsorName }}" style="width:100%; position: relative; top:50%; transform: translate(-0%, -50%);">
+						</a>
+
+					{% if current_user.can(Permission.ADMINVIEW) %}
+						<div class="w3-display-topright w3-padding w3-text-red w3-large w3-hover-red w3-round-large " onclick="assign_id(this);delete_sponsor('{{partner.sponsorName}}')"><i class="fa fa-trash-o"></i></div>
+					{% else %}		
+					{% endif %}
+
+					</div>
+					
+				{% endfor %}
+
+		<div class="w3-clear"></div>
+
+		<div class="" style="width: 100%">
+		<hr style="width: 90%; margin:auto;" class="w3-padding">
+		<h2 class="w3-text-red w3-center">Наши спонсоры</h2>
+				
+			<div class="my-flex">
+				{% for sponsor in otherSponsors %}
+					
+
+					<div class="w3-card-2 w3-hover-opacity w3-display-container w3-margin" style="max-width: 250px;">
+
+
+
+						<a href="{{ sponsor.linkToSponsor | safe}}" target="blank" class="">
+						<img src="{{ sponsor.imgURL }}"  alt="{{ sponsor.sponsorName }}" style="width:100%; position: relative; top:50%; transform: translate(-0%, -50%);">
+						</a>
+
+						{% if current_user.can(Permission.ADMINVIEW) %}
+							<div class="w3-display-topright w3-padding w3-text-red w3-large w3-hover-red w3-round-large" onclick="assign_id(this);delete_sponsor('{{sponsor.sponsorName}}')"><i class="fa fa-trash-o"></i></div>
+						{% else %}		
+						{% endif %}	
+
+					</div>
+					
+				{% endfor %}
+
+			</div>
+
+		</div>
+
+	<!-- Modal window to add new sponsor -->
+			<div id="add_sponsor" class="w3-modal w3-display-container" style="display: {{ request.args.get('displayNewSponsor') }}">
+				<div class="w3-modal-content w3-animate-zoom w3-padding w3-center" style="max-width: 320px;">
+					<button onclick="document.getElementById('add_sponsor').style.display='none'" class="w3-button w3-right w3-hover-red-d3 w3-red"><i class="fa fa-close"></i></button>	
+
+					<h3 class="" style="text-align: center;">Новый спонсор</h3>
+						{% with messages = get_flashed_messages() %}
+						    {% if messages %}
+						    
+						    {% for message in messages %}
+						        <p class="w3-text-red w3-padding">{{ message }}</p>
+						    {% endfor %}
+						    
+						  {% endif %}
+						{% endwith %} 	
+						<br>			
+					<form action="{{ url_for('info.add_sponsor') }}" class="w3-container w3-padding" method="POST" enctype="multipart/form-data" name="contact" >
+						<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+						<input required type="text" class="w3-input  w3-animate-input w3-border-blue w3-center w3-small w3-margin-bottom" placeholder="название спонсора" name="sponsorName" style="width: 60%; margin: auto;">
+
+						<input required type="text" class="w3-input w3-animate-input w3-animate-input w3-border-blue w3-center w3-small w3-margin-bottom" placeholder="ссылка на спонсора" name="linkToSponsor" style="width: 60%; margin: auto;">
+							
+						<select required class="w3-select w3-padding w3-margin w3-text-grey w3-center" style="width: 60%" name="sponsorType">
+							<option value="генеральный">генеральный</option>
+							<option value="партнер">партнер</option>
+							<option value="остальные">остальные</option>
+						</select>
+						
+						<br>
+						<br>
+						<p class="w3-small">логотип спонсора: </p>
+						<input required type="file" id="docs" name="docs" class="w3-margin-bottom w3-small">
+					 	
+					 	<br>
+					 	<br>
+					 	
+					 	<input type="submit" class="w3-button w3-green w3-margin" value="создать">
+						
+
+					</form>
+				</div>	
+			</div>
+
+
+
+	<!-- End of Text - Content block -->
+		</div>
+
+		<div class="w3-col m1 l2 w3-hide-small"> &nbsp;</div>
+		
+		
+	</section>
+
+{% endblock %}

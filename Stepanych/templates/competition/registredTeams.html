@@ -1,0 +1,431 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+	<div class="w3-hide-small" style="height: 43px;"></div>
+	
+	<section class="w3-row w3-margin-top">
+		<div class="w3-col m1 l2 w3-hide-small"> &nbsp;</div>
+
+		<div class="w3-col m10 l8 s12 w3-padding " id="content">
+
+	<!-- Start of Text - Content block -->
+
+<!-- Tabs Registred & Participants -->
+<p id="competition" class="w3-hide">{{ competition }}</p>
+<p id="numberOfSets" class="w3-hide">{{ numberOfSets }}</p>
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="w3-pale-green w3-border-green w3-border w3-round" style="margin: 16px 0 0 0;">
+    <a href="#" class="w3-right w3-padding w3-text-green w3-large w3-hover-text-red w3-round w3-padding" onclick="assign_id(this);delete_element()" style="position: relative; top:-3px">x</a>
+    {% for message in messages %}
+    	
+        <p class="w3-padding">{{ message }}</p>
+
+    {% endfor %}
+    </div>
+    <br>
+  {% endif %}
+ {% endwith %}
+	<p id="mytest"></p>
+  <div class="w3-row">
+    <a href="javascript:void(0)" onclick="toogle('registredteams','participantteams','tab1');">
+      <div id="tab1" class="w3-half tablink w3-bottombar w3-hover-light-grey w3-padding  w3-border-blue w3-blue-l4">Список зарегистрировавшихся команд</div>
+    </a>
+    <a href="javascript:void(0)" onclick="toogle('participantteams','registredteams','tab2');">
+      <div id="tab2" class="w3-half tablink w3-bottombar w3-hover-light-grey w3-padding w3-text-grey ">Финальный список команд участников</div>
+    </a>
+  </div>
+
+<!-- Tab Registred  -->
+	<div class="teamlits" id="registredteams" style="display: block;">
+	<!-- list header Registred-->	
+			<br>	
+			<div id="header" class="w3-row w3-padding w3-border-blue w3-border-bottom" style="font-weight: bold;">
+				<div class="w3-col m5 s7 ">Команда<br> <span class="w3-text-grey w3-small">Участники</span> </div>
+				<div class="w3-col m2 w3-hide-small" id="year1">г.р.</div>
+				<div class="w3-col m1 w3-hide-small" id="alp_level">раз<br>алп</div>
+				<div class="w3-col m1 w3-hide-small" id="climb_level">раз<br>скл</div>
+				<div class="w3-col m3 s5">Сет<br> <span class="w3-text-grey w3-small">Клуб</span> </div>
+			</div>	
+			<input class="w3-input w3-border-bottom w3-border-blue w3-blue-l5 input-filter" type="text" placeholder="фильтр..." onkeyup="myFilter(0)" id="inputFilter" style="font-size: 13px; padding: 4px;">
+	<!-- Set #n Registred -->
+			{% for set in registredTeams %}
+			<p onclick="blocks('set{{ loop.index }}')" class="w3-padding w3-block w3-border-bottom w3-border-white w3-left-align w3-blue" style="cursor: pointer;">Сет {{ set }} >></p>
+
+			<div id="set{{ loop.index }}" class="w3-hide">
+				<ul class="my-ul my-litstdelete ul-filter">
+					{% for team in registredTeams[set] %}
+				<!-- ===================Team seporator=================================================== -->		
+					<li id="li{{set+1}}{{ loop.index }}">
+					{% if current_user.can(Permission.ADMINVIEW) %}
+					<span class="w3-hover-red w3-text-red w3-padding my-litstdelite trash" onclick="assign_id(this);document.getElementById('delete_team').style.display='block'"><i class="fa fa-trash-o  w3-large"></i></span>	
+					{% else %}
+					{% endif %}							
+					<div id="team{{ loop.index }}" class="w3-hover-lime w3-border-bottom w3-border-blue w3-padding">
+						<div id="header" class="w3-row w3-margin-bottom">
+							<div class="w3-col s9" id="teamname">{{ loop.index }}. <span class="teamName">{{team.teamName}}</span></div>
+							<div class="w3-col s3" id="alp_level">{{set}}й сет</div>
+						</div>
+
+						<div id="member1" style="" class="w3-text-grey w3-small w3-row">
+							<div class="w3-col m5 s6">
+								<a href="{{url_for('competition.profile', name=team.name1, sname=team.sname1, year=team.year1 )}}" class="w3-text-blue">{{team.sname1}} {{team.name1}}</a>
+							</div>
+							<div class="w3-col m2 w3-hide-small">{{team.year1}}</div>
+							<div class="w3-col m1 w3-hide-small">{{team.alpSkill1}}</div>
+							<div class="w3-col m1 w3-hide-small">{{team.climbSkill1}}</div>
+							<div class="w3-col m3 s6">{{team.club1}}</div> 
+						</div>
+
+						<div id="member1" style="" class="w3-text-grey w3-small w3-row">
+							<div class="w3-col m5 s6">
+								<a href="{{url_for('competition.profile', name=team.name2, sname=team.sname2, year=team.year2 )}}" class="w3-text-blue">{{team.sname2}} {{team.name2}}</a>
+							</div>
+							<div class="w3-col m2 w3-hide-small">{{team.year2}}</div>
+							<div class="w3-col m1 w3-hide-small">{{team.alpSkill2}}</div>
+							<div class="w3-col m1 w3-hide-small">{{team.climbSkill2}}</div>
+							<div class="w3-col m3 s6">{{team.club2}}</div> 
+						</div>
+					</div>
+					</li>
+					{% endfor %}
+
+				</ul>
+			</div>
+		{% endfor %}
+	
+			<br>
+			<br>
+
+			{% if session['role'] == 'admin' or session['role'] == 'guest' %}
+
+			<button onclick="toogle('participantteams','registredteams','tab2'),randomizeList()" class="w3-btn-1 w3-round w3-lime w3-right">
+				<i class="fa fa-save"></i> Провести лотерею
+			</button>
+
+			{% else %}
+			{% endif %}
+
+			<br>
+			<br>
+			<br>
+			<hr style="width: 90%; margin:auto;">
+		
+	</div>
+
+<!-- Tab Participants  -->
+	{% if current_user.can(Permission.ADMINVIEW) %} <!-- Список для АДМИНОВ -->
+	<div class="teamlits" id="participantteams" style="display: none">
+		<!-- list header Participants -->		
+				<br>	
+				<div id="header" class="w3-row w3-padding w3-border-blue w3-border-bottom" style="font-weight: bold;">
+					<div class="w3-col m5 s7 ">Команда<br> <span class="w3-text-grey w3-small">Участники</span> </div>
+					<div class="w3-col m2 w3-hide-small" id="year1">г.р.</div>
+					<div class="w3-col m1 w3-hide-small" id="alp_level">раз<br>алп</div>
+					<div class="w3-col m1 w3-hide-small" id="climb_level">раз<br>скл</div>
+					<div class="w3-col m3 s5">Сет<br> <span class="w3-text-grey w3-small">Клуб</span> </div>
+				</div>	
+				<input class="w3-input w3-border-bottom w3-border-blue w3-blue-l5 input-filter" type="text" placeholder="фильтр..." onkeyup="myFilter(1)" id="inputFilter" style="font-size: 13px; padding: 4px;">
+		<!-- Set #n Participants -->
+				
+
+				{% for set in registredTeamsUpdated %}
+				<p onclick="blocks('setr{{ loop.index }}')" class="w3-padding w3-block w3-border-bottom w3-border-white w3-left-align w3-blue" style="cursor: pointer;">Сет {{ set }} >></p>
+
+				<div id="setr{{ loop.index }}" class="w3-hide">
+
+					<ul class="my-ul my-litstdelete ul-filter registredTeams" id="setul{{set}}" ondragover="allowDrop(event)" ondrop="drop(event,{{set}})">
+						<!-- ===================Team seporator=================================================== -->		
+					
+						<li draggable="true" ondragstart="drag(event)" class="helpingLi">
+
+							<div class="w3-border-bottom w3-border-blue w3-padding">
+							<div id="header" class="w3-row w3-margin-bottom">
+								<div class="w3-col s12" ><span class="w3-small w3-text-grey">Перетащите сюда команды, которые вы хотите добавить в этот сет</span></div>
+							</div>
+						</li>	
+		
+
+						{% for team in registredTeamsUpdated[set] %}
+						<!-- ===================Team seporator=================================================== -->		
+						<li id="lir{{set}}{{ loop.index }}" ondragstart="drag(this,event)" draggable="true" class="toWaitingList">
+
+							<span class="w3-hover-red w3-text-red w3-padding my-litstdelite trash" onclick="assign_id(this);document.getElementById('delete_team').style.display='block'"><i class="fa fa-trash-o  w3-large"></i></span>			
+							<div id="team{{ loop.index }}" class="w3-hover-lime w3-border-bottom w3-border-blue w3-padding">
+								<div id="header" class="w3-row w3-margin-bottom">
+									<div class="w3-col s9" >{{ loop.index }}. <span class="teamName">{{team.teamName}}</span></div>
+									<div class="w3-col s3 w3-small" id="alp_level">предпочительно {{team.setNumber}}й сет <span class="w3-hide setNuber">{{set}}</span></div>
+								</div>
+
+								<div class="w3-text-grey w3-small w3-row">
+									<div class="w3-col m5 s6">
+										<a href="{{url_for('competition.profile', name=team.name1, sname=team.sname1, year=team.year1 )}}" class="w3-text-blue">
+											<span class="sname1">{{team.sname1}}</span> 
+											<span class="name1">{{team.name1}}</span></a>
+									</div>
+									<div class="w3-col m2 w3-hide-small"><span class="year1">{{team.year1}}</span></div>
+									<div class="w3-col m1 w3-hide-small"><span class="alpSkill1">{{team.alpSkill1}}</span></div>
+									<div class="w3-col m1 w3-hide-small"><span class="climbSkill1">{{team.climbSkill1}}</span></div>
+									<div class="w3-col m3 s6"><span class="club1">{{team.club1}}</span></div> 
+								</div>
+
+								<div class="w3-text-grey w3-small w3-row">
+									<div class="w3-col m5 s6">
+										<a href="{{url_for('competition.profile', name=team.name2, sname=team.sname2, year=team.year2 )}}" class="w3-text-blue">
+											<span class="sname2">{{team.sname2}}</span> 
+											<span class="name2">{{team.name2}}</span></a>
+									</div>
+									<div class="w3-col m2 w3-hide-small"><span class="year2">{{team.year2}}</span></div>
+									<div class="w3-col m1 w3-hide-small"><span class="alpSkill2">{{team.alpSkill2}}</span></div>
+									<div class="w3-col m1 w3-hide-small"><span class="climbSkill2">{{team.climbSkill2}}</span></div>
+									<div class="w3-col m3 s6"><span class="club2">{{team.club2}}</span></div> 
+								</div>
+							</div>
+						</li>
+						{% endfor %}
+
+					</ul>
+				</div>
+				{% endfor %}
+					
+				<br>
+		
+		<!-- Waiting list Participant -->		
+			<p onclick="blocks('waitingList')" class="w3-padding w3-block w3-left-align w3-teal" style="cursor: pointer;">Лист ожидания >></p>
+
+				<div id="waitingList" class="w3-hide">
+					<ul class="my-ul  my-litstdelete ul-filter" id="waitinglistul" ondragover="allowDrop(event)" ondrop="drop(event,0)">
+						<!-- ===================Team seporator=================================================== -->	
+
+							<li draggable="true" ondragstart="drag(event)">
+
+								<div class="w3-border-bottom w3-border-blue w3-padding">
+								<div id="header" class="w3-row w3-margin-bottom">
+								<div class="w3-col s12 " ><span class="w3-small w3-text-grey">Перетащите сюда команды, которые нужно добавить в лист ожидания</span></div>
+								</div>
+							</li>
+
+
+							{% for team in waitingList %}
+						<!-- ===================Team seporator=================================================== -->		
+							<li id="lir{{0}}{{ loop.index }}" ondragstart="drag(this,event)" draggable="true" class="toWaitingList">
+							
+								<span class="w3-hover-red w3-text-red w3-padding my-litstdelite trash" onclick="assign_id(this);document.getElementById('delete_team').style.display='block'"><i class="fa fa-trash-o  w3-large"></i></span>
+				
+
+								<div id="team{{ loop.index }}" class="w3-hover-lime w3-border-bottom w3-border-blue w3-padding">
+									
+									<div id="header" class="w3-row w3-margin-bottom">
+										<div class="w3-col s9" >{{ loop.index }}. <span class="teamName">{{team.teamName}}</span></div>
+										<div class="w3-col s3 w3-small">предпочтительно {{team.setNumber}}й сет <span class="w3-hide setNuber">{{0}}</span>
+										</div>
+									</div>
+
+									<div class="w3-text-grey w3-small w3-row">
+										<div class="w3-col m5 s6">
+											<a href="{{url_for('competition.profile', name=team.name1, sname=team.sname1, year=team.year1 )}}" class="w3-text-blue">
+												<span class="sname1">{{team.sname1}}</span> 
+												<span class="name1">{{team.name1}}</span></a>
+										</div>
+										<div class="w3-col m2 w3-hide-small"><span class="year1">{{team.year1}}</span></div>
+										<div class="w3-col m1 w3-hide-small"><span class="alpSkill1">{{team.alpSkill1}}</span></div>
+										<div class="w3-col m1 w3-hide-small"><span class="climbSkill1">{{team.climbSkill1}}</span></div>
+										<div class="w3-col m3 s6"><span class="club1">{{team.club1}}</span></div> 
+									</div>
+
+									<div class="w3-text-grey w3-small w3-row">
+										<div class="w3-col m5 s6">
+											<a href="{{url_for('competition.profile', name=team.name2, sname=team.sname2, year=team.year2 )}}" class="w3-text-blue">
+												<span class="sname2">{{team.sname2}}</span> 
+												<span class="name2">{{team.name2}}</span></a>
+										</div>
+										<div class="w3-col m2 w3-hide-small"><span class="year2">{{team.year2}}</span></div>
+										<div class="w3-col m1 w3-hide-small"><span class="alpSkill2">{{team.alpSkill2}}</span></div>
+										<div class="w3-col m1 w3-hide-small"><span class="climbSkill2">{{team.climbSkill2}}</span></div>
+										<div class="w3-col m3 s6"><span class="club2">{{team.club2}}</span></div> 
+									</div>
+								</div>
+							</li>
+							{% endfor %}
+		
+					</ul>
+				</div>
+				<br>
+
+			{% if participantsListStatus == "published" %}
+			<button class="w3-btn-1 w3-round w3-red w3-right w3-show" id="hidepublish" onclick="unpublish(this, 'publish')"><i class="fa fa fa-minus-square"></i> Снять финальный список с публикации</button>
+			{% else %}
+			<button class="w3-btn-1 w3-round w3-lime w3-right w3-show" type="submit" id="publish" onclick="publish(this, 'hidepublish')"><i class="fa fa-plus-square" ></i> Опубликовать финальный список </button>
+			{% endif %}
+				<br>
+				<br>
+				<br>
+				<hr style="width: 90%; margin:auto;">
+		
+	</div>	
+
+
+
+
+	{% else %} <!-- Список для участников -->
+		{% if participantsListStatus == 'published' %}	
+		<div class="teamlits" id="participantteams" style="display: none">
+			<!-- list header Participants -->		
+					<br>	
+					<div id="header" class="w3-row w3-padding w3-border-blue w3-border-bottom" style="font-weight: bold;">
+						<div class="w3-col m5 s7 ">Команда<br> <span class="w3-text-grey w3-small">Участники</span> </div>
+						<div class="w3-col m2 w3-hide-small" id="year1">г.р.</div>
+						<div class="w3-col m1 w3-hide-small" id="alp_level">раз<br>алп</div>
+						<div class="w3-col m1 w3-hide-small" id="climb_level">раз<br>скл</div>
+						<div class="w3-col m3 s5">Сет<br> <span class="w3-text-grey w3-small">Клуб</span> </div>
+					</div>	
+					<input class="w3-input w3-border-bottom w3-border-blue w3-blue-l5 input-filter" type="text" placeholder="фильтр..." onkeyup="myFilter(1)" id="inputFilter" style="font-size: 13px; padding: 4px;">
+			<!-- Set #n Participants -->
+					
+
+					{% for set in registredTeamsUpdated %}
+					<p onclick="blocks('setr{{ loop.index }}')" class="w3-padding w3-block w3-border-bottom w3-border-white w3-left-align w3-blue" style="cursor: pointer;">Сет {{ set }} >></p>
+
+					<div id="setr{{ loop.index }}" class="w3-hide">
+
+						<ul class="my-ul my-litstdelete ul-filter registredTeams" id="setul{{set}}">		
+
+							{% for team in registredTeamsUpdated[set] %}
+							<!-- ===================Team seporator=================================================== -->		
+							<li id="lir{{set}}{{ loop.index }}" class="toWaitingList">	
+
+								<div id="team{{ loop.index }}" class="w3-hover-lime w3-border-bottom w3-border-blue w3-padding">
+									<div id="header" class="w3-row w3-margin-bottom">
+										<div class="w3-col s9" >{{ loop.index }}. <span class="teamName">{{team.teamName}}</span></div>
+										<div class="w3-col s3 w3-small" id="alp_level">предпочительно {{team.setNumber}}й сет <span class="w3-hide setNuber">{{set}}</span></div>
+									</div>
+
+									<div class="w3-text-grey w3-small w3-row">
+										<div class="w3-col m5 s6">
+											<a href="{{url_for('competition.profile', name=team.name1, sname=team.sname1, year=team.year1 )}}" class="w3-text-blue">
+												<span class="sname1">{{team.sname1}}</span> 
+												<span class="name1">{{team.name1}}</span></a>
+										</div>
+										<div class="w3-col m2 w3-hide-small"><span class="year1">{{team.year1}}</span></div>
+										<div class="w3-col m1 w3-hide-small"><span class="alpSkill1">{{team.alpSkill1}}</span></div>
+										<div class="w3-col m1 w3-hide-small"><span class="climbSkill1">{{team.climbSkill1}}</span></div>
+										<div class="w3-col m3 s6"><span class="club1">{{team.club1}}</span></div> 
+									</div>
+
+									<div class="w3-text-grey w3-small w3-row">
+										<div class="w3-col m5 s6">
+											<a href="{{url_for('competition.profile', name=team.name2, sname=team.sname2, year=team.year2 )}}" class="w3-text-blue">
+												<span class="sname2">{{team.sname2}}</span> 
+												<span class="name2">{{team.name2}}</span></a>
+										</div>
+										<div class="w3-col m2 w3-hide-small"><span class="year2">{{team.year2}}</span></div>
+										<div class="w3-col m1 w3-hide-small"><span class="alpSkill2">{{team.alpSkill2}}</span></div>
+										<div class="w3-col m1 w3-hide-small"><span class="climbSkill2">{{team.climbSkill2}}</span></div>
+										<div class="w3-col m3 s6"><span class="club2">{{team.club2}}</span></div> 
+									</div>
+								</div>
+							</li>
+							{% endfor %}
+
+						</ul>
+					</div>
+					{% endfor %}
+						
+					<br>
+			
+			<!-- Waiting list Participant -->		
+				<p onclick="blocks('waitingList')" class="w3-padding w3-block w3-left-align w3-teal" style="cursor: pointer;">Лист ожидания >></p>
+
+					<div id="waitingList" class="w3-hide">
+						<ul class="my-ul  my-litstdelete ul-filter" id="waitinglistul" >
+
+
+								{% for team in waitingList %}
+							<!-- ===================Team seporator=================================================== -->		
+								<li id="lir{{0}}{{ loop.index }}" class="toWaitingList">
+								
+									<div id="team{{ loop.index }}" class="w3-hover-lime w3-border-bottom w3-border-blue w3-padding">
+										
+										<div id="header" class="w3-row w3-margin-bottom">
+											<div class="w3-col s9" >{{ loop.index }}. <span class="teamName">{{team.teamName}}</span></div>
+											<div class="w3-col s3 w3-small">предпочтительно {{team.setNumber}}й сет <span class="w3-hide setNuber">{{0}}</span>
+											</div>
+										</div>
+
+										<div class="w3-text-grey w3-small w3-row">
+											<div class="w3-col m5 s6">
+												<a href="{{url_for('competition.profile', name=team.name1, sname=team.sname1, year=team.year1 )}}" class="w3-text-blue">
+													<span class="sname1">{{team.sname1}}</span> 
+													<span class="name1">{{team.name1}}</span></a>
+											</div>
+											<div class="w3-col m2 w3-hide-small"><span class="year1">{{team.year1}}</span></div>
+											<div class="w3-col m1 w3-hide-small"><span class="alpSkill1">{{team.alpSkill1}}</span></div>
+											<div class="w3-col m1 w3-hide-small"><span class="climbSkill1">{{team.climbSkill1}}</span></div>
+											<div class="w3-col m3 s6"><span class="club1">{{team.club1}}</span></div> 
+										</div>
+
+										<div class="w3-text-grey w3-small w3-row">
+											<div class="w3-col m5 s6">
+												<a href="{{url_for('competition.profile', name=team.name2, sname=team.sname2, year=team.year2 )}}" class="w3-text-blue">
+													<span class="sname2">{{team.sname2}}</span> 
+													<span class="name2">{{team.name2}}</span></a>
+											</div>
+											<div class="w3-col m2 w3-hide-small"><span class="year2">{{team.year2}}</span></div>
+											<div class="w3-col m1 w3-hide-small"><span class="alpSkill2">{{team.alpSkill2}}</span></div>
+											<div class="w3-col m1 w3-hide-small"><span class="climbSkill2">{{team.climbSkill2}}</span></div>
+											<div class="w3-col m3 s6"><span class="club2">{{team.club2}}</span></div> 
+										</div>
+									</div>
+								</li>
+								{% endfor %}
+			
+						</ul>
+					</div>
+					<br>
+				
+					<br>
+					<br>
+					<br>
+					<hr style="width: 90%; margin:auto;">
+			
+		</div>	
+		{% else %}
+		<div class="teamlits" id="participantteams" style="display: none">
+			<div class="w3-center">
+				<img src="/img/logo_route.jpg" alt="Степаныч лого" width="300px">
+				<br>
+				<br>	
+				<p class="w3-padding-48 w3-large w3-center">Финальные списки участников еще не опубликованы <br>
+				т.к. регистрация продолжается <br>
+				</p>
+			</div>
+		</div>
+		{% endif %}
+
+	{% endif %}	
+<!-- End of Tab Participants  -->
+
+
+
+
+	<!-- End of Text - Content block -->
+		</div>
+		
+		<div class="w3-col m1 l2 w3-hide-small"> &nbsp;</div>
+
+	<!-- Delete team modal window -->
+		<div id="delete_team" class="w3-modal">
+			<div class="w3-modal-content w3-animate-zoom w3-padding w3-center" style="max-width: 600px">
+				<button onclick="this.parentElement.parentElement.style.display='none'" class="w3-button w3-right w3-hover-gren w3-green"><i class="fa fa-close"></i></button>	
+				<h2 class="w3-text-blue">Удаление команды</h2>
+				
+					<p class="w3-small">Вы уверены что хотите удалить эту команду? Она будет удалена с сервера!</p>
+				 	<button class="w3-button w3-red w3-margin" onclick="delete_team_modal('delete_team')"><i class="fa fa-trash-o" ></i> удалить</button>
+				
+			</div>	
+		</div>	
+		
+	</section>
+
+{% endblock %}

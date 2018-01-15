@@ -1,0 +1,280 @@
+{% extends "base.html" %}
+{% import "_macros.html" as macros %}
+
+{% block content scoped %}
+<link rel="stylesheet" type="text/css" href="/css/simditor.css" />
+
+	<div class="w3-hide-small" style="height: 43px;"></div>
+	
+
+	<section style="display: ">
+		<div class="w3-display-container">
+		{% if blank %}
+			
+			
+			{% if current_user.is_authenticated %}
+
+			{% else %}
+				
+				<div style="width: 100%; height: 150px; background:   ">
+				<div class="w3-display-position" style="top:50%; left: 50%; transform: translate(-50%,-50%);">
+
+					<botton {% if registrationStatus == 'closed' %}{% else %} onclick="document.getElementById('registration-window').style.display='block'" {% endif %} class="w3-button w3-padding-large w3-green w3-hover-green-l1 {% if registrationStatus == 'closed' %}w3-disabled {% else %}{% endif %}">Зарегистрировать команду</botton>
+					{% if registrationStatus == 'closed' %}
+					<p class="w3-tiny w3-section w3-text-grey" >*Регистрация еще не началась</p>
+					{% else %}{% endif %}
+				
+				</div>
+				
+				</div>
+			{% endif %}
+			
+
+
+		{% else %}
+			
+			<img style="width: 100%; height: auto;" src="{{logo.imgURL}}" alt="регистрация на соревнования альпинистких связок Степаныч">
+			{% if current_user.is_authenticated %}
+
+			{% else %}
+			
+				<div class="w3-display-position" style="top:10%; right: 10%;"">
+
+					<botton {% if registrationStatus == 'closed' %}{% else %} onclick="document.getElementById('registration-window').style.display='block'" {% endif %} class="w3-button w3-padding-large w3-green w3-hover-green-l1 {% if registrationStatus == 'closed' %}w3-disabled {% else %}{% endif %}">Зарегистрировать команду</botton>
+					{% if registrationStatus == 'closed' %}
+					<p class="w3-tiny w3-section w3-text-grey" >*Регистрация еще не началась</p>
+					{% else %}{% endif %}
+
+				</div>
+
+			{% endif %}
+		{% endif %}
+			
+
+		
+		</div>
+	</section>
+
+	<section class="w3-row w3-margin-top">
+		<div class="w3-col m1 l2 w3-hide-small"> &nbsp;</div>
+
+		<div class="w3-col m10 l8 s12 w3-padding " id="news">
+		{% if blank %}
+		<hr>
+		{% else %}
+		{% endif %}
+			<!-- Start of Text - Content block -->
+			{% with messages = get_flashed_messages() %}
+			{% if messages %}
+			
+			{% for message in messages %}
+			<p class="w3-margin-top">{{ message }}</p>
+			{% endfor %}
+
+			{% endif %}		
+			{% endwith %}
+
+			{% include '/news/_posts.html' %}
+			
+			{{ macros.pagination_widget(pagination, 'main.index') }}
+			
+			
+			<!-- End of Text - Content block -->
+		</div>
+
+		<div class="w3-col m1 l2 w3-hide-small"> &nbsp;</div>
+		
+	<!-- Start of Registration modal window -->
+		<div id="registration-window" class="w3-modal" style="display: {{ request.args.get('displayRegistrationForm')}}" onload="disable_select_option()">
+
+			<div class="w3-modal-content w3-animate-zoom w3-padding w3-small" style="max-width: 600px">
+				<button onclick="document.getElementById('registration-window').style.display='none'" class="w3-button w3-padding-small w3-right w3-hover-red-d3 w3-red"><i class="fa fa-close w3-large"></i></button>	
+
+				<h3>Форма регистрации</h3>
+
+				{% with messages = get_flashed_messages() %}
+				    {% if messages %}
+				    
+				    {% for message in messages %}
+				        <p class="w3-text-red">{{ message }}</p>
+				    {% endfor %}
+				    
+				  {% endif %}
+				{% endwith %} 	
+				
+
+				<form action="{{ url_for('auth.registration') }}" class="w3-container" method="POST">
+					{{ registrationForm.csrf_token }}
+					<!-- ============= Командная информация ===================== -->
+					<div class="w3-section">
+						
+						{{ registrationForm.teamName(class="w3-input w3-border-bottom") }}
+							<p class="w3-tiny w3-text-red">
+								{% for message in registrationForm.teamName.errors %}
+								{{ message }}
+								{% endfor %}
+							</p>						
+
+						{{ registrationForm.email(class="w3-input w3-border-bottom ") }}
+							<p class="w3-tiny w3-text-red">
+								{% for message in registrationForm.email.errors %}
+								{{ message }}
+								{% endfor %}
+							</p>
+
+						{{ registrationForm.password(class="w3-input w3-border-bottom w3-margin-bottom") }}
+							<p class="w3-tiny w3-text-red">
+								{% for message in registrationForm.password.errors %}
+								{{ message }}
+								{% endfor %}
+							</p>
+
+						{{ registrationForm.role(class="w3-hide") }} 
+						{{ registrationForm.competition(class="w3-hide") }} 
+						
+						{{ registrationForm.setNumber(class="w3-select w3-text-grey w3-padding w3-margin-bottom disable-option") }}
+							<p class="w3-tiny w3-text-red">
+								{% for message in registrationForm.setNumber.errors %}
+								{{ message }}
+								{% endfor %}
+							</p>
+
+
+						<div class="w3-cell-row">
+							<!-- =========== 1й участник ============ -->
+							<div class="w3-mobile w3-card-2 w3-margin-bottom" style="width: 48%; float: left;">
+								<div class="w3-container w3-blue w3-padding w3-center">Участник 1</div>
+								<div class="w3-container w3-padding">
+								{{ registrationForm.name1(class="w3-input w3-border-bottom") }}
+									<p class="w3-tiny w3-text-red">
+										{% for message in registrationForm.name1.errors %}
+										{{ message }}
+										{% endfor %}
+									</p>								
+
+								{{ registrationForm.sname1(class="w3-input w3-border-bottom ") }}
+									<p class="w3-tiny w3-text-red">
+										{% for message in registrationForm.sname1.errors %}
+										{{ message }}
+										{% endfor %}
+									</p>								
+
+								{{ registrationForm.club1(class="w3-input w3-border-bottom ") }}
+									<p class="w3-tiny w3-text-red">
+										{% for message in registrationForm.club1.errors %}
+										{{ message }}
+										{% endfor %}
+									</p>								
+
+								{{ registrationForm.year1(class="w3-input w3-border-bottom  w3-margin-bottom") }}
+									<p class="w3-tiny w3-text-red">
+										{% for message in registrationForm.year1.errors %}
+										{{ message }}
+										{% endfor %}
+									</p>						 		
+
+								{{ registrationForm.alpSkill1(class="w3-select w3-text-grey w3-padding  w3-margin-bottom disable-option") }}
+									<p class="w3-tiny w3-text-red">
+										{% for message in registrationForm.alpSkill1.errors %}
+										{{ message }}
+										{% endfor %}
+									</p>
+
+								{{ registrationForm.climbSkill1(class="w3-select w3-text-grey w3-padding w3-margin-bottom disable-option") }}
+									<p class="w3-tiny w3-text-red">
+										{% for message in registrationForm.climbSkill1.errors %}
+										{{ message }}
+										{% endfor %}
+									</p>	
+
+								{{ registrationForm.male1(class="w3-select w3-text-grey w3-padding w3-margin-bottom disable-option") }}
+									<p class="w3-tiny w3-text-red">
+										{% for message in registrationForm.male1.errors %}
+										{{ message }}
+										{% endfor %}
+									</p>
+								</div>
+							</div>
+								<!-- ============= 2й участник ============= -->
+							<div class="w3-mobile w3-card-2" style="width: 48%; float: right;">
+								<div class="w3-container w3-blue w3-padding w3-center">Участник 2</div>
+								<div class="w3-container w3-padding">
+								{{ registrationForm.name2(class="w3-input w3-border-bottom ") }}
+									<p class="w3-tiny w3-text-red">
+										{% for message in registrationForm.name2.errors %}
+										{{ message }}
+										{% endfor %}
+									</p>								
+
+								{{ registrationForm.sname2(class="w3-input w3-border-bottom ") }}
+									<p class="w3-tiny w3-text-red">
+										{% for message in registrationForm.sname2.errors %}
+										{{ message }}
+										{% endfor %}
+									</p>								
+
+								{{ registrationForm.club2(class="w3-input w3-border-bottom ") }}
+									<p class="w3-tiny w3-text-red">
+										{% for message in registrationForm.club2.errors %}
+										{{ message }}
+										{% endfor %}
+									</p>								
+
+								{{ registrationForm.year2(class="w3-input w3-border-bottom  w3-margin-bottom") }}
+									<p class="w3-tiny w3-text-red">
+										{% for message in registrationForm.year2.errors %}
+										{{ message }}
+										{% endfor %}
+									</p>						 		
+
+								{{ registrationForm.alpSkill2(class="w3-select w3-text-grey w3-padding  w3-margin-bottom disable-option") }}
+									<p class="w3-tiny w3-text-red">
+										{% for message in registrationForm.alpSkill2.errors %}
+										{{ message }}
+										{% endfor %}
+									</p>						 		
+	
+
+								{{ registrationForm.climbSkill2(class="w3-select w3-text-grey w3-padding  w3-margin-bottom disable-option") }}
+									<p class="w3-tiny w3-text-red">
+										{% for message in registrationForm.climbSkill2.errors %}
+										{{ message }}
+										{% endfor %}
+									</p>	
+
+								{{ registrationForm.male2(class="w3-select w3-text-grey w3-padding  w3-margin-bottom disable-option") }}
+									<p class="w3-tiny w3-text-red">
+										{% for message in registrationForm.male1.errors %}
+										{{ message }}
+										{% endfor %}
+									</p>	
+								</div>
+							</div>
+						</div>
+
+
+
+						{{ registrationForm.submit(class="w3-button w3-block w3-green w3-padding w3-hover-green-l1 w3-margin-top") }}
+						
+					</div>
+				</form>
+				
+				<div class="w3-cell-row">
+						
+					<div class="w3-container w3-cell" style="padding-bottom: 16px;">
+					<p class="w3-text-dark-grey w3-small w3-left w3-cell w3-container"><sup>*</sup>для входа в личный кабинет и обратной связи</p></div>
+					<div class="w3-container w3-cell">
+					<a href="{{ url_for('info.rules') }}" class="w3-text-blue w3-small w3-hover-text-red">положение</a></div>
+				
+				</div>
+			</div>
+		</div>	
+	<!-- END of Registration modal window -->
+	</section>
+	<script>
+		$(document).ready(function(){
+		    $("#competition").val("users");
+		});
+	</script>
+{% endblock %}
+

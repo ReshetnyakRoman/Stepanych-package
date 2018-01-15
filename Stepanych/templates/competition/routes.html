@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div class="w3-hide-small" style="height: 43px;"></div>
+	
+	<section class="w3-row w3-margin-top">
+		<div class="w3-col m1 l2 w3-hide-small"> &nbsp;</div>
+
+		<div class="w3-col m10 l8 s12 w3-padding " id="content">
+
+	<!-- Start of Text - Content block -->
+
+
+	<h1 class="w3-text-red w3-center">Трассы</h1>
+	<p id="testtext"></p>
+			<p class="w3-tiny w3-text-grey w3-center">вы должны быть авторизованы, что бы иметь возможность вносить результаты</p>
+			{% with messages = get_flashed_messages() %}
+			    {% if messages %}
+				    <div class="w3-pale-green w3-border-green w3-border w3-round" style="margin: 16px 0 0 0;">
+				    <a href="#" class="w3-right w3-padding w3-text-green w3-large w3-hover-text-red w3-round w3-padding" onclick="assign_id(this);delete_element()" style="position: relative; top:-3px">x</a>
+					    {% for message in messages %}
+					    	
+					        <p class="w3-padding">{{ message }}</p>
+
+					    {% endfor %}
+			    	</div>
+			   	 <br>
+			  	{% endif %}
+		 	{% endwith %}
+			<hr style="width: 90%; margin:auto;" >
+
+			<div id="route" class="my-flex">
+			{% if current_user.can(Permission.ADMINVIEW) %}
+			<!-- create new route  -->
+				<div class="w3-display-container my-route w3-round-xlarge w3-card-2 w3-border my-jump w3-margin" title="добавить трассу" onclick="document.getElementById('add_route').style.display='block'">
+					<div class="w3-padding w3-blue w3-display-topleft w3-center w3-round-large">--<br><span class="w3-tiny">бал</span></div>
+					<div class="w3-display-middle my-route-center"><b>+</b></div>
+					<div class="w3-padding w3-lime w3-display-bottomright w3-center w3-round-large">--<br><span class="w3-tiny">мин</span></div>
+				</div>	
+			{% else %}
+			{% endif %}	
+
+
+			<!-- routes -->
+				{% set count = 1 %}
+				{% if noRotes and session['role'] != 'admin' and session['role'] != 'guest' %}
+				<div class="w3-center">
+					<br>
+					<img src="/img/logo_route.jpg" alt="Степаныч лого" width="300px">
+					<br>
+					<br>
+					<p style="margin-left: 16px;">Трассы для этих соревнований еще не опубликованы</p>
+				</div>
+				{% else %}
+					{% for routes in routes %}
+					<div class="w3-display-container my-route w3-round-xlarge w3-card-2 w3-border my-jump w3-margin" >
+						{% if current_user.can(Permission.ADMINVIEW) %}
+						<div class="w3-display-topright w3-padding w3-text-red w3-large w3-hover-red w3-round-large" onclick="assign_id(this);delete_route()"><i class="fa fa-trash-o"></i></div>
+						{% else %}
+						{% endif %}						
+						<div class="my-route-click" onclick="get_route_info({{routes.routeNuber}}),document.getElementById('add_route_result').style.display='block'">
+							
+							<div class="w3-padding w3-blue w3-display-topleft w3-center w3-round-large">{{ routes.score }}<br><span class="w3-tiny">бал</span></div>
+							<div class="w3-display-middle my-route-center routeNuber"><b>{{ routes.routeNuber }}</b></div>
+							<div class="w3-padding w3-lime w3-display-bottomright w3-center w3-round-large">{{ routes.controlTimeSec }}<br><span class="w3-tiny">мин</span></div>
+						</div>	
+					</div>
+					{% set count = count + 1 %}
+					{% endfor %}
+				{% endif %}	
+			</div>
+			<br>
+			<hr style="width: 90%; margin:auto;" >
+
+	<!-- Modal window to add new route -->
+		<div id="add_route" class="w3-modal" style="display: {{ request.args.get('displayAddNewRoute') }}">
+			<div class="w3-modal-content w3-animate-zoom w3-padding w3-center" style="max-width: 320px;">
+				<button onclick="document.getElementById('add_route').style.display='none'" class="w3-button w3-right w3-hover-red-d3 w3-red"><i class="fa fa-close"></i></button>	
+
+				<h3 class="w3-text-blue" style="text-align: center;">Добавление новой трассы</h3>
+
+				<form action="{{url_for('competition.routes_add')}}" class="w3-container w3-padding" method="POST" enctype="multipart/form-data" name="route">
+					{{ loginForm.csrf_token }}
+					{% with messages = get_flashed_messages() %}
+					    {% if messages %}
+					    
+					    {% for message in messages %}
+					        <p class="w3-text-red w3-padding">{{ message }}</p>
+					    {% endfor %}
+					    
+					  {% endif %}
+					{% endwith %} 		
+
+					{{ routeForm.routeNuber(class="3-margin-bottom w3-padding-small w3-border w3-small") }}
+
+					{{ routeForm.routeTime(class="w3-select w3-text-grey w3-margin disable-option w3-small") }}
+
+					{{ routeForm.routeScore(class="w3-select w3-text-grey w3-margin-bottom disable-option w3-small") }}
+
+					{{ routeForm.routeName(class="w3-margin-bottom w3-padding-small w3-border w3-small") }}
+					
+				 	<p class="w3-small">фото трассы:</p>
+				 	{{ routeForm.img(class="w3-margin-bottom w3-button w3-small") }}
+				 	<br>
+				 	
+				 	{{ routeForm.submit(class="w3-button w3-green w3-margin") }}
+
+				</form>
+			</div>	
+		</div>
+
+	<!-- Modal window Add Results -->
+		<div id="add_route_result" class="w3-modal" style="display: {{ request.args.get('displayRouteResults') }}">
+			<div class="w3-modal-content w3-animate-zoom w3-padding w3-center" id="routeModal">
+				<button onclick="document.getElementById('add_route_result').style.display='none'" class="w3-button w3-right w3-hover-red-d3 w3-red w3-padding-small"><i class="fa fa-close"></i></button>	
+
+				<h4 class="w3-text-blue">Время на трассе</h4>
+				<img src="/img/logo_route.jpg" alt="трасса 1" id="routeIMG">
+				<p class="w3-center w3-small" id="routeName1"></p>
+				<form action="{{ url_for('competition.route_submit') }}" class="w3-container w3-padding" method="POST">
+					<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+					<input id="routeNuber1" type="text" name="routeNuber" value=" " id="routeNuber" class="w3-border">
+					<input type="number" placeholder="мин" min=0 name="route_time_min" class="w3-border" style=" width: 45px;" required>:<input type="number" placeholder="сек" min=0 max=59 name="route_time_sec" class=" w3-border" style=" width: 45px;" required>
+
+					 	<div class="w3-clear"></div>
+					{% if userSetStatus != 0 and openSet != 0 %}	
+				 	<input type="submit" class="w3-button w3-green w3-margin w3-small" value="Сохранить">
+				 	{% else%}
+				 	<input type="submit" class="w3-button w3-green w3-margin w3-small w3-disabled" value="Сохранить" disabled>
+					<p class="w3-tiny w3-text-red">Ваш сет закрыт или вы не авторизованы</p>
+					{% endif %}	
+				</form>
+				<div class="w3-clear"></div>
+			</div>	
+		</div>
+
+
+
+	<!-- End of Text - Content block -->
+		</div>
+
+		<div class="w3-col m1 l2 w3-hide-small"> &nbsp;</div>
+		
+		
+	</section>
+
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div class="w3-hide-small" style="height: 43px;"></div>
+	
+	<section class="w3-row w3-margin-top">
+		<div class="w3-col m1 l2 w3-hide-small"> &nbsp;</div>
+
+		<div class="w3-col m10 l8 s12 w3-padding " id="content">
+
+	<!-- Start of Text - Content block -->
+	<h2>Регитрация пользователя</h2>
+	<p class="w3-margin-bottom">К сожалению, вы еще не закончили регистрацию профиля вашей команды.</p>
+	<p class="w3-margin-bottom">Для завершения перейдите по ссылке отправленной на ваш Email: <i>{{ current_user.email }}</i></p2>
+	<p class="w3-margin-bottom">Или выйдите из профиля в  <a href="{{ url_for('auth.teamoffice') }}" class="w3-text-blue">личном кабинете</a></p>
+	<p class="w3-margin-bottom">Если вы потеряли email с подтверждающей ссылкой,  <a href="{{ url_for('auth.resend_confirmation') }}" class="w3-text-blue">нажмите сюда для получения нового</a></p>
+
+
+
+
+	<!-- End of Text - Content block -->
+		</div>
+
+		<div class="w3-col m1 l2 w3-hide-small"> &nbsp;</div>
+		
+		
+	</section>
+
+{% endblock %}

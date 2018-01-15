@@ -1,0 +1,493 @@
+@import 'nib' 
+@import 'import/*.styl'
+@import url('https://fonts.googleapis.com/css?family=Lobster&subset=cyrillic');
+
+/* Common sections */
+*	
+	margin 0
+	padding 0
+	text-decoration none
+u
+	text-decoration underline
+strike
+	text-decoration line-through 
+ul 
+	padding-left 40px
+	margin-top 1em
+	
+ol 
+	padding-left 40px
+	margin-top 1em
+	
+.blue-links a 
+	color $blue-d3
+.blue-links a:visited
+	color $red-d5
+
+blockquote
+	border-left 6px solid #4CAF50
+	padding	10px 0 10px 10px
+	margin 15px 0 15px 15px
+	width 85%
+	background-color #f1f1f1
+	
+header
+	z-index 2!important
+#logo 
+	font-family 'Lobster', cursive
+	font-size inherit
+	transform rotate(-5deg)
+	
+.logo 
+	font-family 'Lobster', cursive
+	transform translate(0, 0px) rotate(-5deg)
+	display inline-block 
+
+body
+	height 100%
+	display flex
+	flex-direction column
+	min-height 100vh
+main
+	flex 1 
+	
+footer
+	background url("/img/footer.png")
+	background-repeat repeat-x repeat-y
+	background-size 50%	
+
+input, select
+	background-color white	
+	
+/*-----Menus-------*/
+
+/* top menu block */
+.my-active 
+	background-color $red-d3!important
+	
+	
+.my-menuitem-animation
+	-webkit-transition background-color 0.3s ease 
+	-moz-transition background-color 0.3s ease 
+	-ms-transition background-color 0.3s ease 
+	-o-transition background-color 0.3s ease 
+	transition background-color 0.3s ease 
+	
+.my-dropdown-content 
+	visibility hidden
+	position absolute
+	top 42px
+	z-index 1
+	right 0
+	height 0px
+	width 100%
+	background-color $red-d3
+	border-bottom 0px $red solid
+	-webkit-transition height 0.5s, border-bottom 0.5s 
+	-moz-transition height 0.5s, border-bottom 0.5s 
+	-ms-transition height 0.5s, border-bottom 0.5s 
+	-o-transition height 0.5s, border-bottom 0.5s 
+	transition height 0.5s, border-bottom 0.5s
+
+.my-dropdown-hover:hover .my-dropdown-content
+	visibility visible
+	height 90px
+	border-bottom 3px solid $red	
+
+/* sidebar menu */
+aside
+	z-index 1!important
+	padding-top 50px 
+	position fixed
+	left 0
+	height 100%
+	overflow auto
+	
+/* sidebar menu tooltips*/
+
+.my-tooltip
+	position relative
+	
+.my-tooltip .my-tooltip-text
+	position fixed
+	display none
+	z-index 2!important
+	transform translate(0px, -35px)
+	left 70px
+	width auto
+	padding 1px 8px
+	
+.my-tooltip .my-tooltip-text::after
+	content ""
+	border-width 5px 
+	border-style solid
+	border-color transparent $blue transparent transparent
+	position absolute
+	right 100%
+	top 6px 
+	
+.my-tooltip:hover .my-tooltip-text
+	display block
+
+/*----------Content------------*/
+	
+/*------ common styles for any page------*/
+
+.my-flex
+	display flex
+	flex-wrap wrap
+	justify-content center 
+
+.my-jump:hover
+	transform translate(0px, -10px)		
+
+/* smooth ements animation  */
+.slideanim 
+	visibility hidden
+ 
+.slide 
+	animation-name slide
+	animation-duration 1s
+	visibility visible
+
+@keyframes slide
+	0%
+		opacity 0
+		transform translateY(70%)
+	100%
+		opacity 1
+		transform translateY(0%)	
+		 
+	
+/*------Rules-page styles --------*/	
+.step45
+	font-family 'Lobster', cursive
+	font-size 32px
+	transform translate(7px, 45px) rotate(-45deg)  
+	
+.my-card-top
+	height 150px	
+	border-radius 7px 7px 0 0 
+
+.my-card
+	width 150px
+	margin 16px
+
+.my-card-2
+	margin 16px
+	padding 8px
+.my-card-2 img 
+	height 200px
+	
+/*---Sponsors page---*/	
+.my-card-long
+	margin 16px
+.my-card-long img 
+	width 350px	
+	
+/*----Vedo page-------*/	
+
+.my-video
+	width 640px
+.my-video iframe 
+	width 640px
+	height 360px  	
+
+
+/*----Contacts page----*/
+.my-contacts img
+	height 200px	
+.my-contacts div
+	margin-top 40px
+	display inline-block	
+
+	
+@media (max-width:600px)
+	/*---Rules page---*/
+
+	
+	.my-card-2
+		width 60%
+		margin-left 20%
+	.my-card-2 img 
+		width 100%
+		height auto
+		
+	/*---Sponsors page---*/
+	.my-card-long
+		width 90%
+		margin-left 5%
+	.my-card-long img 
+		width 100%	
+		height auto
+	/*---Video page---*/
+	.my-video
+		width 300px
+		margin auto
+	.my-video iframe
+		width 300px
+		height 167px
+	/*---Contacts page---*/
+	.my-contacts img
+		width 80%
+		height 100%
+		margin-left 10%
+	.my-contacts div
+		margin-top 0px		
+		
+
+/*---Command List page---*/	
+.my-ul
+	padding 0 0 0 35px
+	margin 0
+	list-style-type none  
+
+.my-ul li 
+	padding 0
+	margin 0  	
+	
+ul.my-litstdelete li
+	position relative
+.my-litstdelete span.trash
+	position absolute
+	top 0
+	right 0		
+	
+
+/*---Routs page---*/
+.my-route
+	width 170px
+	height 170px 
+	float left 
+	background url(/img/routeico.jpg)
+	background-size 100%
+	font-size 1em
+	line-height 0.7 
+.my-route .my-route-click
+	width 165px
+	height 165px	
+	
+.my-route div b 
+	font-size 4.2em	
+
+@media (max-width:600px)
+	.my-ul
+		padding 0
+	.my-route
+		width 110px
+		height 110px 
+		font-size 0.9em
+		line-height 0.7
+	.my-route .my-route-click
+		width 105px
+		height 105px  	
+	.my-route div b
+		font-size 3em	
+
+/*---Gallery page---*/
+.my-galery
+	width 240px
+	height 160px
+	margin-left 8px
+	margin-bottom 8px
+	
+.my-galery img
+	width 100%	 
+	position absolute
+	clip rect(0px, 400px, 160px, 0px)
+	
+.my-galery p	
+	background linear-gradient(0deg, #616161, transparent 100%)	
+	width 100%
+	
+/*---Team Office---*/
+.my-input 
+	padding 2px
+	border none
+
+/*---Competition administration page--- */
+
+.my-tooltip .my-tooltip-text-2
+	position fixed
+	z-index 2!important
+	width 50%
+	top 10%
+	left 25%
+	padding 1px 8px
+	display none
+	
+.my-tooltip:hover .my-tooltip-text-2
+	display inline-block
+	
+
+.my-controls
+	width 150px
+	height 150px
+
+.my-btn-1
+	border none
+	display inline-block
+	outline 0
+	padding 0
+	vertical-align:middle
+	overflow hidden
+	text-decoration:none
+	color inherit
+	background-color:inherit
+	text-align center
+	cursor pointer
+	box-shadow 0 1px 3px 0 rgba(0,0,0,0),0 3px 5px 0 rgba(0,0,0,0.0)
+	transition  box-shadow 0.4s
+.my-btn-1:hover
+	box-shadow 1px 1px 3px 0 rgba(0,0,0,0.2),1px 3px 6px 0 rgba(0,0,0,0.19)
+	
+			
+
+/*--- Final results page ---*/		
+
+.my-table
+	border-collapse collapse
+	border-spacing 0
+	width 100%
+	display table
+.my-table td 
+	padding 2px 3px	
+tr input
+	padding 0
+	margin 0
+	border none
+	width 30px
+tr.w3-white input,tr.w3-white select
+	background-color #fff	
+tr.w3-blue-l4 input,tr.w3-blue-l4 select
+	background-color $blue-l4
+	
+tr.w3-red-l3 input,tr.w3-red-l3 select
+	background-color $red-l3
+		
+tr.w3-green-l3 input,tr.w3-green-l3 select
+	background-color $green-l3
+	
+tr.w3-light-grey input,tr.w3-light-grey select
+	background-color #f1f1f1
+			
+tr:hover input	
+	background-color #cddc39
+tr select
+	border none
+	padding 0
+	margin 0
+tr:hover select
+	background-color #cddc39
+
+	
+textarea
+	width 450px
+	height 150px
+	
+@media (max-width:600px)
+	textarea
+		width 280px
+		height 150px
+		margin 0
+		padding 0
+		
+@media (max-width:600px)		
+	html,body 
+		font-size 12px
+		line-height 1.4
+	h1 
+		font-size 32px
+	h2 
+		font-size 26px
+	h3 
+		font-size 20px
+	h4 
+		font-size 16px
+	h5 
+		font-size 14px
+	h6 
+		font-size 12px	
+		
+/* Lodader animator */
+#loader 
+	position absolute
+	left 50%
+	top 50%
+	z-index: 4
+	margin -50px 0 0 -50px
+	border 16px solid #f3f3f3
+	border-radius 50%
+	border-top  16px solid $blue
+	width 100px
+	height 100px
+	animation spin 2s ease infinite
+	background-color $blue
+
+#pic_icetool
+	position absolute
+	margin -33px 0 0 -33px
+	left 50%
+	top 50%
+	z-index 5
+	width 66px
+	height 66px
+	border-radius 50%
+	animation spin2 5s linear infinite
+
+@keyframes spin
+	0% 
+		transform rotate(0deg)
+	100%
+		transform rotate(360deg)
+
+
+@keyframes spin2
+	0%
+		transform rotate(0deg)
+	100%
+		transform rotate(360deg)
+
+/* End of Loader animation */
+#routeModal
+	max-height 560px
+	max-width 400px
+	
+#routeIMG
+	max-height 510px
+	max-width 98%
+
+
+@media (max-width:320px)
+	#routeIMG
+		max-height 410px
+		max-width 98%
+	#routeModal
+		max-height 460px
+		max-width 98%	
+
+@media (max-width:375px)
+	#routeIMG
+		max-height 510px
+		max-width 98%
+	#routeModal
+		max-height 560px
+		max-width 98%	
+      
+@media (max-width:420px)
+	#routeIMG
+		max-height 510px
+		max-width 98%
+	#routeModal
+		max-height 560px
+		max-width 98%	
+	
+/* Masonry */
+.grid-item 
+	width 150px
+.grid-item--width2 
+	width 300px	 
+	
+	
+	  
+	 	

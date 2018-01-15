@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div class="w3-hide-small" style="height: 43px;"></div>
+	
+	<section class="w3-row w3-margin-top">
+		<div class="w3-col m1 l2 w3-hide-small"> &nbsp;</div>
+
+		<div class="w3-col m10 l8 s12 w3-padding w3-center my-flex" id="content">
+
+	<!-- Start of Text - Content block -->
+
+
+			<h2 class="w3-text-red">Видео с наших соревнований</h2>
+			{% with messages = get_flashed_messages() %}
+			    {% if messages %}
+				    <div class="w3-pale-green w3-border-green w3-border w3-round" style="margin: 16px 0 0 0; width: 80%">
+				    <a href="#" class="w3-right w3-padding w3-text-green w3-large w3-hover-text-red w3-round w3-padding" onclick="assign_id(this);delete_element()" style="position: relative; top:-3px">x</a>
+					    {% for message in messages %}
+					    	
+					        <p class="w3-padding">{{ message }}</p>
+
+					    {% endfor %}
+			    	</div>
+			   	 <br>
+			  	{% endif %}
+		 	{% endwith %}
+
+			{% if session['role'] == 'admin' or session['role'] == 'guest' %}
+			<!-- create new route  -->
+			<div class="">
+				<div class="w3-display-container w3-round-xlarge w3-btn-1 w3-border w3-margin w3-center" title="добавить спонсора" onclick="document.getElementById('add_video').style.display='block'" style="width: 250px;">
+					<span class="w3-text-blue w3-large"><i class="fa fa-video-camera"></i> добавить видео</span>
+				</div>
+			</div>		
+			{% else %}
+			{% endif %}
+		
+			{% for video in videos %}		
+				
+				{% if video.vimeoURL != '' %}
+					<div class="my-video w3-red-l1 w3-display-container">
+
+						{% if session['role'] == 'admin' or session['role'] == 'guest' %}
+						<div class="w3-display-topright w3-padding w3-text-white w3-large w3-hover-red w3-round-large" onclick="assign_id(this);delete_video('{{ video.description }}')"><i class="fa fa-trash-o"></i></div>
+						{% else %}		
+						{% endif %}
+
+						<div class="w3-center">
+						<iframe src="{{ video.vimeoURL }}?color=f44336&title=0&byline=0&portrait=0" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+						</div>
+						<div class="w3-padding w3-container w3-red-l1 w3-center">{{ video.description}}</div>
+					</div>
+					<br>
+					<hr style="width: 90%; margin:auto;">
+					<br>
+				{% else %}
+				{% endif %}
+				{% if video.youtubeURL != '' %}
+					<div class="my-video w3-red-l1 w3-display-container">
+
+						{% if session['role'] == 'admin' or session['role'] == 'guest' %}
+						<div class="w3-display-topright w3-padding w3-text-white w3-large w3-hover-red w3-round-large" onclick="assign_id(this);delete_video('{{ video.description }}')"><i class="fa fa-trash-o"></i></div>
+						{% else %}		
+						{% endif %}
+
+						<div class="w3-center">
+						<iframe src="{{ video.youtubeURL }}?rel=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe>
+						</div>
+						<div class="w3-padding-24 w3-container w3-red-l1 w3-center">{{ video.description}}</div>
+					</div>	
+					<br>
+					<hr style="width: 90%; margin:auto;">
+					<br>				
+				{% else %}
+
+				{% endif %}
+
+			
+			{% endfor %}
+			
+
+
+	<!-- Modal window to add new video -->
+			<div id="add_video" class="w3-modal w3-display-container" style="display: {{ request.args.get('displayNewVideo') }}">
+				<div class="w3-modal-content w3-animate-zoom w3-padding w3-center" style="max-width: 320px;">
+					<button onclick="document.getElementById('add_video').style.display='none'" class="w3-button w3-right w3-hover-red-d3 w3-red"><i class="fa fa-close"></i></button>	
+
+					<h3 class="" style="text-align: center;">Новый видос</h3>
+						{% with messages = get_flashed_messages() %}
+						    {% if messages %}
+						    
+						    {% for message in messages %}
+						        <p class="w3-text-red w3-padding">{{ message }}</p>
+						    {% endfor %}
+						    
+						  {% endif %}
+						{% endwith %} 	
+						<br>			
+					<form action="{{ url_for('media.add_video') }}" class="w3-container w3-padding" method="POST" enctype="multipart/form-data" name="contact" >
+						<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+						<input required type="text" class="w3-input  w3-animate-input w3-border-blue w3-center w3-small w3-margin-bottom" placeholder="название для видео" name="description" style="width: 60%; margin: auto;" maxlength="48">
+
+						<input  type="text" class="w3-input w3-animate-input w3-animate-input w3-border-blue w3-center w3-small w3-margin-bottom" placeholder="ссылка на YOUTUBE" name="youtubeURL" style="width: 60%; margin: auto;">
+						<p class="">или</p>
+						<input  type="text" class="w3-input w3-animate-input w3-animate-input w3-border-blue w3-center w3-small w3-margin-bottom" placeholder="ссылка на VIMEO" name="vimeoURL" style="width: 60%; margin: auto;">
+
+					 	<br>
+					 	<br>
+					 	<input type="submit" class="w3-button w3-green w3-margin" value="создать">
+						
+
+					</form>
+				</div>	
+			</div>
+
+	<!-- End of Text - Content block -->
+		</div>
+
+		<div class="w3-col m1 l2 w3-hide-small"> &nbsp;</div>
+		
+		
+	</section>
+
+{% endblock %}

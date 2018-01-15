@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div class="w3-hide-small" style="height: 43px;"></div>
+	
+	<section class="w3-row w3-margin-top">
+		<div class="w3-col m1 l2 w3-hide-small"> &nbsp;</div>
+
+		<div class="w3-col m10 l8 s12 w3-padding " id="content">
+
+	<!-- Start of Text - Content block -->
+
+
+		<hr style="width: 90%; margin:auto;" >
+			<div class="w3-row w3-padding">
+			<h2 class="w3-text-red w3-center ">Карточка участника</h2>
+				
+				<div class="w3-col m3 w3-border-right w3-padding w3-border-blue">
+				<p class="w3-large"><b>{{ member.name }}</b></p>
+				<p class="w3-large"><b>{{ member.sname }}</b></p>
+				<p class="w3-small">{{ member.year }} г.р.</p>
+				<br>
+				<p class="w3-small">Клуб: </p>
+				<p class="w3-small">"{{ member.club }}"</p>
+				<br>
+				<p class="w3-small">Разряды:</p>
+				<p class="w3-small"	>по альпинизму: {{ member.alpSkill }}</p>
+				<p class="w3-small">по скалолазанию: {{ member.climbSkill }}</p>
+				</div>
+
+				<div class="w3-rest w3-padding">
+				<p class="w3-small">Участие в соревнованиях:</p>
+				<br>
+				{% for member1 in member1 %}
+					<p><b>{{member1.competition}}</b>,  &nbsp;команда: "<i>{{member1.teamName}}</i>",  &nbsp;место:
+					<b>{% if member1.position==0  %} {{member1.teamStatus}} {% else %} {{member1.position}} {% endif %}</p>
+				{% endfor %}</b>
+
+				{% for member2 in member2 %}
+					<p><b>{{member2.competition}}</b>,  &nbsp;команда: "<i>{{member2.teamName}}</i>",  &nbsp;место:
+					<b>{% if member2.position==0  %} {{member2.teamStatus}} {% else %} {{member2.position}} {% endif %}</b></p>
+				{% endfor %}
+			</div>
+			<br>
+			<div class="w3-clear"></div>
+			<br>
+		<hr style="width: 90%; margin:auto;">
+
+
+	<!-- End of Text - Content block -->
+		</div>
+
+		<div class="w3-col m1 l2 w3-hide-small"> &nbsp;</div>
+		
+		
+	</section>
+
+{% endblock %}

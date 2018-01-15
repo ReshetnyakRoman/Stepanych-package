@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}
+
+{% block content %}
+<!-- SIMDITOR scripts -->
+<link rel="stylesheet" type="text/css" href="/css/simditor.css" media="screen" />
+
+
+
+
+
+<!-- End of SIMDITOR scripts -->
+	<section class="w3-row w3-margin-top">
+		<div class="w3-col m1 l2 w3-hide-small"> &nbsp;</div>
+
+		<div class="w3-col m10 l8 s12 w3-padding " id="news">
+			<!-- Start of Text - Content block -->
+
+
+			<div class="w3-hide-small" style="height: 43px;"></div>
+			<div class="w3-display-container">
+			{% with messages = get_flashed_messages() %}
+			    {% if messages %}
+			    <div class="w3-pale-green w3-border-green w3-border w3-round">
+			    {% for message in messages %}
+			    	<a href="#" class="w3-right w3-padding w3-text-green w3-large w3-hover-text-red w3-round w3-padding" onclick="assign_id(this);delete_element()" style="position: relative; top:-3px">x</a>
+			        <p class="w3-padding">{{ message }}</p>
+			    {% endfor %}
+			    </div>
+			  {% endif %}
+			 {% endwith %} 		
+				
+				<h3>Редактирование cтраницы</h3>
+				{% if current_user.can(Permission.ADMIN) %}
+				<form method="POST" action="{{ url_for('site.edit_page', iconDescriptionEng=iconDescriptionEng) }}" class="w3-container">
+
+					{{ form.csrf_token }}
+					<div class="w3-section">
+
+						 {{ form.header(class="w3-input w3-border w3-margin-bottom") }}	
+						 	<p class="w3-tiny w3-text-red">
+								{% for message in form.header.errors %}
+								{{ message }}
+								{% endfor %}
+							</p>	
+						 <br>
+
+						{{ form.body(class="w3-input w3-border w3-margin-bottom", id="txt-editor") }}
+							<p class="w3-tiny w3-text-red">
+								{% for message in form.body.errors %}
+								{{ message }}
+								{% endfor %}
+							</p>
+
+
+						
+						{{ form.submit(class="w3-btn-1 w3-border-blue w3-border w3-round w3-margin w3-right w3-text-blue") }}
+
+					</div>
+
+				</form>
+				
+
+				{% else %}
+				<p>Сожалеем, но у вас нет прав для добавления новостей</p>
+				{% endif %}
+			</div>
+
+
+			<!-- End of Text - Content block -->
+		<div class="w3-col m1 l2 w3-hide-small"> &nbsp;</div>
+		
+		
+	</section>
+	
+	<script type="text/javascript" src="/static/js/module.js"></script>
+	<script type="text/javascript" src="/static/js/hotkeys.js"></script>
+	<script type="text/javascript" src="/static/js/uploader.js"></script>
+	<script type="text/javascript" src="/static/js/simditor.js"></script>
+	<script type="text/javascript" src="/static/js/simditor-autosave.js"></script>
+	<script>
+		 $(function() {
+			var editor = new Simditor({
+		  	textarea: $('#txt-editor'),
+		  	defaultImage:'/img/',
+		  	upload:false,
+		  	pasteImage:false,
+		  	imageButton:['external'],
+		  	code:false,
+		  	toolbar:[
+		  	'title',
+		  	'bold',
+		  	'italic',
+		  	'underline',
+		  	'strikethrough',
+		  	'fontScale',
+		  	'color',
+		  	'indent',
+		  	'outdent',
+		  	'alignment',
+		  	'hr',
+		  	'ol',
+		  	'ul',
+		  	'blockquote',
+		  	'table',
+		  	'link',
+		  	'image',
+		  	'code']
+			});
+
+		 });
+	</script>
+{% endblock %}
