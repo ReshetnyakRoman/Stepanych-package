@@ -20,6 +20,14 @@ systemctl poweroff – выключает систему
 systemctl reboot – перезагружает систему
 systemctl daemon-reload - перезагрузка всех серверов
 
+FireWall
+sudo systemctl enable firewalld
+sudo systemctl start firewalld
+sudo systemctl status firewalld
+
+$ sudo journalctl -r репорт последних действий в системе может показать  брутфорс атаку.
+
+
 =======Добавление сервиса в автозагрузку======
 Find out the name of service’s script from /etc/init.d/ directory e.g. mysqld or httpd
 Add it to chkconfig

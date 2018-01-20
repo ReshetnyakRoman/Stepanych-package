@@ -19,27 +19,27 @@ class mainTable(db.Model, UserMixin):
 	email = db.Column(db.String(64), index=True)
 	teamName = db.Column(db.String(128), index=True)
 	passwordHash = db.Column(db.String(256))
-	setNumber = db.Column(db.Integer)
+	setNumber = db.Column(db.Integer, default = 1)
 	name1 = db.Column(db.String(64))
 	sname1 = db.Column(db.String(64))
-	year1 = db.Column(db.Integer)
+	year1 = db.Column(db.Integer, default = 0)
 	male1 = db.Column(db.String(64))
 	club1 = db.Column(db.String(64))
 	alpSkill1 = db.Column(db.String(64))
 	climbSkill1 = db.Column(db.String(64))
 	name2 = db.Column(db.String(64))
 	sname2 = db.Column(db.String(64))
-	year2 = db.Column(db.Integer)
+	year2 = db.Column(db.Integer, default = 0)
 	male2 = db.Column(db.String(64))
 	club2 = db.Column(db.String(64))
 	alpSkill2 = db.Column(db.String(64))
 	climbSkill2 = db.Column(db.String(64))	
 	role = db.Column(db.String(64), db.ForeignKey('roles.role', ondelete='CASCADE'))
 	teamChange = db.Column(db.String(64))
-	waitingListYes = db.Column(db.String(64))
+	waitingListYes = db.Column(db.Integer, default = 1)
 	keyName1Sname1Year1 = db.Column(db.String(256))
 	keyName2Sname2Year2 = db.Column(db.String(256))
-	position = db.Column(db.Integer)
+	position = db.Column(db.Integer, default = 0)
 	confirmed = db.Column(db.String(64), default = 'False')
 	pendingEmail = db.Column(db.String(64))
 	teamStatus = db.Column(db.String(64)) # discqualified/не явились/ок
@@ -127,57 +127,39 @@ class mainTable(db.Model, UserMixin):
 		return json_team
 
 	
-	def results(self):
-		routeList = Routes.query.all()
+	def results(self,routeNuber,competition):
 		results = {
-		'keyTeamCompetition':self.keyTeamCompetition,
-		'competition':self.competition,
-		'email':self.email,
-		'teamName':self.teamName,
-		'name1':self.name1,
-		'sname1':self.sname1,
-		'club1':self.club1,
-		'year1':self.year1,
-		'alpSkill1':self.alpSkill1,
-		'climbSkill1':self.climbSkill1,
-		'male1':self.male1,
-		'name2':self.name2,
-		'sname2':self.sname2,
-		'club2':self.club2,
-		'year2':self.year2,
-		'alpSkill2':self.alpSkill2,
-		'climbSkill2':self.climbSkill2,				
-		'male2':self.male2,
-		'position':self.position,
-		'teamStatus':self.teamStatus,
-		'bestTeams':self.bestTeams,
 		'routeScoreTotal':self.routeScoreTotal,
 		'routeScoreFinal':round(self.routeScoreFinal,0),
 		'routeTimeSecTotal':self.routeTimeSecTotal,
 		'routeTimeSecTotalMin': round((self.routeTimeSecTotal - self.routeTimeSecTotal%60)/60,0),
 		'routeTimeSecTotalSec': self.routeTimeSecTotal%60
 		}
-		routesPassed = 0
-		for route in routeList:
-			timex = 'routeTimeSec' + str(route.routeNuber)
-			timeMin = timex + 'Min'
-			timeSec = timex + 'Sec'
-			results[timex] = getattr(self,timex,0)
-			results[timeMin] = round((results[timex] - results[timex]%60)/60,0)
-			results[timeSec] = results[timex]%60
-			if getattr(self,timex) != 0 :
-				routesPassed = routesPassed + 1
-		results['routesPassed'] = routesPassed
+		if routeNuber == 0:
+			routesPassed = 0
+			for route in Routes.query.filter_by(competition=competition).all():
+				timex = 'routeTimeSec' + str(route.routeNuber)
+				if getattr(self,timex) != 0 :
+					routesPassed = routesPassed + 1
+			results['routesPassed'] = routesPassed
+		else:
+			if routeNuber == 1000:
+				pass
+			else:	
+				route = Routes.query.filter_by(competition=competition).filter_by(routeNuber=routeNuber).first()
+				timex = 'routeTimeSec' + str(route.routeNuber)
+				timeMin = timex + 'Min'
+				timeSec = timex + 'Sec'
+				results[timex] = getattr(self,timex,0)
+				results[timeMin] = round((results[timex] - results[timex]%60)/60,0)
+				results[timeSec] = results[timex]%60
+		
 		return results
 
 	@staticmethod
-	def update_scores():
-		if Competition.query.first() is not None:
-			competitionName = Competition.query.first().competitionName
-		else: 
-			competitionName = ''
-		teams = mainTable.query.filter_by(competition=competitionName).all()
-		routes = Routes.query.all()
+	def update_scores(competition):
+		teams = mainTable.query.filter_by(competition=competition).all()
+		routes = Routes.query.filter_by(competition=competition).all()
 		for team in teams:
 			
 			team.routeTimeSecTotal = 0
@@ -189,37 +171,37 @@ class mainTable(db.Model, UserMixin):
 			for route in routes:
 				routeAttrName = 'routeTimeSec'+str(route.routeNuber)
 				if getattr(team,routeAttrName,0) != 0:
-					team.routeScoreTotal = team.routeScoreTotal + route.weight+team.routeScoreFinal
+					team.routeScoreTotal = team.routeScoreTotal + route.weight
 				else:
-					team.routeScoreTotal = team.routeScoreTotal + team.routeScoreFinal
+					team.routeScoreTotal = team.routeScoreTotal
+			
+			team.routeScoreTotal = team.routeScoreTotal + team.routeScoreFinal
+					
 			db.session.add(team)
 
 		db.session.commit	
 
 	@staticmethod
-	def update_positions():
-		if Competition.query.first() is not None:
-			competitionName = Competition.query.first().competitionName
-		else: 
-			competitionName = ''
-		teams = mainTable.query.filter_by(competition=competitionName).filter_by(teamStatus='ok').order_by(mainTable.routeScoreTotal.desc()).order_by(mainTable.routeTimeSecTotal).all()
+	def update_positions(competition):
+		
+		teams = mainTable.query.filter_by(competition=competition).filter_by(teamStatus='ok').order_by(mainTable.routeScoreTotal.desc()).order_by(mainTable.routeTimeSecTotal).all()
 		for index, team in enumerate(teams, start=1):
 			team.position = index
 			team.bestTeams = 'none'
 			db.session.add(team)
 
-		badTeams = mainTable.query.filter_by(competition=competitionName).filter(mainTable.teamStatus != 'ok').all()
+		badTeams = mainTable.query.filter_by(competition=competition).filter(mainTable.teamStatus != 'ok').all()
 		for teamx in badTeams:
 			teamx.position = 0
 			teamx.bestTeams = 'none'
 			db.session.add(teamx)
 
-		bestWeemen = mainTable.query.filter_by(male1='Ж').filter_by(male2='Ж').order_by(mainTable.routeScoreTotal.desc()).order_by(mainTable.routeTimeSecTotal).first()
+		bestWeemen = mainTable.query.filter_by(male1='Ж').filter_by(male2='Ж').filter_by(competition=competition).order_by(mainTable.routeScoreTotal.desc()).order_by(mainTable.routeTimeSecTotal).first()
 		if bestWeemen is not None:
 			bestWeemen.bestTeams = 'weemen'
 			db.session.add(bestWeemen)
-		bestMix1 = mainTable.query.filter_by(male1='М').filter_by(male2='Ж').order_by(mainTable.routeScoreTotal.desc()).order_by(mainTable.routeTimeSecTotal).first()
-		bestMix2 = mainTable.query.filter_by(male1='Ж').filter_by(male2='М').order_by(mainTable.routeScoreTotal.desc()).order_by(mainTable.routeTimeSecTotal).first()
+		bestMix1 = mainTable.query.filter_by(male1='М').filter_by(male2='Ж').filter_by(competition=competition).order_by(mainTable.routeScoreTotal.desc()).order_by(mainTable.routeTimeSecTotal).first()
+		bestMix2 = mainTable.query.filter_by(male1='Ж').filter_by(male2='М').filter_by(competition=competition).order_by(mainTable.routeScoreTotal.desc()).order_by(mainTable.routeTimeSecTotal).first()
 		
 		if bestMix1 is None and bestMix2 is not None:
 			if bestMix2.routeScoreTotal > 0:

@@ -11,7 +11,12 @@
 			<!-- Start of Text - Content block -->
 	<!-- Шапка --> 
 			<h2 class="w3-text-red">Список всех зарегестрированных участников</h2>
+			{% if current_user.can(Permission.ADMIN) %}
 			<p class="w3-tiny w3-text-grey"><sup>*</sup>Эта страничка предназначена для администратора соревнования. Здесь можно смотреть всех участников когла либо регестрировавшихся в соревнованиях, удалять их из базы данных если они козлы, или попали сюда по ошибке! А так же посмотреть в каких командах состоял участник.</p>
+			{% else %}	
+			<p class="w3-tiny w3-text-grey"><sup>*</sup>Список всех спортсменов регестрировавшихся в ниших соревнованиях с начала ведения базы данных. Если вы нашли ошибку, пишите нам и мы ее поправим :)</p>
+
+			{% endif %}
 			<br>
 			<br>
 
@@ -37,8 +42,8 @@
 			{% for member in memberList %}
 				<li class="w3-tiny w3-row user">
 					<a href="{{ url_for('competition.profile', name=member.name, sname=member.sname, year=member.year)}}" class="w3-hover-text-blue">
-					<div class="sname" style="width: 30px; display: inline-block;">{{ loop.index }} </div>
-					<div class="sname" style="width: 100px; display: inline-block;"> {{ member.sname }}</div>
+					<div style="width: 30px; display: inline-block;">{{ loop.index }} </div>
+					<div class="sname" style="width: 100px; display: inline-block;">{{ member.sname }}</div>
 					<div class="name" style="width: 100px; display: inline-block;">{{ member.name }}</div>
 					<div class="year" style="width: 50px; display: inline-block;">{{ member.year }}</div>
 					<div class="male" style="width: 55px; display: inline-block;">{{ member.male }}</div>
@@ -46,7 +51,11 @@
 					<div class="alpSkill" style="width: 40px; display: inline-block;">{{ member.alpSkill }}</div>
 					<div class="climbSkill" style="width: 40px; display: inline-block;">{{ member.climbSkill }}</div>
 					</a>
+					{% if current_user.can(Permission.ADMIN) %}
 					<div class="w3-hover-red w3-round w3-text-red w3-padding-small" style="width: 32px; display: inline-block;" onclick="document.getElementById('delete_user').style.display='block';assign_id(this)"><i class="fa fa-trash-o  w3-large"></i></div>
+					{% else %}		
+					{% endif %}
+
 				</li>
 			{% set count = count + 1 %}
 			{% endfor %}			

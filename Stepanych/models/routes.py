@@ -3,7 +3,8 @@ from Stepanych.models.competition import Competition
 
 class Routes(db.Model):
 	__tablename__='routes'
-	routeNuber=db.Column(db.Integer, primary_key=True)
+	id=db.Column(db.Integer, primary_key=True)
+	routeNuber=db.Column(db.Integer)
 	score = db.Column(db.Integer)
 	controlTimeSec = db.Column(db.Integer)
 	teamsPassTrough = db.Column(db.Integer)

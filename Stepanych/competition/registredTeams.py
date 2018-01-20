@@ -57,6 +57,31 @@ def registred_teams_update():
 		flash('Списки участников опубликованы без изменений')
 		return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
 
+@competition.route('/registredteams/save_update', methods=['POST'])
+@admin_required
+def registred_teams_update_save():
+	competition = Competition.query.first()
+	jsonTeamList = request.get_json(silent=True)
+	if request.is_json and len(jsonTeamList['teamName'])>0:
+		
+		for i in range(len(jsonTeamList['teamName'])):
+			changeSet = mainTable.query.filter_by(competition=competition.competitionName).filter_by(teamName=jsonTeamList['teamName'][i]).first()
+			changeSet.waitingListYes = jsonTeamList['set'][i]
+			db.session.add(changeSet)
+
+		changeStatusTeams = mainTable.query.filter_by(competition=competition.competitionName).filter_by(waitingListYes=0).all()
+		for team in changeStatusTeams:
+			team.teamStatus = 'ожид'
+		db.session.commit()		
+		flash('Изменения сохранены')
+		return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
+	else: 
+		competition.participantsListStatus = "published"
+		db.session.add(competition)
+		db.session.commit()
+		flash('Списки участников опубликованы без изменений')
+		return json.dumps({'success':True}), 200, {'ContentType':'application/json'}		
+
 
 @competition.route('/registredteams/unpublish', methods=['POST'])
 @admin_required

@@ -44,7 +44,7 @@ class RegistrationForm(FlaskForm):
 	teamName = StringField('Название команды', validators = [
 		Required("введите название команды"),
 		Length(1,128),
-		Regexp('^[A-Za-zА-Яа-яёЁ0-9][A-Za-zА-Яа-яёЁ0-9_ ]*$',0,'Допускаются только буквы, цыфры и нижнее подчеркивание и пробелы')],
+		Regexp('^[A-Za-zА-Яа-яёЁЙ0-9()& +-][A-Za-zА-Яа-яёЁЙ0-9_ ()&+-]*$',0,'Допускаются только буквы, цыфры и нижнее подчеркивание и пробелы')],
 		render_kw={"placeholder": "название команды"})
 	
 	email = StringField('Email', validators = [Required("введите email"), Email("неправильное написание"), Length(1,64)], render_kw = {"placeholder": "email*"})
@@ -70,14 +70,13 @@ class RegistrationForm(FlaskForm):
 		validators =[
 		Required("Введите фамилию 1го участника"), 
 		Length(1,64), 
-		Regexp('^[A-Za-zА-Яа-я0-9][A-Za-zА-Яа-я0-9_ ]*$',0,'Допускаются только буквы, цыфры и нижнее подчеркивание и пробелы')],
+		Regexp('^[A-Za-zА-ЯЁёа-я0-9][A-Za-zА-ЯЁёа-я0-9_ ]*$',0,'Допускаются только буквы, цыфры и нижнее подчеркивание и пробелы')],
 		render_kw={"placeholder": "Файмилия участника"})
 	
 	club1 = StringField('Клуб', 
 		validators =[
 		Required("Введите клуб 1го участника"), 
-		Length(1,128), 
-		Regexp('^[A-Za-zА-ЯЁёа-я0-9. ][A-Za-zА-ЯЁёа-я0-9_. ]*$',0,'Допускаются только буквы, цыфры и нижнее подчеркивание и пробелы')],
+		Length(1,128)],
 		render_kw={"placeholder": "Клуб"})
 	
 	year1 = StringField('Год рождения', 
@@ -111,8 +110,7 @@ class RegistrationForm(FlaskForm):
 	club2 = StringField('Клуб', 
 		validators =[
 		Required("Введите клуб 1го участника"), 
-		Length(1,128), 
-		Regexp('^[A-Za-zА-ЯЁёа-я0-9. ][A-Za-zА-ЯЁёа-я0-9_. ]*$',0,'Допускаются только буквы, цыфры и нижнее подчеркивание и пробелы')],
+		Length(1,80)],
 		render_kw={"placeholder": "Клуб"})
 	
 	year2 = StringField('Год рождения', 

@@ -65,7 +65,7 @@
 			
 					{% for competition in competitionArchive %}
 					<div class="archive w3-border my-card w3-round-large my-btn-1 w3-text-grey w3-display-container"> 
-						<a href="{{ url_for('competition.archive', competitionName=competition.competitionName, prevURL=request.full_path) }}">
+						<a id="button-upload2x" class="button-upload" href="{{ url_for('competition.archive', competitionName=competition.competitionName, prevURL=request.full_path) }}">
 							<div class=" my-card-top" ><p class="step45 competitionName">{{competition.competitionName}}</p></div>
 					
 							<div class="w3-padding-24 w3-container" style="height: 70px"><i class="fa fa-lock w3-xxlarge"></i></div>
@@ -107,7 +107,7 @@
 					<input type="file" id="docs" name="docs" class="w3-margin-bottom w3-small">
 				 	<br>
 				 	<br>
-				 	<input type="submit" class="w3-button w3-green w3-margin" value="загрузить" id="button-upload">
+				 	<input type="submit" class="w3-button w3-green w3-margin button-upload" value="загрузить">
 					
 
 				</form>

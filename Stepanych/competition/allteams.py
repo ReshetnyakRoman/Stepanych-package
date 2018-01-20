@@ -29,6 +29,7 @@ def allteams():
 @admin_required
 def delete_team(TeamCompetition):
 	mainTable.query.filter_by(keyTeamCompetition=TeamCompetition).delete()
+	db.session.commit()
 	return redirect(url_for('competition.allteams'))
 
 @competition.route('/allteams/change', methods=['POST'])
@@ -167,7 +168,7 @@ def registration():
 			 )
 			db.session.add(team)
 			db.session.commit()
-			flash('Команда добавлена')
+			flash('Команда "%s" добавлена' % (registrationForm.teamName.data))
 			return redirect(url_for('competition.allteams'))
 		else:
 			db.session.commit()
@@ -177,8 +178,6 @@ def registration():
 	return redirect(url_for('competition.allteams', displayRegistrationForm='block'))
 
 @competition.route('/allmembers')
-@login_required
-@permission_required(Permission.ADMINVIEW)
 def allmembers():
 	memberList = Members.query.all()
 	return render_template('competition/allmembers.html', memberList=memberList, displayLoginForm=request.args.get('displayLoginForm'))
@@ -189,6 +188,7 @@ def allmembers():
 def delete_member():
 	keyNameSnameYear = request.form['keyNameSnameYear']
 	Members.query.filter_by(keyNameSnameYear=keyNameSnameYear).delete()
+	db.session.commit()
 	flash('Участник удален')
 	return redirect(url_for('competition.allmembers'))
 

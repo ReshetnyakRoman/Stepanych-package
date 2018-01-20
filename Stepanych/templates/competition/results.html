@@ -6,7 +6,7 @@
 
 	
 	<section class="w3-row w3-margin-top">
-		{% if session['role'] == 'admin' or session['role'] == 'guest' %}
+		{% if current_user.can(Permission.ADMINVIEW) %}
 		<div class="w3-col w3-hide-small" style="width: 48px;"> &nbsp;</div>
 		{% else %}
 		{% endif %}
@@ -87,7 +87,7 @@
 							</tr>
 							<tr class="w3-border-bottom w3-border-blue" style="font-weight:bold;">
 								<td>место</td>
-								<td>название команды</td>
+								<td style="overflow: hidden; width: 30px;">название команды</td>
 								<td>участники</td>
 								<td>г/р</td>
 								<td>клуб</td>
@@ -102,50 +102,50 @@
 								<td class="w3-center  w3-border-left w3-border-blue"></td>
 								<td>&nbsp;</td>
 							</tr>
-							
+							 
 				<!-- Table content -->
 						 	{% for team in teams %}
 							<tr class="
 							{% if highlightFinals == 'yes' and loop.index == 4 %}w3-border-red w3-border-bottom-3 {% else %} w3-border-blue w3-border-bottom{% endif %} 
 							
-							{% if team.results().bestTeams == 'weemen' %} w3-red-l3 {% else %} 
-								{% if team.results().bestTeams == 'mix' %} w3-green-l3 {% else %}
+							{% if team.bestTeams == 'weemen' %} w3-red-l3 {% else %} 
+								{% if team.bestTeams == 'mix' %} w3-green-l3 {% else %}
 									{% if loop.index%2 == 0 %}w3-blue-l4{% else %}{% endif %}
 								{% endif %}
 							{% endif %}
 							
 							  w3-hover-lime">
 								<td  class="w3-center ">{{loop.index}}</td>
-								<td  class=""><span class="teamName">{{team.results().teamName}}</span> <span class="male w3-hide">{{team.results().male1}}{{team.results().male2}}</span></td>
+								<td  style="column-width: 120px; white-space: normal;"><span class="teamName">{{team.teamName}}</span> </td>
 								<td>
-									<a href="{{url_for('competition.profile', name=team.results().name1, sname=team.results().sname1, year=team.results().year1)}}" class="w3-text-blue">{{team.results().sname1}} {{team.results().name1}}</a><br>
-									<a href="{{url_for('competition.profile', name=team.results().name2, sname=team.results().sname2, year=team.results().year2)}}" class="w3-text-blue">{{team.results().sname2}} {{team.results().name2}}</a>
+									<a href="{{url_for('competition.profile', name=team.name1, sname=team.sname1, year=team.year1)}}" class="w3-text-blue">{{team.sname1}} {{team.name1}}</a><br>
+									<a href="{{url_for('competition.profile', name=team.name2, sname=team.sname2, year=team.year2)}}" class="w3-text-blue">{{team.sname2}} {{team.name2}}</a>
 								</td>
-								<td>{{team.results().year1}} <br>{{team.results().year2}}</td>
-								<td>{{team.results().club1}} <br>{{team.results().club2}}</td>
-								<td>{{team.results().alpSkill1}} <br>{{team.results().alpSkill1}} </td>
-								<td>{{team.results().climbSkill1}} <br>{{team.results().climbSkill1}} </td>
+								<td>{{team.year1}} <br>{{team.year2}}</td>
+								<td>{{team.club1}} <br>{{team.club2}}</td>
+								<td>{{team.alpSkill1}} <br>{{team.alpSkill1}} </td>
+								<td>{{team.climbSkill1}} <br>{{team.climbSkill1}} </td>
 									{% for route in routesInfo %}
 										<td class=" w3-border-blue w3-border-left routes">
-											<input disabled	 type="number" value="{{ (team.results()['routeTimeSec'~route.routeNuber~'Min']) | round | int }}" min="0" style="direction: rtl;" class="min">:
-											<input type="number" value="{{  team.results()['routeTimeSec'~route.routeNuber~'Sec']  }}" min="0" max="59"  disabled class="sec">
+											<input disabled	 type="number" value="{{ (team.results(route.routeNuber,competition)['routeTimeSec'~route.routeNuber~'Min']) | round | int }}" min="0" style="direction: rtl;" class="min">:
+											<input type="number" value="{{  team.results(route.routeNuber,competition)['routeTimeSec'~route.routeNuber~'Sec']  }}" min="0" max="59"  disabled class="sec">
 											<span class="w3-hide routeNuber">{{route.routeNuber}}</span>
 										</td>
 									{% endfor %}
 								<td class="w3-border-blue w3-border-left w3-center">
 
-									<input disabled id="routeScoreFinal"	 type="number" value="{{ team.results().routeScoreFinal | round | int }}" min="0" style="width: 45px; text-align: center;" class="routeScoreFinal">
+									<input disabled id="routeScoreFinal"	 type="number" value="{{ team.results(1000,competition).routeScoreFinal | round | int }}" min="0" style="width: 45px; text-align: center;" class="routeScoreFinal">
 								</td>
-								<td class="w3-border-blue w3-border-left w3-center">{{ team.results().routeScoreTotal | round | int }} <br>{{ team.results().routeTimeSecTotalMin | round | int }}:{{team.results().routeTimeSecTotalSec}}
+								<td class="w3-border-blue w3-border-left w3-center">{{ team.results(1000,competition).routeScoreTotal | round | int }} <br>{{ team.results(1000,competition).routeTimeSecTotalMin | round | int }}:{{team.results(1000,competition).routeTimeSecTotalSec}}
 								</td>
-								<td class="w3-border-blue w3-border-left w3-center">{{team.results().routesPassed}}</td>
+								<td class="w3-border-blue w3-border-left w3-center">{{team.results(0,competition).routesPassed}}</td>
 
 
 								<td class="w3-border-blue w3-border-left">
 									<select name="status" disabled class="teamStatus">
-										<option value="ok" {% if team.results().teamStatus == 'ok' %} selected {% else %}{% endif %} >ok</option>
-										<option value="н/я" {% if team.results().teamStatus == 'н/я' %} selected {% else %}{% endif %} >н/я</option>
-										<option value="дискв" {% if team.results().teamStatus == 'дискв' %} selected {% else %}{% endif %} >дискв</option>
+										<option value="ok" {% if team.teamStatus == 'ok' %} selected {% else %}{% endif %} >ok</option>
+										<option value="н/я" {% if team.teamStatus == 'н/я' %} selected {% else %}{% endif %} >н/я</option>
+										<option value="дискв" {% if team.teamStatus == 'дискв' %} selected {% else %}{% endif %} >дискв</option>
 									</select>
 								</td>	
 								<td class="w3-border-blue w3-border-bottom">
@@ -153,41 +153,42 @@
 									<button class="w3-btn-1 w3-round w3-blue w3-hide w3-padding-small w3-margin-left" onclick="save_results(this);"><i class="fa fa fa-save w3-medium"></i></button>
 								</td>
 							</tr>
+
 							<!-- Дисквалифицированные команды -->
 							{% endfor %}
 							{% for team in badTeams %}
 							<tr class="w3-border-blue w3-border-bottom w3-light-grey w3-hover-lime">
 								<td  class="w3-center ">{{team.teamStatus}}</td>
-								<td  class=""><span class="teamName">{{team.results().teamName}}</span> <span class="male w3-hide">{{team.results().male1}}{{team.results().male2}}</span></td>
+								<td  style="column-width: 120px; white-space: normal;"><span class="teamName" >{{team.teamName}}</span> </td>
 								<td>
-									<a href="{{url_for('competition.profile', name=team.results().name1, sname=team.results().sname1, year=team.results().year1)}}" class="w3-text-blue">{{team.results().sname1}} {{team.results().name1}}</a><br>
-									<a href="{{url_for('competition.profile', name=team.results().name2, sname=team.results().sname2, year=team.results().year2)}}" class="w3-text-blue">{{team.results().sname2}} {{team.results().name2}}</a>
+									<a href="{{url_for('competition.profile', name=team.name1, sname=team.sname1, year=team.year1)}}" class="w3-text-blue">{{team.sname1}} {{team.name1}}</a><br>
+									<a href="{{url_for('competition.profile', name=team.name2, sname=team.sname2, year=team.year2)}}" class="w3-text-blue">{{team.sname2}} {{team.name2}}</a>
 								</td>
-								<td>{{team.results().year1}} <br>{{team.results().year2}}</td>
-								<td>{{team.results().club1}} <br>{{team.results().club2}}</td>
-								<td>{{team.results().alpSkill1}} <br>{{team.results().alpSkill1}} </td>
-								<td>{{team.results().climbSkill1}} <br>{{team.results().climbSkill1}} </td>
+								<td>{{team.year1}} <br>{{team.year2}}</td>
+								<td>{{team.club1}} <br>{{team.club2}}</td>
+								<td>{{team.alpSkill1}} <br>{{team.alpSkill1}} </td>
+								<td>{{team.climbSkill1}} <br>{{team.climbSkill1}} </td>
 									{% for route in routesInfo %}
 										<td class=" w3-border-blue w3-border-left routes">
-											<input disabled	 type="number" value="{{ (team.results()['routeTimeSec'~route.routeNuber~'Min']) | round | int }}" min="0" style="direction: rtl;" class="min">:
-											<input type="number" value="{{  team.results()['routeTimeSec'~route.routeNuber~'Sec']  }}" min="0" max="59"  disabled class="sec">
+											<input disabled	 type="number" value="{{ (team.results(route.routeNuber,competition)['routeTimeSec'~route.routeNuber~'Min']) | round | int }}" min="0" style="direction: rtl;" class="min">:
+											<input type="number" value="{{  team.results(route.routeNuber,competition)['routeTimeSec'~route.routeNuber~'Sec']  }}" min="0" max="59"  disabled class="sec">
 											<span class="w3-hide routeNuber">{{route.routeNuber}}</span>
 										</td>
 									{% endfor %}
 								<td class="w3-border-blue w3-border-left w3-center">
 
-									<input disabled	 type="number" value="{{ team.results().routeScoreFinal | round | int }}" min="0" style="width: 45px; text-align: center;" class="routeScoreFinal">
+									<input disabled	 type="number" value="{{ team.results(1000,competition).routeScoreFinal | round | int }}" min="0" style="width: 45px; text-align: center;" class="routeScoreFinal">
 								</td>
-								<td class="w3-border-blue w3-border-left w3-center">{{ team.results().routeScoreTotal | round | int }} <br>{{ team.results().routeTimeSecTotalMin | round | int }}:{{team.results().routeTimeSecTotalSec}}
+								<td class="w3-border-blue w3-border-left w3-center">{{ team.routeScoreTotal | round | int }} <br>{{ team.results(1000,competition).routeTimeSecTotalMin | round | int }}:{{team.results(1000,competition).routeTimeSecTotalSec}}
 								</td>
-								<td class="w3-border-blue w3-border-left w3-center">{{team.results().routesPassed}}</td>
+								<td class="w3-border-blue w3-border-left w3-center">{{team.results(0,competition).routesPassed}}</td>
 
 
 								<td class="w3-border-blue w3-border-left">
 									<select name="status" disabled class="teamStatus">
-										<option value="ok" {% if team.results().teamStatus == 'ok' %} selected {% else %}{% endif %} >ok</option>
-										<option value="н/я" {% if team.results().teamStatus == 'н/я' %} selected {% else %}{% endif %} >н/я</option>
-										<option value="дискв" {% if team.results().teamStatus == 'дискв' %} selected {% else %}{% endif %} >дискв</option>
+										<option value="ok" {% if team.teamStatus == 'ok' %} selected {% else %}{% endif %} >ok</option>
+										<option value="н/я" {% if team.teamStatus == 'н/я' %} selected {% else %}{% endif %} >н/я</option>
+										<option value="дискв" {% if team.teamStatus == 'дискв' %} selected {% else %}{% endif %} >дискв</option>
 									</select>
 								</td>	
 								<td class="w3-border-blue w3-border-bottom">
@@ -210,20 +211,17 @@
 								<div class="w3-clear"></div>
 
 							{% if finalResultsStatus == 'closed' %}
-								<button type="submit" class="w3-btn-1 w3-round w3-lime w3-right w3-show w3-margin"><i class="fa fa-check"></i> Опубликовать результаты и комментарии</button>
+								<button type="submit" class="w3-btn-1 button-upload w3-round w3-lime w3-right w3-show w3-margin"><i class="fa fa-check"></i> Опубликовать результаты и комментарии</button>
 							{% else %}
-								<button type="submit" class="w3-btn-1 w3-round w3-red w3-right w3-margin w3-show"><i class="fa fa-minus-square-o"></i> Снять результаты с публикации</button>
+								<button type="submit" class="button-upload w3-btn-1 w3-round w3-red w3-right w3-margin w3-show"><i class="fa fa-minus-square-o"></i> Снять результаты с публикации</button>
 							{% endif %}
 							{% if highlightFinals == 'no' %}
-								<a onclick="highlightFinals('yes')" class="w3-btn-1 w3-round  w3-right w3-margin w3-show w3-border w3-border-blue w3-text-blue">Выделить финалистов</a>
+								<a onclick="highlightFinals('yes')" class="w3-btn-1 w3-round  w3-right w3-margin w3-show w3-border w3-border-blue w3-text-blue button-upload">Выделить финалистов</a>
 							{% else %}
-								<a onclick="highlightFinals('no')" class="w3-btn-1 w3-round  w3-right w3-margin w3-show w3-border w3-border-blue w3-text-blue">снять выделение финалистов</a>
+								<a onclick="highlightFinals('no')" class="w3-btn-1 w3-round  w3-right w3-margin w3-show w3-border w3-border-blue w3-text-blue button-upload">снять выделение финалистов</a>
 							{% endif %}	
 							</form>		
-							<form action="">
-								<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 								
-							</form>	
 						</div>
 					</div>	
 					
@@ -305,57 +303,57 @@
 							<tr class="
 							{% if highlightFinals == 'yes' and loop.index == 4 %}w3-border-red w3-border-bottom-3 {% else %} w3-border-blue w3-border-bottom{% endif %} 
 							
-							{% if team.results().bestTeams == 'weemen' %} w3-red-l3 {% else %} 
-								{% if team.results().bestTeams == 'mix' %} w3-green-l3 {% else %}
+							{% if team.bestTeams == 'weemen' %} w3-red-l3 {% else %} 
+								{% if team.bestTeams == 'mix' %} w3-green-l3 {% else %}
 									{% if loop.index%2 == 0 %}w3-blue-l4{% else %}{% endif %}
 								{% endif %}
 							{% endif %}
 							
 							  w3-hover-lime">
 								<td  class="w3-center ">{{loop.index}}</td>
-								<td  class="">{{team.results().teamName}} <span class="male w3-hide">{{team.results().male1}}{{team.results().male2}}</span></td>
+								<td  style="column-width: 120px; white-space: normal;">{{team.teamName}}</td>
 								<td>
-									<a href="{{url_for('competition.profile', name=team.results().name1, sname=team.results().sname1, year=team.results().year1)}}" class="w3-text-blue">{{team.results().sname1}} {{team.results().name1}}</a><br>
-									<a href="{{url_for('competition.profile', name=team.results().name2, sname=team.results().sname2, year=team.results().year2)}}" class="w3-text-blue">{{team.results().sname2}} {{team.results().name2}}</a>
+									<a href="{{url_for('competition.profile', name=team.name1, sname=team.sname1, year=team.year1)}}" class="w3-text-blue">{{team.sname1}} {{team.name1}}</a><br>
+									<a href="{{url_for('competition.profile', name=team.name2, sname=team.sname2, year=team.year2)}}" class="w3-text-blue">{{team.sname2}} {{team.name2}}</a>
 								</td>
-								<td>{{team.results().year1}} <br>{{team.results().year2}}</td>
-								<td>{{team.results().club1}} <br>{{team.results().club2}}</td>
-								<td>{{team.results().alpSkill1}} <br>{{team.results().alpSkill1}} </td>
-								<td>{{team.results().climbSkill1}} <br>{{team.results().climbSkill1}} </td>
+								<td>{{team.year1}} <br>{{team.year2}}</td>
+								<td>{{team.club1}} <br>{{team.club2}}</td>
+								<td>{{team.alpSkill1}} <br>{{team.alpSkill1}} </td>
+								<td>{{team.climbSkill1}} <br>{{team.climbSkill1}} </td>
 									{% for route in routesInfo %}
 										<td class="w3-border-blue w3-border-left w3-center">
-											{{ (team.results()['routeTimeSec'~route.routeNuber~'Min']) | round | int }}:{{  team.results()['routeTimeSec'~route.routeNuber~'Sec']  }}
+											{{ (team.results(route.routeNuber,competition)['routeTimeSec'~route.routeNuber~'Min']) | round | int }}:{{  team.results(route.routeNuber,competition)['routeTimeSec'~route.routeNuber~'Sec']  }}
 										</td>
 									{% endfor %}
-								<td class="w3-border-blue w3-border-left w3-center">{{ team.results().routeScoreFinal | round | int }}</td>
-								<td class="w3-border-blue w3-border-left w3-center">{{ team.results().routeScoreTotal | round | int }} <br>{{ team.results().routeTimeSecTotalMin | round | int }}:{{team.results().routeTimeSecTotalSec}}
+								<td class="w3-border-blue w3-border-left w3-center">{{ team.results(1000,competition).routeScoreFinal | round | int }}</td>
+								<td class="w3-border-blue w3-border-left w3-center">{{ team.routeScoreTotal | round | int }} <br>{{ team.results(1000,competition).routeTimeSecTotalMin | round | int }}:{{team.results(1000,competition).routeTimeSecTotalSec}}
 								</td>
-								<td class="w3-border-blue w3-border-left w3-center">{{team.results().routesPassed}}</td>	
+								<td class="w3-border-blue w3-border-left w3-center">{{team.results(0,competition).routesPassed}}</td>	
 							</tr>
 							<!-- team seporator -->
 							{% endfor %}
 
 							{% for team in badTeams %}
 							<tr class="w3-border-blue w3-border-bottom w3-light-grey w3-hover-lime">
-								<td  class="w3-center ">{{ team.results().teamStatus }}</td>
-								<td  class="">{{team.results().teamName}} <span class="male w3-hide">{{team.results().male1}}{{team.results().male2}}</span></td>
+								<td  class="w3-center ">{{ team.teamStatus }}</td>
+								<td  style="column-width: 120px; white-space: normal;">{{team.teamName}}</td>
 								<td>
-									<a href="{{url_for('competition.profile', name=team.results().name1, sname=team.results().sname1, year=team.results().year1)}}" class="w3-text-blue">{{team.results().sname1}} {{team.results().name1}}</a><br>
-									<a href="{{url_for('competition.profile', name=team.results().name2, sname=team.results().sname2, year=team.results().year2)}}" class="w3-text-blue">{{team.results().sname2}} {{team.results().name2}}</a>
+									<a href="{{url_for('competition.profile', name=team.name1, sname=team.sname1, year=team.year1)}}" class="w3-text-blue">{{team.sname1}} {{team.name1}}</a><br>
+									<a href="{{url_for('competition.profile', name=team.name2, sname=team.sname2, year=team.year2)}}" class="w3-text-blue">{{team.sname2}} {{team.name2}}</a>
 								</td>
-								<td>{{team.results().year1}} <br>{{team.results().year2}}</td>
-								<td>{{team.results().club1}} <br>{{team.results().club2}}</td>
-								<td>{{team.results().alpSkill1}} <br>{{team.results().alpSkill1}} </td>
-								<td>{{team.results().climbSkill1}} <br>{{team.results().climbSkill1}} </td>
+								<td>{{team.year1}} <br>{{team.year2}}</td>
+								<td>{{team.club1}} <br>{{team.club2}}</td>
+								<td>{{team.alpSkill1}} <br>{{team.alpSkill1}} </td>
+								<td>{{team.climbSkill1}} <br>{{team.climbSkill1}} </td>
 									{% for route in routesInfo %}
 										<td class=" w3-border-blue w3-border-left w3-center">
-											{{ (team.results()['routeTimeSec'~route.routeNuber~'Min']) | round | int }}:{{  team.results()['routeTimeSec'~route.routeNuber~'Sec']  }}
+											{{ (team.results(route.routeNuber,competition)['routeTimeSec'~route.routeNuber~'Min']) | round | int }}:{{  team.results(route.routeNuber,competition)['routeTimeSec'~route.routeNuber~'Sec']  }}
 										</td>
 									{% endfor %}
-								<td class="w3-border-blue w3-border-left w3-center">{{ team.results().routeScoreFinal | round | int }}</td>
-								<td class="w3-border-blue w3-border-left w3-center">{{ team.results().routeScoreTotal | round | int }}<br>{{ team.results().routeTimeSecTotalMin | round | int }}:{{team.results().routeTimeSecTotalSec}}
+								<td class="w3-border-blue w3-border-left w3-center">{{ team.results(1000,competition).routeScoreFinal | round | int }}</td>
+								<td class="w3-border-blue w3-border-left w3-center">{{ team.routeScoreTotal | round | int }}<br>{{ team.results(1000,competition).routeTimeSecTotalMin | round | int }}:{{team.results(1000,competition).routeTimeSecTotalSec}}
 								</td>
-								<td class="w3-border-blue w3-border-left w3-center">{{team.results().routesPassed}}</td>	
+								<td class="w3-border-blue w3-border-left w3-center">{{team.results(0,competition).routesPassed}}</td>	
 
 							</tr>
 							<!-- team seporator -->
@@ -461,57 +459,57 @@
 							<tr class="
 							{% if highlightFinals == 'yes' and loop.index == 4 %}w3-border-red w3-border-bottom-3 {% else %} w3-border-blue w3-border-bottom{% endif %} 
 							
-							{% if team.results().bestTeams == 'weemen' %} w3-red-l3 {% else %} 
-								{% if team.results().bestTeams == 'mix' %} w3-green-l3 {% else %}
+							{% if team.bestTeams == 'weemen' %} w3-red-l3 {% else %} 
+								{% if team.bestTeams == 'mix' %} w3-green-l3 {% else %}
 									{% if loop.index%2 == 0 %}w3-blue-l4{% else %}{% endif %}
 								{% endif %}
 							{% endif %}
 							
 							  w3-hover-lime">
 								<td  class="w3-center ">{{loop.index}}</td>
-								<td  class="">{{team.results().teamName}} <span class="male w3-hide">{{team.results().male1}}{{team.results().male2}}</span></td>
+								<td  style="column-width: 120px; white-space: normal;">{{team.teamName}}</td>
 								<td>
-									<a href="{{url_for('competition.profile', name=team.results().name1, sname=team.results().sname1, year=team.results().year1)}}" class="w3-text-blue">{{team.results().sname1}} {{team.results().name1}}</a><br>
-									<a href="{{url_for('competition.profile', name=team.results().name2, sname=team.results().sname2, year=team.results().year2)}}" class="w3-text-blue">{{team.results().sname2}} {{team.results().name2}}</a>
+									<a href="{{url_for('competition.profile', name=team.name1, sname=team.sname1, year=team.year1)}}" class="w3-text-blue">{{team.sname1}} {{team.name1}}</a><br>
+									<a href="{{url_for('competition.profile', name=team.name2, sname=team.sname2, year=team.year2)}}" class="w3-text-blue">{{team.sname2}} {{team.name2}}</a>
 								</td>
-								<td>{{team.results().year1}} <br>{{team.results().year2}}</td>
-								<td>{{team.results().club1}} <br>{{team.results().club2}}</td>
-								<td>{{team.results().alpSkill1}} <br>{{team.results().alpSkill1}} </td>
-								<td>{{team.results().climbSkill1}} <br>{{team.results().climbSkill1}} </td>
+								<td>{{team.year1}} <br>{{team.year2}}</td>
+								<td>{{team.club1}} <br>{{team.club2}}</td>
+								<td>{{team.alpSkill1}} <br>{{team.alpSkill1}} </td>
+								<td>{{team.climbSkill1}} <br>{{team.climbSkill1}} </td>
 									{% for route in routesInfo %}
 										<td class="w3-border-blue w3-border-left w3-center">
-											{{ (team.results()['routeTimeSec'~route.routeNuber~'Min']) | round | int }}:{{  team.results()['routeTimeSec'~route.routeNuber~'Sec']  }}
+											{{ (team.results(route.routeNuber,competition)['routeTimeSec'~route.routeNuber~'Min']) | round | int }}:{{  team.results(route.routeNuber,competition)['routeTimeSec'~route.routeNuber~'Sec']  }}
 										</td>
 									{% endfor %}
-								<td class="w3-border-blue w3-border-left w3-center">{{ team.results().routeScoreFinal | round | int }}</td>
-								<td class="w3-border-blue w3-border-left w3-center">{{ team.results().routeScoreTotal | round | int }} <br>{{ team.results().routeTimeSecTotalMin | round | int }}:{{team.results().routeTimeSecTotalSec}}
+								<td class="w3-border-blue w3-border-left w3-center">{{ team.results(1000,competition).routeScoreFinal | round | int }}</td>
+								<td class="w3-border-blue w3-border-left w3-center">{{ team.routeScoreTotal | round | int }} <br>{{ team.results(1000,competition).routeTimeSecTotalMin | round | int }}:{{team.results(1000,competition).routeTimeSecTotalSec}}
 								</td>
-								<td class="w3-border-blue w3-border-left w3-center">{{team.results().routesPassed}}</td>	
+								<td class="w3-border-blue w3-border-left w3-center">{{team.results(0,competition).routesPassed}}</td>	
 							</tr>
 							<!-- team seporator -->
 							{% endfor %}
 
 							{% for team in badTeams %}
 							<tr class="w3-border-blue w3-border-bottom w3-light-grey w3-hover-lime">
-								<td  class="w3-center ">{{ team.results().teamStatus }}</td>
-								<td  class="">{{team.results().teamName}} <span class="male w3-hide">{{team.results().male1}}{{team.results().male2}}</span></td>
+								<td  class="w3-center ">{{ team.teamStatus }}</td>
+								<td  style="column-width: 120px; white-space: normal;">{{team.teamName}}</td>
 								<td>
-									<a href="{{url_for('competition.profile', name=team.results().name1, sname=team.results().sname1, year=team.results().year1)}}" class="w3-text-blue">{{team.results().sname1}} {{team.results().name1}}</a><br>
-									<a href="{{url_for('competition.profile', name=team.results().name2, sname=team.results().sname2, year=team.results().year2)}}" class="w3-text-blue">{{team.results().sname2}} {{team.results().name2}}</a>
+									<a href="{{url_for('competition.profile', name=team.name1, sname=team.sname1, year=team.year1)}}" class="w3-text-blue">{{team.sname1}} {{team.name1}}</a><br>
+									<a href="{{url_for('competition.profile', name=team.name2, sname=team.sname2, year=team.year2)}}" class="w3-text-blue">{{team.sname2}} {{team.name2}}</a>
 								</td>
-								<td>{{team.results().year1}} <br>{{team.results().year2}}</td>
-								<td>{{team.results().club1}} <br>{{team.results().club2}}</td>
-								<td>{{team.results().alpSkill1}} <br>{{team.results().alpSkill1}} </td>
-								<td>{{team.results().climbSkill1}} <br>{{team.results().climbSkill1}} </td>
+								<td>{{team.year1}} <br>{{teamyear2}}</td>
+								<td>{{team.club1}} <br>{{team.club2}}</td>
+								<td>{{team.alpSkill1}} <br>{{team.alpSkill1}} </td>
+								<td>{{team.climbSkill1}} <br>{{team.climbSkill1}} </td>
 									{% for route in routesInfo %}
 										<td class=" w3-border-blue w3-border-left w3-center">
-											{{ (team.results()['routeTimeSec'~route.routeNuber~'Min']) | round | int }}:{{  team.results()['routeTimeSec'~route.routeNuber~'Sec']  }}
+											{{ (team.results(route.routeNuber,competition)['routeTimeSec'~route.routeNuber~'Min']) | round | int }}:{{  team.results(route.routeNuber,competition)['routeTimeSec'~route.routeNuber~'Sec']  }}
 										</td>
 									{% endfor %}
-								<td class="w3-border-blue w3-border-left w3-center">{{ team.results().routeScoreFinal | round | int }}</td>
-								<td class="w3-border-blue w3-border-left w3-center">{{ team.results().routeScoreTotal | round | int }}<br>{{ team.results().routeTimeSecTotalMin | round | int }}:{{team.results().routeTimeSecTotalSec}}
+								<td class="w3-border-blue w3-border-left w3-center">{{ team.results(1000,competition).routeScoreFinal | round | int }}</td>
+								<td class="w3-border-blue w3-border-left w3-center">{{ team.routeScoreTotal | round | int }}<br>{{ team.results(1000,competition).routeTimeSecTotalMin | round | int }}:{{team.results(1000,competition).routeTimeSecTotalSec}}
 								</td>
-								<td class="w3-border-blue w3-border-left w3-center">{{team.results().routesPassed}}</td>	
+								<td class="w3-border-blue w3-border-left w3-center">{{team.results(0,competition).routesPassed}}</td>	
 
 							</tr>
 							<!-- team seporator -->

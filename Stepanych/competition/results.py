@@ -12,9 +12,10 @@ from flask import jsonify, json, Response
 
 @competition.route('/results')
 def results():
-	mainTable.update_scores()
-	mainTable.update_positions()
 	competition =  Competition.query.first()
+	mainTable.update_scores(competition.competitionName)
+	mainTable.update_positions(competition.competitionName)
+	
 	teams = mainTable.query.filter_by(competition=competition.competitionName).filter_by(teamStatus='ok').order_by(mainTable.routeScoreTotal.desc()).order_by(mainTable.routeTimeSecTotal).all()
 	badTeams = mainTable.query.filter_by(competition=competition.competitionName).filter(mainTable.teamStatus != 'ok').order_by(mainTable.routeScoreTotal.desc()).all()
 	routesInfo = Routes.query.filter_by(competition=competition.competitionName).all()
@@ -37,18 +38,19 @@ def results_update():
 	if request.is_json:
 		team = mainTable.query.filter_by(competition=jsonResultsUpdate['competition']).filter_by(teamName=jsonResultsUpdate['teamName']).first()
 		if team is not None:
+			competition=jsonResultsUpdate['competition']
 			team.routeScoreFinal = jsonResultsUpdate['routeScoreFinal']
 			team.teamStatus = jsonResultsUpdate['teamStatus']
 			if jsonResultsUpdate['teamStatus'] == 'ok':
 				team.waitingListYes = team.setNumber
 
-			del jsonResultsUpdate['routeScoreFinal']
 			del jsonResultsUpdate['competition']
-			del jsonResultsUpdate['teamName']
+			del jsonResultsUpdate['teamName']		
+			del jsonResultsUpdate['routeScoreFinal']
 			del jsonResultsUpdate['teamStatus']
 			
 			for key, value  in jsonResultsUpdate.items():
-				route = Routes.query.filter_by(routeNuber=key[12:]).first()
+				route = Routes.query.filter_by(routeNuber=key[12:]).filter_by(competition=competition).first()
 				if route is not None:
 					if value !=0 and getattr(team, key) == 0:
 							route.teamsPassTrough = route.teamsPassTrough + 1
@@ -61,13 +63,13 @@ def results_update():
 							if value == 0 and getattr(team, key) != 0:
 								route.teamsPassTrough = route.teamsPassTrough - 1
 								setattr(team, key, value)	
-
+				
 
 			db.session.add(route)
 			db.session.add(team)
 			db.session.commit()
 
-			mainTable.update_scores()
+			mainTable.update_scores(competition)
 
 			flash('Изменения сохранены')
 			return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
@@ -115,6 +117,8 @@ def highlightFinals():
 
 @competition.route('/archive/<competitionName>')
 def archive(competitionName):
+	mainTable.update_scores(competitionName)
+	mainTable.update_positions(competitionName)
 	if request.args.get('prevURL') is not None:
 		session['prevURL'] = request.args.get('prevURL')
 

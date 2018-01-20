@@ -110,7 +110,7 @@
 					<div class="w3-display-middle">Закрыть <i class="fa fa-close"></i></div>
 					</a>
 					
-					<a onclick="document.getElementById('other').style.display='none'; getElementById('mobile_menu').style.display='block'" href="#" style="height: 100%;" class="w3-display-container w3-red  w3-hover-red-d3 w3-padding w3-col s6 w3-border-bottom w3-center"><div class="w3-display-middle">Назад <i class="fa fa-arrow-circle-o-left"></i>
+					<a onclick="document.getElementById('other').style.display='none'; getElementById('mobile_menu').style.display='block'" href="#" style="height: 100%;" class="w3-display-container w3-red  w3-hover-red-d3 w3-padding w3-col s6 w3-border-bottom w3-center  w3-border-white"><div class="w3-display-middle">Назад <i class="fa fa-arrow-circle-o-left"></i>
 					</div>
 					</a>
 				</div>
@@ -159,7 +159,7 @@
 						</div>
 						</a>
 
-						<a href="{{ url_for('media.press') }}" style="height: 100%;" class="w3-display-container w3-middle w3-red w3-col s6 w3-hover-red-d3 w3-border-bottom w3-center w3-border-white w3-border-right">
+						<a href="{{ url_for('media.press') }}" style="height: 100%;" class="w3-display-container w3-middle w3-red w3-col s6 w3-hover-red-d3 w3-border-bottom w3-center w3-border-white">
 						<div class="w3-display-middle">
 						<i class="w3-block fa fa-file-text-o  w3-xxlarge"></i>
 						<p>пресса</p>	
@@ -198,7 +198,7 @@
 						<div class="w3-display-middle">Закрыть <i class="fa fa-close"></i></div>
 						</a>
 						
-						<a onclick="document.getElementById('menu_competition').style.display='none'; getElementById('mobile_menu').style.display='block'" href="#" style="height: 100%;" class="w3-display-container w3-red w3-padding  w3-hover-red-d3 w3-col s6 w3-hover-red w3-border-bottom w3-center"><div class="w3-display-middle">Назад <i class="fa fa-arrow-circle-o-left"></i>
+						<a onclick="document.getElementById('menu_competition').style.display='none'; getElementById('mobile_menu').style.display='block'" href="#" style="height: 100%;" class="w3-display-container w3-red w3-padding  w3-hover-red-d3 w3-col s6 w3-hover-red w3-border-bottom  w3-border-white w3-center"><div class="w3-display-middle">Назад <i class="fa fa-arrow-circle-o-left"></i>
 						</div>
 						</a>
 					</div>
@@ -211,7 +211,7 @@
 						</div>	
 						</a>
 
-						<a href="{{ url_for('competition.results') }}" style="height: 100%;"  class="w3-display-container w3-red w3-col s6 w3-hover-red-d3 w3-border-bottom w3-center w3-border-white">
+						<a href="{{ url_for('competition.results') }}" style="height: 100%;"  class="w3-display-container button-upload w3-red w3-col s6 w3-hover-red-d3 w3-border-bottom w3-center w3-border-white">
 						<div class="w3-display-middle">
 						<i class="w3-block fa fa-flag-checkered w3-xxlarge"></i>
 						<p>Результаты</p>
@@ -309,7 +309,7 @@
 					<p class="w3-small">Трассы</p> 
 					</a>
 					
-					<a href="{{ url_for('competition.results') }}" class="w3-bar-item w3-red-d3 w3-hover-red my-menuitem-animation my-bar-item-transition w3-center" style="height: 100%">
+					<a  href="{{ url_for('competition.results') }}" class="w3-bar-item w3-red-d3 w3-hover-red my-menuitem-animation my-bar-item-transition w3-center button-upload" style="height: 100%">
 					<i class="fa fa-flag-checkered w3-xxlarge  w3-padding"></i>
 					<p class="w3-small">Результаты</p> 
 					</a>
@@ -403,7 +403,7 @@
 								{% endfor %}
 							</p>
 						<label for="" class="w3-small w3-text-dark-grey"><b>Пароль</b></label>
-						{{ loginForm.password(class="w3-input w3-border-bottom  w3-margin-bottom") }}
+						{{ loginForm.password(class="w3-input w3-border-bottom  w3-margin-bottom", id="pw") }}
 							<p class="w3-tiny w3-text-red">
 								{% for message in loginForm.password.errors %}
 								{{ message }}
@@ -412,7 +412,7 @@
 
 						
 						{{ loginForm.remember_me(class="w3-check")}} Запомнить меня.
-						{{ loginForm.submit(class="w3-button w3-block w3-green w3-padding w3-hover-green-l1 w3-margin-top") }}
+						{{ loginForm.submit(class="w3-button button-upload w3-block w3-green w3-padding w3-hover-green-l1 w3-margin-top", id="login") }}
 
 					</div>
 				</form>
@@ -463,10 +463,10 @@
 				 	<p class="w3-small">Выберите файлы для загрузки,</p>
 				 	<p class="w3-small">допустимый размер файла до 8 МБ:</p>
 				 	<br>
-				 	<input type="file" multiple  id="docs" name="docs" size="50" class="w3-margin-bottom w3-button" style="width: 300px;">
+				 	<input type="file" multiple name="docs" size="50" class="w3-margin-bottom w3-button" style="width: 300px;">
 				 	<br>
 				 	<br>
-				 	<input type="submit" class="w3-button w3-green w3-margin" value="загрузить" id="button-upload">
+				 	<input type="submit" class="w3-button w3-green w3-margin button-upload" value="загрузить">
 				</form>
 			</div>	
 		</div>	

@@ -59,7 +59,10 @@ def login(currentURL=''):
 					return redirect(confirmationURL) #перенаправляем по ссылке для завершения регистрации   
 				else: 
 					#flash('2')
-					return redirect(session['currentURL'] or session['nextURL'] or url_for('auth.teamoffice')) #перенаправляем по запрошенному урлу(?next=..) если такой был либо кабинет.
+					try:
+						return redirect(session['nextURL'])#перенаправляем по запрошенному урлу(?next=..) если такой был либо кабинет.
+					except:
+						return redirect(session['currentURL'] or url_for('main.index'))
 			else: #если вошедший зарегестрирован в рамках этих соревнований
 				session['role'] = mainTable.query.filter_by(teamName=loginForm.teamName.data).filter_by(competition=competition1).first().role #записываем в сессию его роль (скорее всего user)
 				if confirmationURL != '': #проверяем что пользователь не переходит по ссылке завершающей регистрацию.
@@ -67,8 +70,10 @@ def login(currentURL=''):
 					return redirect(confirmationURL)  #перенаправляем по ссылке для завершения регистрации 
 				else: 
 					#flash('4')
-					return redirect(session['currentURL'] or session['nextURL']  or url_for('auth.teamoffice'))#перенаправляем по запрошенному урлу(?next=..) если такой был либо кабинет.
-		
+					try:
+						return redirect(session['nextURL'])#перенаправляем по запрошенному урлу(?next=..) если такой был либо кабинет.
+					except:
+						return redirect(session['currentURL'] or url_for('main.index'))
 		flash('Неправильное название команды или пароль')	# в случае ошибки ввода выводим надпись и перенаправляем на главную спросьбой поторить
 	
 	return redirect(session['currentURL']+'?displayLoginForm=block' or url_for('main.index', displayLoginForm='block', loginForm=loginForm))
@@ -251,7 +256,7 @@ def registration():
 		send_email(team.email, ': Подтвердите ваш аккаунт для Степаныча', 'auth/email/confirm', team=team, token=token)
 		flash('Для зваершения регистрации пройдите по ссылке отправленной вам на Email ')
 		return redirect(url_for('auth.registrationNextStep'))
-	flash('Команда с таким названием уже зарегестрирована в этих соревнованиях или вы ввели не все данные!')
+	flash('Вы заполнили не все данные или ввели недопустимый символ (разрешены только буквы, цыфры, пробелы)!')
 	return redirect(url_for('main.index', displayRegistrationForm='block'))
 
 
@@ -305,17 +310,23 @@ def unconfirmed():
 @auth.route('/pswresend',  methods=['GET', 'POST'])
 def password_resend():
 	form = pswEmailForm()
-	competition1 = Competition.query.filter_by(id=1).first().competitionName
+	competition1 = Competition.query.first().competitionName
 	if form.validate_on_submit():
-		team = mainTable.query.filter_by(teamName = form.teamName.data).filter_by(competition=competition1).filter_by(email=form.email.data).first()
-		if team is not None:
-			token = team.generate_confirmation_token()
-			send_email(form.email.data, ': Восстановление пароля для степаныча', 'auth/email/pswresendemail', team=team.teamName, token=token)
-			flash('Вам отправлен Email с ссылкой для востановление пароля')
-			return redirect(url_for('auth.registrationNextStep'))
+		if mainTable.query.filter_by(teamName= form.teamName.data).filter_by(email=form.email.data).first() is not None:
+			if mainTable.query.filter_by(teamName= form.teamName.data).filter_by(email=form.email.data).first().role == 'admin':
+				team = mainTable.query.filter_by(teamName= form.teamName.data).filter_by(email=form.email.data).first()
+			else:
+				team = mainTable.query.filter_by(teamName = form.teamName.data).filter_by(competition=competition1).filter_by(email=form.email.data).first()
+			if team is not None:
+				token = team.generate_confirmation_token()
+				send_email(form.email.data, ': Восстановление пароля для степаныча', 'auth/email/pswresendemail', team=team.teamName, token=token)
+				flash('Вам отправлен Email с ссылкой для востановление пароля')
+				return redirect(url_for('auth.registrationNextStep'))
+			else:
+				flash('Такие команда или Email не зарегистрирован в текущих соревнованиях')
+				return render_template('/auth/pswresend.html', emailForm=form)
 		else:
-			flash('Такие команда или Email не зарегистрирован в текущих соревнованиях')
-			return render_template('/auth/pswresend.html', emailForm=form)
+			flash('Такая команда не зарегестрирована')
 	return render_template('/auth/pswresend.html', emailForm=form)
 
 #2й блок берет новый пароль, записывает его хэш в БД, и отправляет письмо пользователю с новым паролем!
@@ -423,7 +434,7 @@ def team_member_change():
 			member2.club = request.form['club2']
 			member2.alpSkill = request.form['alpSkill2']
 			member2.climbSkill = request.form['climbSkill2']
-			member1.male = request.form['male2']
+			member2.male = request.form['male2']
 
 			db.session.add(member2)
 			

@@ -25,9 +25,12 @@ def routes():
 	if current_user.is_anonymous:
 		userSetStatus = 0
 	else:
-		userSet =  int(current_user.waitingListYes)
-		userSetStatus = 2**(userSet-1)&openSet
-		
+		if current_user.waitingListYes != 0:
+			userSet =  int(current_user.waitingListYes)
+			userSetStatus = 2**(userSet-1)&openSet
+		else:
+			userSetStatus = 0
+
 	if Routes.query.filter_by(competition=competition.competitionName).first() is None:
 		noRotes = True
 	else:

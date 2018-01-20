@@ -121,7 +121,8 @@
 		    </div>
 		  {% endif %}
 		 {% endwith %}
-
+		
+		<!-- Add Comments form -->
 		{% if current_user.is_authenticated %}
 		<form action="{{ url_for('news.post', id=posts.id, currentURL=request.path) }}" method="POST" class="w3-container">
 			
@@ -136,7 +137,7 @@
 							{% endfor %}
 						</p>
 
-					{{ form.submit(class="w3-btn-1 w3-blue w3-round w3-margin ") }}
+					{{ form.submit(class="w3-btn-1 w3-blue w3-round w3-margin button-upload") }}
 
 				</div>
 		</form>
@@ -149,7 +150,7 @@
 		{% endif %}
 		<div class="w3-clear"></div>
 
- 
+ 		<!-- Comments itself -->
 		{% include '/news/_comments.html' %}
 
 	<!-- End of Text - Content block -->

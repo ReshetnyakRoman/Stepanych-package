@@ -62,7 +62,7 @@
 		
 		<hr style="width: 90%; margin:auto;" >
 		<h2 class="w3-text-red w3-center">Партнеры и генеральные спонсоры</h2>
-
+		<div class="w3-clear"></div>
 			<div class="my-flex">
 				{% for sponsor in generalSponsors %}
 					
@@ -104,7 +104,7 @@
 		<div class="" style="width: 100%">
 		<hr style="width: 90%; margin:auto;" class="w3-padding">
 		<h2 class="w3-text-red w3-center">Наши спонсоры</h2>
-				
+			<div class="w3-clear"></div>	
 			<div class="my-flex">
 				{% for sponsor in otherSponsors %}
 					
@@ -162,12 +162,12 @@
 						<br>
 						<br>
 						<p class="w3-small">логотип спонсора: </p>
-						<input required type="file" id="docs" name="docs" class="w3-margin-bottom w3-small">
+						<input required type="file" name="docs" class="w3-margin-bottom w3-small">
 					 	
 					 	<br>
 					 	<br>
 					 	
-					 	<input type="submit" class="w3-button w3-green w3-margin" value="создать">
+					 	<input type="submit" class="w3-button w3-green w3-margin" value="создать" id="button-upload2">
 						
 
 					</form>

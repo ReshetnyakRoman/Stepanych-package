@@ -253,11 +253,16 @@
 				</div>
 				<br>
 
+
 			{% if participantsListStatus == "published" %}
 			<button class="w3-btn-1 w3-round w3-red w3-right w3-show" id="hidepublish" onclick="unpublish(this, 'publish')"><i class="fa fa fa-minus-square"></i> Снять финальный список с публикации</button>
 			{% else %}
 			<button class="w3-btn-1 w3-round w3-lime w3-right w3-show" type="submit" id="publish" onclick="publish(this, 'hidepublish')"><i class="fa fa-plus-square" ></i> Опубликовать финальный список </button>
 			{% endif %}
+			
+
+			<button class="w3-btn-1 w3-round w3-blue w3-right w3-show" onclick="save_team_change()" style="margin-right: 12px;"><i class="fa fa-save"></i> сохранить</button>
+			
 				<br>
 				<br>
 				<br>

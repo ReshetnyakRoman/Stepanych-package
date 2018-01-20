@@ -1,0 +1,96 @@
+общие сведения
+cat /etc/centos-release версия системы
+cat /proc/sys/kernel/osrelease - версия ядра
+yum list firewalld - установленная версия пакета
+sudo netstat -plntu - проверка запущенных демонов, на каких портах они слушают и на каких ip
+sudo journalctl -r репорт последних действий в системе может показать  брутфорс атаку.
+
+
+Управление 
+sudo systemctl start firewalld
+sudo systemctl stop firewalld
+sudo systemctl enable firewalld
+sudo firewall-cmd --reload перезапуск 
+firewall-cmd --list-all  - проверка текущих настроек
+
+
+названия служб поддерживаемых firewalld
+http https imap imaps smtp smtp-submission pop3 pop3s mysql ssh telnet
+
+текущие потры:   25   993   995   3306  587        110  143  111    80   465 22   111   961           39113
+текущие службы: smtp imaps pop3s mysql submission pop3 imap sunrpc http urd ssh  sunrpc 961(rpcbind) 39113(uwsgi)
+
+настройка firewalld
+закрываем ipv6
+$ firewall-cmd --permanent --zone=public --remove-service=dhcpv6-client
+открываем порт для sshd
+$ firewall-cmd --permanent --zone=public --add-port=2234/tcp
+
+устанавливаем дефолтную зону
+sudo firewall-cmd --set-default-zone=dmz
+sudo firewall-cmd --get-default-zone
+добавляем перманентные сервисы в нашу зону:
+sudo firewall-cmd --zone=dmz --add-service=http --permanent
+sudo firewall-cmd --zone=dmz --add-service=https --permanent
+sudo firewall-cmd --zone=dmz --add-service=mysql --permanent /command failed
+sudo firewall-cmd --zone=dmz --add-service=ssh --permanent
+sudo firewall-cmd --zone=dmz --add-service=smtp-submission --permanent /command failed
+sudo firewall-cmd --zone=dmz --add-service=smtp --permanent /command failed
+sudo firewall-cmd --zone=dmz --add-service=pop3 --permanent 
+sudo firewall-cmd --zone=dmz --add-service=pop3s --permanent /command failed
+sudo firewall-cmd --zone=dmz --add-service=ssh --permanent
+sudo firewall-cmd --zone=dmz --add-service=imap --permanent
+sudo firewall-cmd --zone=dmz --add-service=imaps --permanent
+
+пример удаления службы
+sudo firewall-cmd --remove-service=ssh --permanent
+пример добавления порта формат порт/протоко(tcp/udp)
+sudo firewall-cmd --add-port=7022/tcp --permanent
+
+----------fail2ban-------
+
+fail2ban  - банит ip которые пытаются подсоеденится много раз по ssh но неудачно!
+sudo systemctl start fail2ban
+sudo systemctl restart fail2ban
+
+sudo fail2ban-client status - показывает запущенные службы fail2ban
+sudo fail2ban-client status sshd - показывает детальную инфу по службе sshd
+
+sudo nano /etc/fail2ban/jail.local - редактирование пользовательского конфига
+sudo nano /etc/fail2ban/jail.conf - редактирование основного конфига 
+
+моинторить логи $ sudo journalctl -b -u fail2ban
+последние действия $ sudo tail -F /var/log/fail2ban.log
+записи в iptables $ sudo iptables -L 
+или $ sudo iptables -S
+
+=====File jail.local===
+[DEFAULT]
+# Ban hosts for one hour:
+bantime = 3600
+
+# Override /etc/fail2ban/jail.d/00-firewalld.conf:
+banaction = iptables-multiport
+
+[sshd]
+enabled = true
+
+[nginx-http-auth]
+enabled = true
+
+[sshd-ddos]
+enabled = true
+
+[postfix]
+enabled = true
+
+[mysqld-auth]
+enabled = true
+
+[postfix-sasl]
+enabled = true
+
+[dovecot]
+enabled = true
+
+====end file====

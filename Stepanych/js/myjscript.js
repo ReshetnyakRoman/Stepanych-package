@@ -43,8 +43,24 @@
 		}
 
 	/* loader function */
-	$('#button-upload').click(function() {
-    $('#loader_section').show()});
+	$('.button-upload').on("click", function () {
+		$('#loader_section').show();
+	})
+
+	//$('#button-upload').click(function() {
+    //$('#loader_section').show()});
+
+   // $('#button-upload2').click(function() {
+   // $('#loader_section').show()});
+
+   // $('#button-upload3').click(function() {
+   // $('#loader_section').show()});
+
+   // $('#button-upload4').click(function() {
+   // $('#loader_section').show()});
+
+   	function loader() {
+    $('#loader_section').show()};
 	
 	$('#pic-upload').click(function() {
     $('#loader_section').show()});	
@@ -91,6 +107,24 @@
 	    //alert(myJSON);
 		    $.ajax({
 			  url:'/competition/registredteams/update',
+			  type:"POST",
+			  data:myJSON,
+			  contentType:"application/json; charset=utf-8",
+			  dataType:"json",
+			  success: function(data){
+			    location.reload(true);
+			  },
+			  error: function() {
+		        alert("Error");
+		      }
+			})
+	}
+
+	function save_team_change() {
+	    myJSON = JSON.stringify(teamlist);
+	    //alert(myJSON);
+		    $.ajax({
+			  url:'/competition//registredteams/save_update',
 			  type:"POST",
 			  data:myJSON,
 			  contentType:"application/json; charset=utf-8",
@@ -284,6 +318,7 @@
 	function delete_user_modal(arg){
 		document.getElementById(arg).style.display = "none";
 		var teamID = $('li#delete div.name').text() + $('li#delete div.sname').text()+$('li#delete div.year').text();
+		//alert(teamID);
 		$.post('/competition/allmembers/delete', {keyNameSnameYear : teamID});
 		var y = document.getElementById('delete').parentElement;
 		var x = document.getElementById('delete');
@@ -644,7 +679,7 @@
 
 		function open_routes(arg1, arg2) {
 		/* меняем нкопку открыть регистрацию на кнопку закрыть регистрацию */	
-		    arg1.className = arg1.className.replace(" w3-show", " w3-hide");
+		    arg1.className = arg1.className.replace(" w3-show", " w3-grayscale");
 			var x = document.getElementById(arg2);
 		    x.className = x.className.replace(" w3-hide", " w3-show");
 		    /* TODO Дописать функцию которая активирует трассы на странице тарссы */
@@ -713,10 +748,12 @@
 			  contentType:"application/json; charset=utf-8",
 			  dataType:"json",
 			  success: function(data){
-			    location.reload(true);
+			    alert('Изаенения сохранены');
+			    //location.reload(true);
 			  },
 			  error: function() {
-			  	location.reload(true);
+			  	alert('Ошибка')
+			  	//location.reload(true);
 		      }
 			})
 

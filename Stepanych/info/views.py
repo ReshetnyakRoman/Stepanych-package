@@ -96,9 +96,9 @@ def delete_rules():
 @info.route('/sponsors')
 def sponsors():
 
-	generalSponsors = Sponsors.query.filter_by(sponsorType='генеральный').all()
-	partners = Sponsors.query.filter_by(sponsorType='партнер').all()
-	otherSponsors = Sponsors.query.filter_by(sponsorType='остальные').all()
+	generalSponsors = Sponsors.query.filter_by(sponsorType='генеральный').order_by(Sponsors.sponsorName).all()
+	partners = Sponsors.query.filter_by(sponsorType='партнер').order_by(Sponsors.sponsorName).all()
+	otherSponsors = Sponsors.query.filter_by(sponsorType='остальные').order_by(Sponsors.sponsorName).all()
 
 	return render_template('info/sponsors.html', 
 		displayLoginForm=request.args.get('displayLoginForm'),
@@ -138,7 +138,7 @@ def add_sponsor():
 							sponsorType = bleach.clean(request.form['sponsorType']))
 						db.session.add(sponsor)
 				db.session.commit()
-				flash('%s добавлен %s' % (request.form['sponsorName'],request.form['sponsorType']))
+				flash('%s добавлен в %s' % (request.form['sponsorName'],request.form['sponsorType']))
 				return redirect(url_for('info.sponsors'))
 			except:
 				flash('Некорректный файл')

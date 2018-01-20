@@ -111,12 +111,13 @@
 
 	<!-- Modal window Add Results -->
 		<div id="add_route_result" class="w3-modal" style="display: {{ request.args.get('displayRouteResults') }}">
-			<div class="w3-modal-content w3-animate-zoom w3-padding w3-center" id="routeModal">
+			<div class="w3-modal-content w3-animate-zoom w3-padding w3-center" id="routeModal" >
 				<button onclick="document.getElementById('add_route_result').style.display='none'" class="w3-button w3-right w3-hover-red-d3 w3-red w3-padding-small"><i class="fa fa-close"></i></button>	
-
+				
 				<h4 class="w3-text-blue">Время на трассе</h4>
-				<img src="/img/logo_route.jpg" alt="трасса 1" id="routeIMG">
 				<p class="w3-center w3-small" id="routeName1"></p>
+				<img src="/img/logo_route.jpg" alt="трасса" id="routeIMG" >
+				
 				<form action="{{ url_for('competition.route_submit') }}" class="w3-container w3-padding" method="POST">
 					<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 					<input id="routeNuber1" type="text" name="routeNuber" value=" " id="routeNuber" class="w3-border">
@@ -124,7 +125,7 @@
 
 					 	<div class="w3-clear"></div>
 					{% if userSetStatus != 0 and openSet != 0 %}	
-				 	<input type="submit" class="w3-button w3-green w3-margin w3-small" value="Сохранить">
+				 	<input type="submit" class="w3-button w3-green w3-margin w3-small button-upload" value="Сохранить">
 				 	{% else%}
 				 	<input type="submit" class="w3-button w3-green w3-margin w3-small w3-disabled" value="Сохранить" disabled>
 					<p class="w3-tiny w3-text-red">Ваш сет закрыт или вы не авторизованы</p>

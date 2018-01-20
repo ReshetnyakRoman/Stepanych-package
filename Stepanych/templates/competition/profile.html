@@ -33,12 +33,12 @@
 				<br>
 				{% for member1 in member1 %}
 					<p><b>{{member1.competition}}</b>,  &nbsp;команда: "<i>{{member1.teamName}}</i>",  &nbsp;место:
-					<b>{% if member1.position==0  %} {{member1.teamStatus}} {% else %} {{member1.position}} {% endif %}</p>
-				{% endfor %}</b>
+					<b>{% if member1.position==0  %} - {% else %} {{member1.position}} {% endif %}</b></p>
+				{% endfor %}
 
 				{% for member2 in member2 %}
 					<p><b>{{member2.competition}}</b>,  &nbsp;команда: "<i>{{member2.teamName}}</i>",  &nbsp;место:
-					<b>{% if member2.position==0  %} {{member2.teamStatus}} {% else %} {{member2.position}} {% endif %}</b></p>
+					<b>{% if member2.position==0  %} - {% else %} {{member2.position}} {% endif %}</b></p>
 				{% endfor %}
 			</div>
 			<br>

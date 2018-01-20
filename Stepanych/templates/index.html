@@ -64,15 +64,7 @@
 		{% else %}
 		{% endif %}
 			<!-- Start of Text - Content block -->
-			{% with messages = get_flashed_messages() %}
-			{% if messages %}
-			
-			{% for message in messages %}
-			<p class="w3-margin-top">{{ message }}</p>
-			{% endfor %}
-
-			{% endif %}		
-			{% endwith %}
+				
 
 			{% include '/news/_posts.html' %}
 			
@@ -90,7 +82,7 @@
 			<div class="w3-modal-content w3-animate-zoom w3-padding w3-small" style="max-width: 600px">
 				<button onclick="document.getElementById('registration-window').style.display='none'" class="w3-button w3-padding-small w3-right w3-hover-red-d3 w3-red"><i class="fa fa-close w3-large"></i></button>	
 
-				<h3>Форма регистрации</h3>
+				<h3 class="w3-center">Форма регистрации</h3>
 
 				{% with messages = get_flashed_messages() %}
 				    {% if messages %}
@@ -102,13 +94,13 @@
 				  {% endif %}
 				{% endwith %} 	
 				
-
+				<p class="w3-small" style="padding-left: 16px;">Все поля обязательны для заполнения:</p>
 				<form action="{{ url_for('auth.registration') }}" class="w3-container" method="POST">
 					{{ registrationForm.csrf_token }}
 					<!-- ============= Командная информация ===================== -->
 					<div class="w3-section">
 						
-						{{ registrationForm.teamName(class="w3-input w3-border-bottom") }}
+						{{ registrationForm.teamName(class="w3-input w3-border-bottom", id="team") }}
 							<p class="w3-tiny w3-text-red">
 								{% for message in registrationForm.teamName.errors %}
 								{{ message }}

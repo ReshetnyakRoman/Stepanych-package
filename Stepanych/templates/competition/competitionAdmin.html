@@ -133,7 +133,7 @@
 					<form action="{{ url_for('competition.close_set') }}" method="POST">
 					<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 					<input type="hidden" name="setNuber" value="{{set.setNuber}}"/>
-					<button type="submit" id="open_routes" class="w3-display-container my-controls w3-round-xlarge w3-btn-1 w3-margin w3-border w3-border-red w3-text-red w3-hover-red w3-hover-text-white {% if set.setNuber == 0 %} w3-hide {% else %}w3-show {% endif %}" onclick="open_routes(this, 'close_routes')">
+					<button type="submit"  class="w3-display-container my-controls w3-round-xlarge w3-btn-1 w3-margin w3-border w3-border-red w3-text-red w3-hover-red w3-hover-text-white {% if set.setNuber == 0 %} w3-hide {% else %}w3-show {% endif %}" onclick="open_routes(this, 'close_routes')">
 						<div class="w3-display-middle w3-center w3-large ">
 						 <b>Закрыть<br> {{set.setNuber}}й сет</b>
 						</div>
@@ -144,7 +144,7 @@
 					<form action="{{ url_for('competition.open_set') }}" method="POST">
 					<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 					<input type="hidden" name="setNuber" value="{{set.setNuber}}"/>
-					<button type="submit" id="open_routes" class="w3-display-container my-controls w3-round-xlarge w3-btn-1 w3-margin w3-border w3-border-blue w3-text-blue w3-hover-blue w3-hover-text-white {% if set.setNuber == 0 %} w3-hide {% else %}w3-show {% endif %}" onclick="open_routes(this, 'close_routes')">
+					<button type="submit"  class="w3-display-container my-controls w3-round-xlarge w3-btn-1 w3-margin w3-border w3-border-blue w3-text-blue w3-hover-blue w3-hover-text-white {% if set.setNuber == 0 %} w3-hide {% else %}w3-show {% endif %}" onclick="open_routes(this, 'close_routes')">
 						<div class="w3-display-middle w3-center w3-large ">
 						 <b>Открыть<br> {{set.setNuber}}й сет</b>
 						</div>
@@ -186,7 +186,7 @@
 				{% for competition in competitionArchive%}
 				<div class="archive w3-border my-card w3-round-large my-btn-1 w3-text-grey w3-display-container"> 
 					<div class="w3-display-topright w3-text-red w3-large w3-hover-red w3-round-large" style="padding: 3px 8px 3px 8px;" onclick="document.getElementById('delete_archive').style.display='block';assign_id(this)"><i class="fa fa-trash-o"></i></div>
-					<a href="{{ url_for('competition.archive', competitionName=competition.competitionName, prevURL=request.full_path) }}" target="blank">
+					<a class="button-upload" href="{{ url_for('competition.archive', competitionName=competition.competitionName, prevURL=request.full_path) }}">
 						<div class=" my-card-top" ><p class="step45 competitionName">{{competition.competitionName}}</p></div>
 				
 						<div class="w3-padding-24 w3-container" style="height: 70px"><i class="fa fa-lock w3-xxlarge"></i></div>

@@ -7,7 +7,17 @@
 -почтовый сервер, есле нужен почтовый ящик на домене stepanich.ru (не обязательно, можно настроить отправку писем и через gmail/mail.ru/yandex)
 -информаци по настройке служб (запуск, остановка, добавление в автозагрузку и т.п. в файле system services setup (CentOS7).txt)
 -установленный git
-
+Открытые порты:
+22 - ssh
+25 - postfix (smtp port)
+80 - nginx (http)
+443 -  nginx (shttp)
+993 - dovecot (pop3 port)
+995 - dovecot (pop3 port)
+3306 - mysql
+110 - dovecot (pop3 port)
+143 - dovecot (pop3 port)
+587 - posfix (smpt submission port)
 
 Установка:
 в корневом каталоге проекта инициализируем новый репозиторий git и клонируем приложение с github.com:
@@ -25,6 +35,9 @@ $ mv config_prod.py config.py
 $ mv manage.py manage_dev.py
 $ mv manage_prod.py manage.py
 
+создаем error.log для uwsgi и присваеваем ему нужного пользователя
+$sudo touch /home/flask/error.log
+$sudo chown nginx:flask-uwsgi error.log
 
 в файле для запуска uwsgi сервера проверяем путь к файлу manage.py на запуск приложения  
 $ sudo nano uwsgi.ini
@@ -91,17 +104,39 @@ mysql>insert into roles (role, permissions) values('user',3);
 
 mysql>insert into competition (competitionName, competitionStatus, routesStatus) values ('Stepanych','closed','0');
 
-mysql>insert into main (keyTeamCompetition, competition, email, teamName, confirmed, role) values('Stepanychadmin','Stepanych','admin_email@gmail.com','admin','True','admin'); 
+mysql>insert into main (keyTeamCompetition, competition, email, teamName, confirmed, role, year1, year2) values('Stepanychadmin','Stepanych','admin_email@gmail.com','admin','True','admin', 1990, 1990); 
+
+INSERT INTO setDescriptions (description, setNuber) values ('сет', 0);
 
 !! После запуска сайта нужно будет изменить пароль пользователя admin --> нажать "Войти" и выбрать "забыли пароль"!!
 
 ========Запускаем сайт!======
+запускаем службы (прежде чем их запустить нужно проверить что существуют соответствующие сервисные файлы см.ниже)
+$ sudo systemctl start flask-uwsgi
+$ sudo systemctl start nginx
+$ sudo systemctl start mysqld
+$ sudo systemctl start postfix
+$ sudo systemctl start dovecot
+
+проверяем статуч, что все они успешно запустились
+$ sudo systemctl status flask-uwsgi
+$ sudo systemctl status nginx
+$ sudo systemctl status mysqld
+$ sudo systemctl status postfix
+$ sudo systemctl status dovecot
+
+если статус выдал ошибку, ее полностью можно посмотреть в журнал:
+$sudo journalctl -u service-name.service  - весь журнал 
+$sudo journalctl -u service-name.service -b - последняя загрузка
+
 добавляем службы в автозагрузку
 $ sudo systemctl enable flask-uwsgi
 $ sudo systemctl enable nginx
 $ sudo systemctl enable mysqld
 $ sudo systemctl enable postfix
 $ sudo systemctl enable dovecot
+
+
 
 Что бы проверить что СИСТЕМНАЯ служба в автозагрузках, нужно что бы они присутствовала в катлоге /usr/lib/systemd/system/
 Смотрим что там есть файлы:
@@ -249,3 +284,12 @@ RestartPreventExitStatus=1
 
 PrivateTmp=false
 ------File end----
+
+======Логи=====
+Логи пишутся в:
+/home/flask/error.log   uwsgi server error log
+/var/log/nginx/error.log
+
+
+tail /home/flask/error.log
+sudo tail /var/log/nginx/error.log
