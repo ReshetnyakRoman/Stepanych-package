@@ -124,7 +124,7 @@
 		
 		<!-- Add Comments form -->
 		{% if current_user.is_authenticated %}
-		<form action="{{ url_for('news.post', id=posts.id, currentURL=request.path) }}" method="POST" class="w3-container">
+		<form id="post" action="{{ url_for('news.post', id=posts.id, currentURL=request.path) }}" method="POST" class="w3-container">
 			
 			{{ form.csrf_token }}
 				<div class="w3-section">
@@ -137,7 +137,7 @@
 							{% endfor %}
 						</p>
 
-					{{ form.submit(class="w3-btn-1 w3-blue w3-round w3-margin button-upload") }}
+					{{ form.submit1(class="w3-btn-1 w3-blue w3-round w3-margin button-upload") }}
 
 				</div>
 		</form>

@@ -13,10 +13,10 @@ class PostForm(FlaskForm):
 	body = TextAreaField("Какие новост сегодня?", 
 		validators = [Required("Вы забыли написать новость!")], 
 		render_kw={"placeholder": "Текст новости, например: В горах отличная погода!","data-autosave":"editor-content"})
-	submit = SubmitField("Запостить")
+	submit1 = SubmitField("Запостить")
 
 class CommentForm(FlaskForm):
 	body = TextAreaField('Заголовок новости', 
 		validators = [Required("Введите комментарий")], 
 		render_kw={"placeholder": "Оставьте комментарий"})
-	submit = SubmitField("Отправить")
+	submit1 = SubmitField("Отправить")

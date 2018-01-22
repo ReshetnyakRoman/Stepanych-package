@@ -15,7 +15,7 @@ class LoginForm(FlaskForm):
 	teamName = StringField('Название команды', validators = [Required("введите название команды"), Length(1,128)], render_kw={"placeholder": "Пьяные инженеришки"})
 	password = PasswordField('password', validators = [Required("введите пароль")], render_kw={"placeholder": "хитрый пароль"})		
 	remember_me = BooleanField('Запомнить меня', render_kw={"checked": "checked"})
-	submit = SubmitField('Войти')
+	submit1 = SubmitField('Войти')
 
 class pswEmailForm(FlaskForm):
 	teamName = StringField('Название команды', validators = [Required("введите название команды"), Length(1,128)], render_kw={"placeholder": "Пьяные инженеришки"})
@@ -129,7 +129,7 @@ class RegistrationForm(FlaskForm):
 	male2 = SelectField(default=('', "пол"), choices = [('','пол'),('М','М'),('Ж','Ж')],
 		validators = [Required("укажите пол участника")], id='male2')
 
-	submit = SubmitField('Зарегестрировать')
+	submit1 = SubmitField('Зарегестрировать')
 
 	def __init__(self, *args, **kwargs):
 		super(RegistrationForm, self).__init__(*args, **kwargs)

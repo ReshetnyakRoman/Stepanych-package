@@ -38,7 +38,7 @@
 
 	</script>
 </head>
-<body>
+<body style="">
 <!-- Start of navigation block -->
 
 		<header class="w3-top">
@@ -309,7 +309,7 @@
 					<p class="w3-small">Трассы</p> 
 					</a>
 					
-					<a  href="{{ url_for('competition.results') }}" class="w3-bar-item w3-red-d3 w3-hover-red my-menuitem-animation my-bar-item-transition w3-center button-upload" style="height: 100%">
+					<a  id="testss" href="{{ url_for('competition.results') }}" class="w3-bar-item w3-red-d3 w3-hover-red my-menuitem-animation my-bar-item-transition w3-center button-upload" style="height: 100%">
 					<i class="fa fa-flag-checkered w3-xxlarge  w3-padding"></i>
 					<p class="w3-small">Результаты</p> 
 					</a>
@@ -332,6 +332,9 @@
 			<button onclick="getElementById('login-window').style.display='block' " class="w3-bar-item w3-padding w3-red w3-hide-small w3-hover-red-d3 w3-large my-menuitem-animation w3-right"> <span class="">Войти </span><i class="fa fa-user-circle-o"></i></button>
 			{% endif %}
 		</menu>
+
+	
+			
 		</header>
 
 	<!-- Start of Sidebar -->
@@ -365,122 +368,132 @@
 			<div class="my-tooltip-text w3-blue w3-round-medium">загрузить документ</div>
 			</div>
 
+			
+
 		</aside>
+
+		
+
+	
+
+
 		{% else %}
 
 		{% endif %}
 
-	<!-- Start of Login modal window -->
-		<div id="login-window" class="w3-modal" style="display: {{ request.args.get('displayLoginForm') }}">
-
-			<div class="w3-modal-content w3-animate-zoom" style="max-width: 500px">
-						
-				<div class="w3-display-container w3-padding" style="padding-top: 40px; margin-bottom: -20px; height: 220px;">
-				<button onclick="document.getElementById('login-window').style.display='none'" class="w3-button w3-right w3-hover-red-d3 w3-red"><i class="fa fa-close w3-xlarge "></i></button>
-				<img src="/img/login.jpg" alt="login" width="200px" class="w3-circle w3-display-middle w3-margin-top">	
-				<br>
-				</div>
-				
-				<form method="post" action="{{ url_for('auth.login',currentURL = request.path) }}" class="w3-container">
-
-					{{ loginForm.csrf_token }}
-					<div class="w3-section">
-						<br>
-						{% with messages = get_flashed_messages() %}
-						    {% if messages %}
-						    
-						    {% for message in messages %}
-						        <p class="w3-text-red w3-padding">{{ message }}</p>
-						    {% endfor %}
-						    
-						  {% endif %}
-						{% endwith %} 						
-						<label for="" class="w3-small w3-text-dark-grey"><b>Название команды</b></label>
-						{{ loginForm.teamName(class="w3-input w3-border-bottom w3-margin-bottom") }}
-							<p class="w3-tiny w3-text-red">
-								{% for message in loginForm.teamName.errors %}
-								{{ message }}
-								{% endfor %}
-							</p>
-						<label for="" class="w3-small w3-text-dark-grey"><b>Пароль</b></label>
-						{{ loginForm.password(class="w3-input w3-border-bottom  w3-margin-bottom", id="pw") }}
-							<p class="w3-tiny w3-text-red">
-								{% for message in loginForm.password.errors %}
-								{{ message }}
-								{% endfor %}
-							</p>
-
-						
-						{{ loginForm.remember_me(class="w3-check")}} Запомнить меня.
-						{{ loginForm.submit(class="w3-button button-upload w3-block w3-green w3-padding w3-hover-green-l1 w3-margin-top", id="login") }}
-
-					</div>
-				</form>
-
-				<div class="w3-cell-row">
-						
-					<div class="w3-container w3-cell" style="padding-bottom: 16px;">
-					<a href="{{ url_for('competition.registred_teams') }}" class="w3-text-blue w3-small w3-hover-text-red">спиок зарегестрированных команд</a></div>
-						
-					<div class="w3-container w3-cell">
-					<a href="{{url_for('auth.password_resend')}}" class="w3-text-blue w3-small w3-hover-text-red">забыли пароль?</a>
-					</div>
-				
-				</div>
-			</div>
-		</div>
-
-	<!-- Files upload modal winodw -->
-
-		<div id="add_files" class="w3-modal" style="display: {{ request.args.get('displayFileUpload') }}">
-			<div class="w3-modal-content w3-animate-zoom w3-padding w3-center" style="max-width: 500px">
-				<button onclick="document.getElementById('add_files').style.display='none'" class="w3-button w3-right w3-hover-red-d3 w3-red"><i class="fa fa-close"></i></button>	
-
-				<h2 class="w3-text-blue">Загрузка файлов на сервер</h2>
-				<br>
-				{% with messages = get_flashed_messages() %}
-				    {% if messages %}
-				    
-				    {% for message in messages %}
-				        <p class="w3-text-red w3-padding">{{ message }}</p>
-				    {% endfor %}
-				    
-				  {% endif %}
-				{% endwith %} 	
-				<div class="w3-container">	
-				<p style="text-align: left;">Сохраняйте обновленные: </p>
-				<br>
-				<p class="w3-margin-left" style="text-align: left; font-weight: bold;">правила</p>
-				<p class="w3-margin-left" style="text-align: left;font-weight: bold;">положение</p>
-				<p class="w3-margin-left" style="text-align: left;font-weight: bold;">протоколы </p>
-				<p class="w3-margin-left" style="text-align: left;font-weight: bold;">картинки и т.п. </p>
-				<br>
-				<p class="" style="text-align: left;">полученные ссылки на документы вы сможете исользовать на нужной странице</p>
-				</div>
-				<form action="{{url_for('site.file_upload',prevURL=request.path)}}" class="w3-container w3-padding" enctype="multipart/form-data" method="POST">
-				<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-					<br>
-				 	<p class="w3-small">Выберите файлы для загрузки,</p>
-				 	<p class="w3-small">допустимый размер файла до 8 МБ:</p>
-				 	<br>
-				 	<input type="file" multiple name="docs" size="50" class="w3-margin-bottom w3-button" style="width: 300px;">
-				 	<br>
-				 	<br>
-				 	<input type="submit" class="w3-button w3-green w3-margin button-upload" value="загрузить">
-				</form>
-			</div>	
-		</div>	
+	
 <!-- End of navigation block -->
 
 <!-- Start of content -->
 	<main>
-	
+
+		<!-- Start of Login modal window -->
+			<div id="login-window" class="w3-modal" style="display: {{ request.args.get('displayLoginForm') }}">
+
+				<div class="w3-modal-content w3-animate-zoom" style="max-width: 500px">
+							
+					<div class="w3-display-container w3-padding" style="padding-top: 40px; margin-bottom: -20px; height: 220px;">
+					<button onclick="document.getElementById('login-window').style.display='none'" class="w3-button w3-right w3-hover-red-d3 w3-red"><i class="fa fa-close w3-xlarge "></i></button>
+					<img src="/img/login.jpg" alt="login" width="200px" class="w3-circle w3-display-middle w3-margin-top">	
+					<br>
+					</div>
+					<div class="w3-section">
+					<form method="post" action="{{ url_for('auth.login',currentURL = request.path) }}" class="w3-container" id="loginForm">
+						
+						<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+						
+							<br>
+							{% with messages = get_flashed_messages() %}
+							    {% if messages %}
+							    
+							    {% for message in messages %}
+							        <p class="w3-text-red w3-padding">{{ message }}</p>
+							    {% endfor %}
+							    
+							  {% endif %}
+							{% endwith %} 						
+							<label for="" class="w3-small w3-text-dark-grey"><b>Название команды</b></label>
+							{{ loginForm.teamName(class="w3-input w3-border-bottom w3-margin-bottom") }}
+								<p class="w3-tiny w3-text-red">
+									{% for message in loginForm.teamName.errors %}
+									{{ message }}
+									{% endfor %}
+								</p>
+							<label for="" class="w3-small w3-text-dark-grey"><b>Пароль</b></label>
+							{{ loginForm.password(class="w3-input w3-border-bottom  w3-margin-bottom", id="pw") }}
+								<p class="w3-tiny w3-text-red">
+									{% for message in loginForm.password.errors %}
+									{{ message }}
+									{% endfor %}
+								</p>
+
+							
+							{{ loginForm.remember_me(class="w3-check")}} Запомнить меня.
+							{{ loginForm.submit1(class="w3-button button-upload w3-block w3-green w3-padding w3-hover-green-l1 w3-margin-top") }}
+
+						
+					</form>
+					</div>
+
+					<div class="w3-cell-row">
+							
+						<div class="w3-container w3-cell" style="padding-bottom: 16px;">
+						<a href="{{ url_for('competition.registred_teams') }}" class="w3-text-blue w3-small w3-hover-text-red">спиок зарегестрированных команд</a></div>
+							
+						<div class="w3-container w3-cell">
+						<a href="{{url_for('auth.password_resend')}}" class="w3-text-blue w3-small w3-hover-text-red">забыли пароль?</a>
+						</div>
+					
+					</div>
+				</div>
+			</div>	
+
+		<!-- Files upload modal winodw -->
+
+			<div id="add_files" class="w3-modal" style="display: {{ request.args.get('displayFileUpload') }}">
+				<div class="w3-modal-content w3-animate-zoom w3-padding w3-center" style="max-width: 500px">
+					<button onclick="document.getElementById('add_files').style.display='none'" class="w3-button w3-right w3-hover-red-d3 w3-red"><i class="fa fa-close"></i></button>	
+
+					<h2 class="w3-text-blue">Загрузка файлов на сервер</h2>
+					<br>
+					{% with messages = get_flashed_messages() %}
+					    {% if messages %}
+					    
+					    {% for message in messages %}
+					        <p class="w3-text-red w3-padding">{{ message }}</p>
+					    {% endfor %}
+					    
+					  {% endif %}
+					{% endwith %} 	
+					<div class="w3-container">	
+					<p style="text-align: left;">Сохраняйте обновленные: </p>
+					<br>
+					<p class="w3-margin-left" style="text-align: left; font-weight: bold;">правила</p>
+					<p class="w3-margin-left" style="text-align: left;font-weight: bold;">положение</p>
+					<p class="w3-margin-left" style="text-align: left;font-weight: bold;">протоколы </p>
+					<p class="w3-margin-left" style="text-align: left;font-weight: bold;">картинки и т.п. </p>
+					<br>
+					<p class="" style="text-align: left;">полученные ссылки на документы вы сможете исользовать на нужной странице</p>
+					</div>
+					<form action="{{url_for('site.file_upload',prevURL=request.path)}}" class="w3-container w3-padding" enctype="multipart/form-data" method="POST">
+					<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+						<br>
+					 	<p class="w3-small">Выберите файлы для загрузки,</p>
+					 	<p class="w3-small">допустимый размер файла до 8 МБ:</p>
+					 	<br>
+					 	<input type="file" multiple name="docs" size="50" class="w3-margin-bottom w3-button" style="width: 300px;">
+					 	<br>
+					 	<br>
+					 	<input type="submit" class="w3-button w3-green w3-margin button-upload" value="загрузить">
+					</form>
+				</div>	
+			</div>	
 
 	{% block content %}{% endblock %}
 
 	</main>
 <!-- End of content -->
-	<section id="loader_section" style="display: none;">
+	<section id="loader_section" style="display: none; z-index:3;padding-top:100px;position:fixed;left:0;top:0;width:100%;height:100%;overflow:auto;background-color:rgba(255,255,255,0.7)";> 
 		<div id="loader"></div>
 		<img src="/img/icetool_ico_white.png" alt="ice_tool" id="pic_icetool">
 	</section>

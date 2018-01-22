@@ -79,7 +79,7 @@
 				
 				<h1>Новый пост</h1>
 				{% if current_user.can(Permission.WRITE_ARTICLES) or current_user.can(Permission.ADMINVIEW) %}
-				<form method="POST" action="{{ url_for('news.new_post') }}" class="w3-container" enctype="multipart/form-data">
+				<form method="POST" action="{{ url_for('news.new_post') }}" class="w3-container" enctype="multipart/form-data" id="newpost">
 
 							{{ NewsForm.csrf_token }}
 							<div class="w3-section">
@@ -106,7 +106,7 @@
 								 	
 								 	<input type="file" id="docs" name="docs" class="w3-margin-bottom w3-small" multiple>
 
-								{{ NewsForm.submit(class="w3-btn-1 w3-border-blue w3-border w3-round w3-margin w3-right button-upload w3-text-blue") }}
+								{{ NewsForm.submit1(class="w3-btn-1 w3-border-blue w3-border w3-round w3-margin w3-right button-upload w3-text-blue") }}
 
 							</div>
 				</form>

@@ -43,36 +43,72 @@
 		}
 
 	/* loader function */
-	$('.button-upload').on("click", function () {
+	/*$('.button-upload').on("click", function (event) {
+
 		$('#loader_section').show();
-	})
+		$('main').addClass('blur');
+		$('aside').addClass('blur');
+	    $('header').addClass('blur');
+	    $('footer').addClass('blur');
+	    
+	});*/
 
-	//$('#button-upload').click(function() {
-    //$('#loader_section').show()});
+	$('.button-upload').on("click", function (event) {
+		
+		event.preventDefault();
+		event.stopPropagation();
+		$('#loader_section').show();
+		$('main').addClass('blur');
+		$('aside').addClass('blur');
+	    $('header').addClass('blur');
+	    $('footer').addClass('blur');
+	    _this = $(this)[0]
+	    href = $(this).attr('href');
+	    this2 = $(this)
+	    if (_this.tagName == 'A') {
+	    	setTimeout(function() { location.href = href; }, 10);
+	  		}
+	  	else {
+	  		
+	  		//alert($(this).parents("form:first")[0].id)
+	  		setTimeout(function() { this2.parents("form").submit(); }, 10);
+	  	}
 
-   // $('#button-upload2').click(function() {
-   // $('#loader_section').show()});
+	});
 
-   // $('#button-upload3').click(function() {
-   // $('#loader_section').show()});
+	/*var classname = document.getElementsByClassName("button-upload");
 
-   // $('#button-upload4').click(function() {
-   // $('#loader_section').show()});
-
+	for (var i = 0; i < classname.length; i++) {
+    classname[i].addEventListener('click', loader, false);
+	}*/
+   	
    	function loader() {
-    $('#loader_section').show()};
+   		
+	    $('#loader_section').show()
+	    $('main').addClass('blur');
+		$('aside').addClass('blur');
+	    $('header').addClass('blur');
+	    $('footer').addClass('blur');
+	    
+	};
 	
 	$('#pic-upload').click(function() {
-    $('#loader_section').show()});	
+	    $('#loader_section').show();
+	    $('main').addClass('blur');
+	    $('aside').addClass('blur');
+	    $('header').addClass('blur');
+	    $('footer').addClass('blur');
+	});	
 
-	$("#loader_section").bind("ajaxSend", function() {
+	$("#loader_section").on("ajaxSend", function() {
 	        $(this).show();
-	    	}).bind("ajaxStop", function() {
+	    	}).on("ajaxStop", function() {
 	        $(this).hide();
-	    	}).bind("ajaxError", function() {
+	    	}).on("ajaxError", function() {
 	        $(this).hide();
 	 });	
 	});
+
 /* Registred team json and randomize function */
 	/* drug and drop function */
 	teamlist = {'teamName':[],'set':[] }; 
@@ -97,7 +133,6 @@
 		counterx += 1;
 	}
 
-	
 
 
 	/* Publish official participant list */
