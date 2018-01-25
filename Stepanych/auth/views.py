@@ -140,7 +140,7 @@ def teamoffice():
 		)
 	else:
 		if mainTable.query.filter_by(teamName=session['teamName']).filter_by(competition=competition1).first() == None:
-			flash('Такая команда не зарегестрирована в этих соревнованиях')	
+			flash('Такая команда не зарегистрирована в этих соревнованиях')	
 			logout_user()
 			session['email'] =''
 			session['teamName'] = ''
@@ -254,9 +254,9 @@ def registration():
 		db.session.commit()
 		token = team.generate_confirmation_token()
 		send_email(team.email, ': Подтвердите ваш аккаунт для Степаныча', 'auth/email/confirm', team=team, token=token)
-		flash('Для зваершения регистрации пройдите по ссылке отправленной вам на Email ')
+		flash('Для завершения регистрации пройдите по ссылке, отправленной вам на Email ')
 		return redirect(url_for('auth.registrationNextStep'))
-	flash('Вы заполнили не все данные или ввели недопустимый символ (разрешены только буквы, цыфры, пробелы)!')
+	flash('Вы заполнили не все данные или ввели недопустимый символ! Разрешены только буквы, цифры и пробелы')
 	return redirect(url_for('main.index', displayRegistrationForm='block'))
 
 
@@ -273,7 +273,7 @@ def confirm(token):
 	try:
 		mainTable.query.filter_by(keyTeamCompetition = data).first().confirmed #проверяем что зашифрованной команде соответствует запись в базе данных
 	except:
-		flash('Неправильная ссылка для подтверждения, или закончился срок ее действия') #если не не существует отправляем лесом
+		flash('Неправильная ссылка для подтверждения или закончился срок ее действия') #если не не существует отправляем лесом
 		return render_template('auth/nextstep.html')
 	else: #если существет создаем объект teamRegistration для этой команды.
 		teamRegistration = mainTable.query.filter_by(keyTeamCompetition = data).first()
@@ -283,11 +283,11 @@ def confirm(token):
 			teamRegistration.confirmed = 'True'
 			db.session.add(teamRegistration)
 			db.session.commit()
-			flash('Поздравляем регистрация завершена!')
-			flash('Теперь можете продолжить работу, например:')
-			flash('- При необходимости заменить одного из участников команды в личном кабинете')
-			flash('- Регистировать результаты вашей команды во время соревнований (меню: соревнования -> трассы)')
-			flash('- поменять email вашей команды')
+			flash('Поздравляем, регистрация успешно завершена!')
+			flash('Теперь вы можете продолжить работу, например:')
+			flash('- заменить одного из участников команды в Личном кабинете (при необходимости)')
+			flash('- регистрировать результаты вашей команды во время соревнований (меню: соревнования -> трассы)')
+			flash('- изменить email вашей команды')
 			return redirect(url_for('auth.registrationNextStep'))		
 
 @auth.route('/confirm')
@@ -295,7 +295,7 @@ def confirm(token):
 def resend_confirmation():
 	token = current_user.generate_confirmation_token()
 	send_email(current_user.email, ': Подтвердите ваш аккаунт для Степаныча', 'auth/email/confirm', team=current_user, token=token)
-	flash('Вам отправленн новый email с сылкой для завершения регистрации!')
+	flash('Вам отправлено новое письмо с ссылкой для завершения регистрации')
 	return redirect(url_for('auth.registrationNextStep'))
 
 
@@ -320,13 +320,13 @@ def password_resend():
 			if team is not None:
 				token = team.generate_confirmation_token()
 				send_email(form.email.data, ': Восстановление пароля для степаныча', 'auth/email/pswresendemail', team=team.teamName, token=token)
-				flash('Вам отправлен Email с ссылкой для востановление пароля')
+				flash('Вам отправлено новое письмо с ссылкой для восстановления пароля')
 				return redirect(url_for('auth.registrationNextStep'))
 			else:
-				flash('Такие команда или Email не зарегистрирован в текущих соревнованиях')
+				flash('Такая команда или Email не зарегистрированы в текущих соревнованиях')
 				return render_template('/auth/pswresend.html', emailForm=form)
 		else:
-			flash('Такая команда не зарегестрирована')
+			flash('Такая команда не зарегистрирована')
 	return render_template('/auth/pswresend.html', emailForm=form)
 
 #2й блок берет новый пароль, записывает его хэш в БД, и отправляет письмо пользователю с новым паролем!
@@ -342,13 +342,13 @@ def newpassword(token):
 			send_email(team.email, ': Ваш новый пароль на сайте Степаныча', 'auth/email/newpassword', team=team.teamName, password = form.password.data)
 			db.session.add(team)
 			db.session.commit()
-			flash('Ваш пароль изменен.')
-			flash('Письмо с новым парольем отправлено вам на почту.')
+			flash('Ваш пароль изменен')
+			flash('Письмо с новым паролем отправлено вам на почту')
 			return redirect(url_for('auth.registrationNextStep'))
 		else: 
 			return render_template('/auth/newpassword.html', passwordForm = form, token1=token)	
 	else: #если существет создаем объект teamRegistration для этой команды.
-		flash('Неправильная ссылка для подтверждения, или закончился срок ее действия') #если не не существует отправляем лесом
+		flash('Неправильная ссылка для подтверждения или закончился срок ее действия') #если не не существует отправляем лесом
 		flash(team)
 		return redirect(url_for('auth.password_resend'))
 
@@ -363,7 +363,7 @@ def new_email():
 		current_user.pendingEmail = form.email.data
 		token = current_user.generate_confirmation_token()
 		send_email(form.email.data, ': Подтвердите ваш новый email', 'auth/email/newemail', team = current_user.teamName, token=token)
-		flash('На новй email вам отправлено письмо с секретной ссылкой, перейдите по ней для завершения изменений.')
+		flash('На новый email вам отправлено письмо с секретной ссылкой, перейдите по ней для завершения изменений')
 		return redirect(url_for('auth.registrationNextStep'))
 	else:
 		return render_template('/auth/newemail.html', newEmailForm=form)
@@ -377,10 +377,10 @@ def new_email_change(token):
 		current_user.email = current_user.pendingEmail
 		db.session.add(current_user)
 		db.session.commit()
-		flash('Поздравляем ваш Email изменен!')
+		flash('Поздравляем, ваш Email изменен!')
 		return redirect(url_for('auth.registrationNextStep'))
 	else:
-		flash('Неправильная ссылка или истек срок ее действия!')
+		flash('Неправильная ссылка или истек срок ее действия')
 		return redirect(url_for('auth.registrationNextStep'))
 
 @auth.route('/memberchange', methods=['GET','POST'])

@@ -39,7 +39,7 @@ def add_article():
 		db.session.commit()
 		flash('Ссылка на %s добавлена!' % (url_object.netloc))	
 		return redirect(url_for('media.press'))
-	flash('Упс, возникла какая то проблема!')	
+	flash('Упс, возникла какая-то проблема :(')	
 	return redirect(url_for('media.press', displayNewArticle='block'))
 
 @media.route('/press/delete', methods=['POST'])
@@ -53,7 +53,7 @@ def delete_article():
 		flash('Запись удалена')
 		return redirect(url_for('media.press'))
 
-	flash('Упс, что-то пошло не так!')
+	flash('Упс, что-то пошло не так...')
 	return redirect(url_for('media.press'))
 
 #===============VIDEO===============
@@ -80,7 +80,7 @@ def add_video():
 			db.session.commit()
 			flash('Ссылка на %s добавлена!' % (request.form['description']))	
 			return redirect(url_for('media.video'))
-	flash('Упс, возникла какая то проблема!')	
+	flash('Упс, возникла какая-то проблема :(')	
 	return redirect(url_for('media.video', displayNewVideo='block'))
 
 @media.route('/video/delete', methods=['POST'])
@@ -94,7 +94,7 @@ def delete_video():
 		flash('Видео удалено')
 		return redirect(url_for('media.video'))
 
-	flash('Упс, что-то пошло не так!')
+	flash('Упс, что-то пошло не так...')
 	return redirect(url_for('media.video'))	
 
 #===============PHOTO===============
@@ -156,7 +156,7 @@ def add_gallery():
 				flash('Альбом "%s" добавлен!' % (request.form['galleryName']) )
 				return redirect(url_for('media.photo'))
 			except:
-				flash('Вы не залогинены или некоректный файл')
+				flash('Вы не залогинены или некорректный файл')
 				return redirect(url_for('media.photo', displayNewGallery='block'))
 	flash('Упс, что-то не сработало :(')
 	return redirect(url_for('media.photo'))
@@ -177,7 +177,7 @@ def delete_gallery():
 			pass
 	
 	Photo.query.filter_by(galleryID=galleryID).delete()
-	flash('Альбом удален!')
+	flash('Альбом удален')
 	return redirect(url_for('media.photo'))
 
 
@@ -224,7 +224,7 @@ def add_photo():
 							authorName=current_user.teamName)
 						db.session.add(gallery)
 				db.session.commit()
-				flash('Фото добавлены!')
+				flash('Фото добавлены')
 				return redirect(url_for('media.photo_gallery', id=request.form['galleryID']))
 			except:
 				flash('Вы не залогинены или некоректный файл')
@@ -247,5 +247,5 @@ def delete_photo():
 		pass
 	
 	Photo.query.filter_by(id=photoID).delete()
-	flash('Альбом удален!')
+	flash('Альбом удален')
 	return redirect(url_for('media.photo'))

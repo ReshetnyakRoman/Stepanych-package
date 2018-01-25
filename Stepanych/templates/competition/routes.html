@@ -13,7 +13,7 @@
 
 	<h1 class="w3-text-red w3-center">Трассы</h1>
 	<p id="testtext"></p>
-			<p class="w3-tiny w3-text-grey w3-center">вы должны быть авторизованы, что бы иметь возможность вносить результаты</p>
+			<p class="w3-tiny w3-text-grey w3-center">Вы должны быть авторизованы, чтобы иметь возможность вносить результаты.</p>
 			{% with messages = get_flashed_messages() %}
 			    {% if messages %}
 				    <div class="w3-pale-green w3-border-green w3-border w3-round" style="margin: 16px 0 0 0;">
@@ -49,7 +49,7 @@
 					<img src="/img/logo_route.jpg" alt="Степаныч лого" width="300px">
 					<br>
 					<br>
-					<p style="margin-left: 16px;">Трассы для этих соревнований еще не опубликованы</p>
+					<p style="margin-left: 16px;">Трассы для этих соревнований еще не опубликованы.</p>
 				</div>
 				{% else %}
 					{% for routes in routes %}

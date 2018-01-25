@@ -92,6 +92,10 @@ $ source venv-pyth3/bin/activate
 выходим из окружения:
 (venv-pyth3)$ deactivate
 
+
+Для наполнения базы данных есть два пути:
+1) если мы ходтим востановить все данные их sql-backup файла то просто накатываем его на MySQL и все должно заработать (см. раздел Backup)
+2) если мы хотим завести все с нуля с читой базой данных и без архивов про предыдущим соревнованиям то:
 логинимся в mysql, что-бы добавить пользователя админа и типы прав, соревнования:
 $ mysql -u stepanich_mysql_user -p
 
@@ -293,3 +297,42 @@ PrivateTmp=false
 
 tail /home/flask/error.log
 sudo tail /var/log/nginx/error.log
+
+=====BackUP=====
+MySQL backup 
+в консоле вводим:
+заходим в папку проекта:
+$ cd /home/flask/
+создаем backup file:
+$ mysqldump -u stepanich -p  Stepanich -R -E --single-transaction --triggers >Stepanich_backup.sql
+файл сохраняется в той же папке из которой вводилась команда.
+
+здесь 
+пользователь: stepanich
+сохраняем базу данных Stepanich
+-R for all routines
+-E for all Events
+--single-transaction - without locking the table i.e., without interrupting any connection(R/W)
+
+Восстановление базы данных:
+1) На целевой машине создается база данных с таким же именем:
+mysql> GRANT ALL PRIVILEGES ON Stepanich.* TO 'stepanich_mysql_user'@'localhost' IDENTIFIED BY 'strong_password';
+
+2) Загрузить файл в MySQL командой (при этом нужно быть в папке в которой находится файл):
+$ mysql -u [uname] -p[pass] [db_to_restore] < [backupfile.sql]
+в нашем случае:
+$ mysql -u user -p Stepanich < Stepanich_backup.sql
+
+Если нужно создать базу данных которая уже существует то синтаксис команды следующий:
+mysqlimport -u [uname] -p[pass] [dbname] [backupfile.sql]
+
+Архивация папок img & doc
+сжатие общий вид:
+$ tar -jcvf archive_name.tar /path/to/directory_to_compress
+разархивирование:
+$ tar -xvf archive_name.tar
+
+Наш случай добавления архива:
+$ cd /home/flask/
+$ tar -jcvf img_backup.tar /home/flask/Stepanych/img/
+$ tar -jcvf doc_backup.tar /home/flask/Stepanych/doc/

@@ -75,7 +75,7 @@ def doc_delete():
 		os.remove(os.path.join(current_app.config['UPLOADED_DOCUMENTS_DEST'], doc.name))
 	except:
 		Docs.query.filter_by(name=docName).delete()
-		flash('Такого документа уже нет на сервере!')
+		flash('Такого документа уже нет на сервере')
 		return redirect(url_for('site.docs'))
 	Docs.query.filter_by(name=docName).delete()
 	flash('Документ удален')
@@ -129,10 +129,10 @@ def add_logo():
 							status = '')
 						db.session.add(photo)
 				db.session.commit()
-				flash('Логотип добавлен!')
+				flash('Логотип добавлен')
 				return redirect(url_for('site.administration'))
 			except:
-				flash('Какой-то некоректный файл :(')
+				flash('Какой-то некорректный файл :(')
 				return redirect(url_for('site.administration', displayNewPhoto='block'))
 	flash('Упс, что-то не сработало :(')
 	return redirect(url_for('site.administration'))	
@@ -215,7 +215,7 @@ def edit_page(iconDescriptionEng):
 		page.body = form.body.data
 		page.header = form.header.data
 		db.session.add(page)
-		flash('Страничка обновлена!')
+		flash('Страничка обновлена')
 
 		form.header.data = page.header
 		form.body.data = page.body

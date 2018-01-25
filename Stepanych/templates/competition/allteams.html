@@ -11,10 +11,10 @@
 			<!-- Start of Text - Content block -->
 			<!-- Шапка --> 
 		<h2 class="w3-text-red">Список всех команд, зарегистрированных на сайте</h2>
-		<p class="w3-tiny w3-text-grey"><sup>*</sup>Эта страничка предназначена для администратора соревнования. Здесь можно поменять участников, скоректировать инфо об участниках или вовсе удалить команду.</p>
+		<p class="w3-tiny w3-text-grey"><sup>*</sup>Эта страничка предназначена только для администраторов соревнований. Здесь можно поменять участников, скорректировать информацию об участниках или вовсе удалить команду.</p>
 		<br>
 		<button class="w3-btn-1 w3-green w3-margin-bottom" onclick="document.getElementById('registration-window').style.display='block';">Создать команду</button>
-		<p class="w3-tiny w3-text-grey"><sup>*</sup>эта кнопка может использоваться для добавления пользователя с Админскими или Гостевыми правами, в этом случае в качестве имени команды рекомендуется выбрать "Фамилию Имя", в поле соревнований написать Admin или Guest, и указать нужную роль.</p>
+		<p class="w3-tiny w3-text-grey"><sup>*</sup>Эта кнопка может использоваться как для создания и регистрации команды, так и для добавления пользователя с Админскими или Гостевыми правами. Во втором случае в качестве названия команды рекомендуется указать "Фамилию Имя", а в поле "Соревнования" указать Admin или Guest, и выбрать соответсвующую роль.</p>
 		<br>	
 		{% with messages = get_flashed_messages() %}
 		    {% if messages %}
@@ -133,8 +133,8 @@
 				<button onclick="this.parentElement.parentElement.style.display='none'" class="w3-button w3-right w3-hover-gren w3-green"><i class="fa fa-close"></i></button>	
 				<h2 class="w3-text-blue">Удаление команды</h2>
 				
-					<p class="w3-small">Вы уверены что хотите удалить эту команду? Она будет удалена с сервера!</p>
-				 	<button class="w3-button w3-red w3-margin" onclick="delete_element_modal('delete_team')"><i class="fa fa-trash-o" ></i> удалить</button>
+					<p class="w3-small">Вы уверены, что хотите удалить эту команду? Она будет удалена с сервера.</p>
+				 	<button class="w3-button w3-red w3-margin" onclick="delete_element_modal('delete_team')"><i class="fa fa-trash-o" ></i> Удалить</button>
 				
 			</div>	
 		</div>		

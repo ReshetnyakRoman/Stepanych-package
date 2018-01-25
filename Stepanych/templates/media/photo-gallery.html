@@ -31,7 +31,7 @@
 		<a href="{{ url_for('media.photo') }}" class="w3-btn-1 w3-text-blue w3-border w3-border-blue w3-round w3-margin "> << назад к альбомам </a>
 		
 		{% if current_user.teamName == galleryInfo.authorName or current_user.can(Permission.ADMIN) %}
-			<a class="w3-btn-1 w3-blue w3-padding w3-margin w3-round" onclick="document.getElementById('add_photo').style.display='block'"><i class="fa fa-plus-square"></i> добавить фото</a>
+			<a class="w3-btn-1 w3-blue w3-padding w3-margin w3-round" onclick="document.getElementById('add_photo').style.display='block'"><i class="fa fa-plus-square"></i> Добавить фото</a>
 		{% else %}
 		{% endif %}
 

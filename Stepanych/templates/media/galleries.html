@@ -10,7 +10,7 @@
 
 	<!-- Start of Text - Content block -->
 
-		<h1 class="w3-text-red w3-center">Фото-отчеты о "Степанычах"</h1>
+		<h1 class="w3-text-red w3-center">Фотоотчеты о "Степанычах"</h1>
 		<hr style="width: 90%; margin:auto;" >
 		
 		{% with messages = get_flashed_messages() %}
@@ -28,9 +28,9 @@
 		 	{% endwith %}
 		
 			{% if current_user.teamName != 'anonymous' %}
-			<a class="w3-btn-1 w3-lime w3-padding w3-margin w3-round" onclick="document.getElementById('add_galery').style.display='block'"><i class="fa fa-plus-square"></i> добавить новый альбом</a>
+			<a class="w3-btn-1 w3-lime w3-padding w3-margin w3-round" onclick="document.getElementById('add_galery').style.display='block'"><i class="fa fa-plus-square"></i> Добавить новый альбом</a>
 			{% else %}
-			<a class="w3-btn-1 w3-lime w3-padding w3-margin w3-round" onclick="document.getElementById('add_galery2').style.display='block'"><i class="fa fa-plus-square"></i> добавить новый альбом</a>
+			<a class="w3-btn-1 w3-lime w3-padding w3-margin w3-round" onclick="document.getElementById('add_galery2').style.display='block'"><i class="fa fa-plus-square"></i> Добавить новый альбом</a>
 			{% endif %}
 		
 
@@ -100,7 +100,7 @@
 				<h3 class="w3-text-blue"> </h3>
 	 			<br>
 	 			<br>
-				<p>Для того чтобы добавить фотографии вам нужно <a href="#" onclick="getElementById('login-window').style.display='block';document.getElementById('add_galery2').style.display='none'" class="w3-text-blue">воити</a></p>
+				<p>Для того чтобы добавить фотографии, вам нужно <a href="#" onclick="getElementById('login-window').style.display='block';document.getElementById('add_galery2').style.display='none'" class="w3-text-blue">войти</a></p>
 				<br>
 				<br>
 			

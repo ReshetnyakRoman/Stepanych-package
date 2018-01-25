@@ -44,8 +44,8 @@
 			<div id="header" class="w3-row w3-padding w3-border-blue w3-border-bottom" style="font-weight: bold;">
 				<div class="w3-col m5 s7 ">Команда<br> <span class="w3-text-grey w3-small">Участники</span> </div>
 				<div class="w3-col m2 w3-hide-small" id="year1">г.р.</div>
-				<div class="w3-col m1 w3-hide-small" id="alp_level">раз<br>алп</div>
-				<div class="w3-col m1 w3-hide-small" id="climb_level">раз<br>скл</div>
+				<div class="w3-col m1 w3-hide-small" id="alp_level">р-д<br>алп</div>
+				<div class="w3-col m1 w3-hide-small" id="climb_level">р-д<br>скл</div>
 				<div class="w3-col m3 s5">Сет<br> <span class="w3-text-grey w3-small">Клуб</span> </div>
 			</div>	
 			<input class="w3-input w3-border-bottom w3-border-blue w3-blue-l5 input-filter" type="text" placeholder="фильтр..." onkeyup="myFilter(0)" id="inputFilter" style="font-size: 13px; padding: 4px;">
@@ -142,7 +142,7 @@
 
 							<div class="w3-border-bottom w3-border-blue w3-padding">
 							<div id="header" class="w3-row w3-margin-bottom">
-								<div class="w3-col s12" ><span class="w3-small w3-text-grey">Перетащите сюда команды, которые вы хотите добавить в этот сет</span></div>
+								<div class="w3-col s12" ><span class="w3-small w3-text-grey">Перетащите сюда команды, которые вы хотите добавить в этот сет.</span></div>
 							</div>
 						</li>	
 		
@@ -155,7 +155,7 @@
 							<div id="team{{ loop.index }}" class="w3-hover-lime w3-border-bottom w3-border-blue w3-padding">
 								<div id="header" class="w3-row w3-margin-bottom">
 									<div class="w3-col s9" >{{ loop.index }}. <span class="teamName">{{team.teamName}}</span></div>
-									<div class="w3-col s3 w3-small" id="alp_level">предпочительно {{team.setNumber}}й сет <span class="w3-hide setNuber">{{set}}</span></div>
+									<div class="w3-col s3 w3-small" id="alp_level">предпочтительно {{team.setNumber}}й сет <span class="w3-hide setNuber">{{set}}</span></div>
 								</div>
 
 								<div class="w3-text-grey w3-small w3-row">
@@ -202,7 +202,7 @@
 
 								<div class="w3-border-bottom w3-border-blue w3-padding">
 								<div id="header" class="w3-row w3-margin-bottom">
-								<div class="w3-col s12 " ><span class="w3-small w3-text-grey">Перетащите сюда команды, которые нужно добавить в лист ожидания</span></div>
+								<div class="w3-col s12 " ><span class="w3-small w3-text-grey">Перетащите сюда команды, которые хотите добавить в лист ожидания.</span></div>
 								</div>
 							</li>
 
@@ -261,7 +261,7 @@
 			{% endif %}
 			
 
-			<button class="w3-btn-1 w3-round w3-blue w3-right w3-show" onclick="save_team_change()" style="margin-right: 12px;"><i class="fa fa-save"></i> сохранить</button>
+			<button class="w3-btn-1 w3-round w3-blue w3-right w3-show" onclick="save_team_change()" style="margin-right: 12px;"><i class="fa fa-save"></i> Сохранить</button>
 			
 				<br>
 				<br>
@@ -281,8 +281,8 @@
 					<div id="header" class="w3-row w3-padding w3-border-blue w3-border-bottom" style="font-weight: bold;">
 						<div class="w3-col m5 s7 ">Команда<br> <span class="w3-text-grey w3-small">Участники</span> </div>
 						<div class="w3-col m2 w3-hide-small" id="year1">г.р.</div>
-						<div class="w3-col m1 w3-hide-small" id="alp_level">раз<br>алп</div>
-						<div class="w3-col m1 w3-hide-small" id="climb_level">раз<br>скл</div>
+						<div class="w3-col m1 w3-hide-small" id="alp_level">р-д<br>алп</div>
+						<div class="w3-col m1 w3-hide-small" id="climb_level">р-д<br>скл</div>
 						<div class="w3-col m3 s5">Сет<br> <span class="w3-text-grey w3-small">Клуб</span> </div>
 					</div>	
 					<input class="w3-input w3-border-bottom w3-border-blue w3-blue-l5 input-filter" type="text" placeholder="фильтр..." onkeyup="myFilter(1)" id="inputFilter" style="font-size: 13px; padding: 4px;">
@@ -303,7 +303,7 @@
 								<div id="team{{ loop.index }}" class="w3-hover-lime w3-border-bottom w3-border-blue w3-padding">
 									<div id="header" class="w3-row w3-margin-bottom">
 										<div class="w3-col s9" >{{ loop.index }}. <span class="teamName">{{team.teamName}}</span></div>
-										<div class="w3-col s3 w3-small" id="alp_level">предпочительно {{team.setNumber}}й сет <span class="w3-hide setNuber">{{set}}</span></div>
+										<div class="w3-col s3 w3-small" id="alp_level">предпочтительно {{team.setNumber}}й сет <span class="w3-hide setNuber">{{set}}</span></div>
 									</div>
 
 									<div class="w3-text-grey w3-small w3-row">
@@ -401,8 +401,8 @@
 				<img src="/img/logo_route.jpg" alt="Степаныч лого" width="300px">
 				<br>
 				<br>	
-				<p class="w3-padding-48 w3-large w3-center">Финальные списки участников еще не опубликованы <br>
-				т.к. регистрация продолжается <br>
+				<p class="w3-padding-48 w3-large w3-center">Финальные списки участников еще не опубликованы, <br>
+				т.к. регистрация еще продолжается. <br>
 				</p>
 			</div>
 		</div>
@@ -425,8 +425,8 @@
 				<button onclick="this.parentElement.parentElement.style.display='none'" class="w3-button w3-right w3-hover-gren w3-green"><i class="fa fa-close"></i></button>	
 				<h2 class="w3-text-blue">Удаление команды</h2>
 				
-					<p class="w3-small">Вы уверены что хотите удалить эту команду? Она будет удалена с сервера!</p>
-				 	<button class="w3-button w3-red w3-margin" onclick="delete_team_modal('delete_team')"><i class="fa fa-trash-o" ></i> удалить</button>
+					<p class="w3-small">Вы уверены, что хотите удалить эту команду? Она будет удалена с сервера.</p>
+				 	<button class="w3-button w3-red w3-margin" onclick="delete_team_modal('delete_team')"><i class="fa fa-trash-o" ></i> Удалить</button>
 				
 			</div>	
 		</div>	

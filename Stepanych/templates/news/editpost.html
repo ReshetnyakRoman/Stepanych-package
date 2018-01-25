@@ -71,7 +71,7 @@
 			  {% endif %}
 			 {% endwith %} 		
 				
-				<h3>Редактирование записи.</h3>
+				<h3>Редактирование записи</h3>
 				{% if current_user.can(Permission.WRITE_ARTICLES) %}
 				<form method="POST" action="{{ url_for('news.edit_post', id=request.path[11:]) }}" class="w3-container">
 
@@ -103,10 +103,10 @@
 				
 				<!-- Galeries section -->
 
-				<h3>Редактирование галлереи.</h3>
+				<h3>Редактирование галереи</h3>
 				
 				{% if current_user.keyTeamCompetition == post.keyTeamCompetition or current_user.can(Permission.ADMIN) %}
-					<a class="w3-btn-1 w3-blue w3-padding w3-round" onclick="document.getElementById('add_photo').style.display='block'"><i class="fa fa-plus-square" ></i> добавить фото</a>
+					<a class="w3-btn-1 w3-blue w3-padding w3-round" onclick="document.getElementById('add_photo').style.display='block'"><i class="fa fa-plus-square" ></i> Добавить фото</a>
 				{% else %}
 				{% endif %}
 				<div id="grid-gallery" class="grid-gallery" style="margin-top: 16px;">
@@ -153,7 +153,7 @@
 				</div><!-- // grid-gallery -->
 
 				{% else %}
-				<p>Сожалеем, но у вас нет прав для добавления новостей</p>
+				<p>Сожалеем, но у вас нет прав для добавления новостей.</p>
 				{% endif %}
 			</div>
 

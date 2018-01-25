@@ -62,7 +62,7 @@ def new_post():
 					return redirect(url_for('main.index'))
 				
 				except:
-					flash('Некоректный файл')
+					flash('Некорректный файл')
 					return render_template('/news/newpost.html', NewsForm=postForm)
 	
 		return redirect(url_for('main.index'))
@@ -163,7 +163,7 @@ def add_post_photo():
 				flash('Фото добавлены!')
 				return redirect(url_for('news.edit_post', id=postID))
 			except:
-				flash('Некоректный файл')
+				flash('Некорректный файл')
 				return redirect(url_for('news.edit_post', id=postID, displayNewPhoto='block'))
 	flash('Упс, что-то не сработало :(')
 	return redirect(url_for('news.edit_post', id=postID, displayNewPhoto='block'))

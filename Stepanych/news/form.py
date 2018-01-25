@@ -8,9 +8,9 @@ from flask_pagedown.fields import PageDownField
 
 class PostForm(FlaskForm):
 	header = StringField('Заголовок новости', 
-		validators = [Required("введите заголовок поста")], 
+		validators = [Required("Введите заголовок поста")], 
 		render_kw={"placeholder": "Заголовок для новости"})
-	body = TextAreaField("Какие новост сегодня?", 
+	body = TextAreaField("Какие новости сегодня?", 
 		validators = [Required("Вы забыли написать новость!")], 
 		render_kw={"placeholder": "Текст новости, например: В горах отличная погода!","data-autosave":"editor-content"})
 	submit1 = SubmitField("Запостить")

@@ -11,7 +11,7 @@ from Stepanych.decorators import admin_required, permission_required
 from flask import jsonify, json, Response
 
 @competition.route('/results')
-def results():
+def results(): 
 	competition =  Competition.query.first()
 	mainTable.update_scores(competition.competitionName)
 	mainTable.update_positions(competition.competitionName)
@@ -23,6 +23,7 @@ def results():
 		displayLoginForm=request.args.get('displayLoginForm'),
 		routesInfo=routesInfo,
 		teams=teams,
+		competitionStatus=competition.competitionStatus,
 		badTeams=badTeams,
 		competition =competition.competitionName,
 		finalResultsStatus=competition.finalResultsStatus,
@@ -73,7 +74,7 @@ def results_update():
 
 			flash('Изменения сохранены')
 			return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
-	flash('Изменения не сохранены, возможно вы ввели некорректные данные или изменили данные стрзу нескольких команд')	
+	flash('Изменения не сохранены. Возможно, вы ввели некорректные данные или изменили данные сразу нескольких команд')	
 	return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
 
 
@@ -111,9 +112,9 @@ def highlightFinals():
 		db.session.add(competition)
 		db.session.commit()
 		return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
-	
+		
 	flash('Выделить финалистов не удалось :(')
-	return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
+	return json.dumps({'success':False}), 400, {'ContentType':'application/json'}
 
 @competition.route('/archive/<competitionName>')
 def archive(competitionName):

@@ -1,4 +1,4 @@
-
+ 
 
 // Add smooth scrolling to all links in navbar + footer link
 	$(document).ready(function(){
@@ -174,18 +174,18 @@
 	}
 
 	function highlightFinals(arg) {
-			myJSON = JSON.stringify({'highlight':arg});
+			myJSON1 = JSON.stringify({'highlight':arg});
 			$.ajax({
 			  url:'/competition/results/highlight',
 			  type:"POST",
-			  data:myJSON,
+			  data:myJSON1,
 			  contentType:"application/json; charset=utf-8",
 			  dataType:"json",
 			  success: function(data){
-			    location.reload(true);
+			    location.reload();
 			  },
 			  error: function() {
-		        display("Error");
+		        alert('Error');
 		      }
 			})
 	}

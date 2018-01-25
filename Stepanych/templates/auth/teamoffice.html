@@ -47,7 +47,7 @@
 					    <option {% if male1 == 'Ж' %} selected {% else %}{% endif %} value="Ж">Ж</option>
 			 		</select>
 			 		<br>
-					<label for="{{alpSkill1}}">Разряд по Альпинизму: </label>
+					<label for="{{alpSkill1}}">Разряд по альпинизму: </label>
 					<select class="w3-select my-input w3-margin-bottom" id="falpSkill1" name="alpSkill1" disabled  style="width: 55px">
 						<option {% if alpSkill1 == 'б/р' %} selected {% else %}{% endif %} value="б/р">б/р</option>
 					    <option {% if alpSkill1 == '3й' %} selected {% else %}{% endif %} value="3й">3й</option>
@@ -83,7 +83,7 @@
 					    <option {% if male2 == 'Ж' %} selected {% else %}{% endif %} value="Ж">Ж</option>
 			 		</select>		
 			 		<br>			
-					<label for="alpSkill2">Разряд по Альпинизму: </label>
+					<label for="alpSkill2">Разряд по альпинизму: </label>
 					<select class="w3-select my-input w3-margin-bottom" id="falpSkill2" disabled name="alpSkill2" style="width: 55px">
 						<option value="б/р" {% if alpSkill2 == 'б/р' %} selected {% else %}{% endif %}>б/р</option>
 					    <option value="3й" {% if alpSkill2 == '3й' %} selected {% else %}{% endif %}>3й</option>
@@ -124,7 +124,7 @@
 					    <option {% if male1 == 'Ж' %} selected {% else %}{% endif %} value="Ж">Ж</option>
 			 		</select>
 			 		<br>
-					<label for="{{alpSkill1}}">Разряд по Альпинизму: </label>
+					<label for="{{alpSkill1}}">Разряд по альпинизму: </label>
 					<select class="w3-select my-input w3-margin-bottom" id="falpSkill1" name="alpSkill1" disabled  style="width: 55px">
 						<option {% if alpSkill1 == 'б/р' %} selected {% else %}{% endif %} value="б/р">б/р</option>
 					    <option {% if alpSkill1 == '3й' %} selected {% else %}{% endif %} value="3й">3й</option>
@@ -166,7 +166,7 @@
 					    <option {% if male2 == 'Ж' %} selected {% else %}{% endif %} value="Ж">Ж</option>
 			 		</select>		
 			 		<br>			
-					<label for="alpSkill2">Разряд по Альпинизму: </label>
+					<label for="alpSkill2">Разряд по альпинизму: </label>
 					<select class="w3-select my-input w3-margin-bottom" id="falpSkill2" disabled name="alpSkill2" style="width: 55px">
 						<option value="б/р" {% if alpSkill2 == 'б/р' %} selected {% else %}{% endif %}>б/р</option>
 					    <option value="3й" {% if alpSkill2 == '3й' %} selected {% else %}{% endif %}>3й</option>
@@ -201,7 +201,7 @@
 			<p class="w3-small"><sup>*</sup>Вы уже один раз изменили участника</p>
 			{% else %}
 			<p class="w3-text-red" id="user_change_status"></p>
-			<p class="w3-small"><sup>*</sup>команде разрешено поменять одного участника, один раз</p>
+			<p class="w3-small"><sup>*</sup>Команде разрешено поменять только одного участника и только один раз</p>
 			{% endif %}
 			<a class="w3-btn-1 w3-round w3-green w3-margin-top" href="/auth/logout">
 				<i class="fa fa-arrow-circle-o-right"></i> Выйти

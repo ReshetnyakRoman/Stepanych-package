@@ -40,6 +40,7 @@ def registred_teams_update():
 		for i in range(len(jsonTeamList['teamName'])):
 			changeSet = mainTable.query.filter_by(competition=competition.competitionName).filter_by(teamName=jsonTeamList['teamName'][i]).first()
 			changeSet.waitingListYes = jsonTeamList['set'][i]
+			changeSet.teamStatus = 'ok'
 			db.session.add(changeSet)
 
 		competition.participantsListStatus = "published"
@@ -67,6 +68,7 @@ def registred_teams_update_save():
 		for i in range(len(jsonTeamList['teamName'])):
 			changeSet = mainTable.query.filter_by(competition=competition.competitionName).filter_by(teamName=jsonTeamList['teamName'][i]).first()
 			changeSet.waitingListYes = jsonTeamList['set'][i]
+			changeSet.teamStatus = 'ok'
 			db.session.add(changeSet)
 
 		changeStatusTeams = mainTable.query.filter_by(competition=competition.competitionName).filter_by(waitingListYes=0).all()

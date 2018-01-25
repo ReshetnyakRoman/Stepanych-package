@@ -14,7 +14,7 @@
 
 
 		
-		<p class="w3-margin-bottom"> Для востановления или изменения пароля введите E-mail и название команды указанный при регистрации:</p>
+		<p class="w3-margin-bottom"> Для восстановления или изменения пароля введите E-mail и название команды, указанные при регистрации:</p>
 		<form method="POST" action="{{ url_for('auth.password_resend') }}">
 			{{ emailForm.csrf_token }}
 			{{ emailForm.teamName(class="w3-input w3-border-bottom w3-margin-bottom") }}

@@ -28,13 +28,13 @@
 			 	{% endwith %}
 				
 
-				<a class="w3-btn-1 w3-blue w3-padding w3-margin w3-round" onclick="document.getElementById('add_photo').style.display='block'"><i class="fa fa-plus-square"></i> добавить фото</a>
-				<p class="w3-tiny w3-text-grey w3-margin-bottom">Для заглавного фото рекомендуется: пропорция 3:2, рарешение не ниже 1200:150pх и размер файла не более 100Кб, иначе будет выглядеть убого.</p>
+				<a class="w3-btn-1 w3-blue w3-padding w3-margin w3-round" onclick="document.getElementById('add_photo').style.display='block'"><i class="fa fa-plus-square"></i> Добавить фото</a>
+				<p class="w3-tiny w3-text-grey w3-margin-bottom">Для заглавного фото рекомендуется: пропорция 3:2, разрешение не ниже 1200:600pх и размер файла не более 100Кб, иначе будет выглядеть убого.</p>
 
 				<div style="display:flex; flex-flow: row wrap;" >
 
 					<div style="margin: 0 2px 2px 0; border: #000 1px solid; height: 100px; width: 150px;" class="w3-display-container" onclick="make_logo_active('0')">
-						<p class="w3-display-middle">пусто</p>
+						<p class="w3-display-middle">Пусто</p>
 					
 					<div class="w3-display-bottomleft w3-text-blue w3-xlarge w3-padding-small {% if blank %}{% else %}w3-hide{% endif %}"><i class="fa fa-check-circle"></i></div>
 					
@@ -199,7 +199,7 @@
 							<input type="hidden" name="icon" value="fa fa-file-text-o" id="icon">
 
 							<input required type="text" class="w3-input  w3-animate-input w3-border-blue w3-center" placeholder="Название в меню" name="description" style="width: 60%; margin: auto;" maxlength="32">
-							<p class="w3-tiny w3-text-grey">*не более 2х слов</p>
+							<p class="w3-tiny w3-text-grey"><sup>*</sup>Не более 2х слов.</p>
 
 							<p class="w3-small w3-margin">Иконка:</p>
 

@@ -45,7 +45,7 @@ class Routes(db.Model):
 
 
 	def __repr__(self):
-		return '<competition %s nuber of sets %s >' % (self.name, self.nubmerOfSets)	
+		return '<competition %s nuber of sets %s >' % (self.name, self.competition)	
 
 class setDescriptions(db.Model):
 	__tablename__='setDescriptions'

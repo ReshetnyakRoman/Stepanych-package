@@ -140,7 +140,7 @@ def route_submit():
 			route = Routes.query.filter_by(routeNuber=routeNuber).filter_by(competition=competition.competitionName).first()
 
 			if totalTimeSec>route.controlTimeSec*60:
-				flash('Введеное время больше контрольного, трасса не засчитывается!')
+				flash('Введенное время больше контрольного, трасса не засчитывается!')
 				return redirect(url_for('competition.routes'))
 
 			if getattr(current_user, teamRouteTimeSec,'x') == 0 and totalTimeSec > 0:
@@ -163,7 +163,7 @@ def route_submit():
 			
 			db.session.add(current_user)
 			db.session.add(route)
-			mainTable.update_scores()
+			mainTable.update_scores(competition.competitionName)
 			db.session.commit()
 			flash('Результат трассы №%s добавлен!' % (request.form['routeNuber']))
 			return redirect(url_for('competition.routes'))

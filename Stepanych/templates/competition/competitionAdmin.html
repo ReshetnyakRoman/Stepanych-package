@@ -33,13 +33,13 @@
 
 			<button class="w3-btn-1 w3-round w3-lime w3-show w3-large" id="open_competition" onclick=";document.getElementById('competition_name').style.display='block';document.getElementById('close_comment').style.display='block'"> Открыть соревнования <i class="fa fa-check-circle"></i></button>
 			
-			<p class="w3-tiny w3-text-grey w3-margin-top" id="open_comment"><sup>*</sup>С нажатия этой кнопки начинается работа с любыми новыми соревнованиями. "Открытие соревнований" - приводит операционные базы данных в исходные состояния. Далее в них будет заносится информация по запущенным соревнованиям: зарегестрированные команды, участники, название соревнований, результаты и т.п. Модуль трассы обнулится до исходного значения.</p>
+			<p class="w3-tiny w3-text-grey w3-margin-top" id="open_comment"><sup>*</sup>С нажатия этой кнопки начинается работа с любыми новыми соревнованиями. "Открытие соревнований" - приводит операционные базы данных в исходные состояния. Далее в них будет заноситься информация по запущенным соревнованиям: зарегистрированные команды, участники, название соревнований, результаты и пр. Модуль трассы обнулится до исходного значения.</p>
 			{% else %}
 			<form action="{{ url_for('competition.close_competition') }}" method="POST">
 				<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 				<button class="w3-btn-1 w3-round w3-red w3-large" id="close_competition" type="submit">Закрыть соревнования <i class="fa fa fa-close"></i></button>
 			</form>
-			<p class="w3-tiny w3-text-grey w3-margin-top" id="close_comment"><sup>*</sup>При закрытие соревнований, финальные протоколы сохраняются в архив, ссылка на который появится на страничке /инфо/положение и протоколы/ а так же внизу страницы</p>
+			<p class="w3-tiny w3-text-grey w3-margin-top" id="close_comment"><sup>*</sup>При "Закрытии соревнований" финальные протоколы сохраняются в архив, ссылка на который появится на страничке /инфо/положение и протоколы/, а также в блоке "Архивы" внизу страницы.</p>
 			
 			{% endif %}
 			
@@ -55,7 +55,7 @@
 						<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 						<input type="text" placeholder="Степаныч 20..." name="competitionName" class="w3-margin-bottom w3-border" style=" width: 80%;">
 						<select class="w3-select my-input w3-margin-bottom" required name="numberOfSets" id="number_of_sets" style="width: 80%" onchange="set_description()">
-							<option value="x" selected disabled >выберете количество сетов</option>
+							<option value="x" selected disabled >выберите количество сетов</option>
 							<option value="0">1</option>
 						    <option value="1">2</option>
 						    <option value="2">3</option>
@@ -68,7 +68,7 @@
 						    <option value="9">10</option>
 				 		</select>
 				 		<br>
-				 		<p id="set_description" class="w3-small w3-hide w3-padding">Введите краткое описание для каждого сета. 	Например: "1й сет с 12:00 до 14:30"</p>
+				 		<p id="set_description" class="w3-small w3-hide w3-padding">Введите краткое описание для каждого сета.	Например: "1й сет с 12:00 до 14:30"</p>
 				 		<input type="text" class="w3-input w3-hide  input-filter" style="width: 80%; margin: auto;" placeholder="1й сет с 00:00 до 2:00" name="set1">
 				 		<input type="text" class="w3-input w3-hide  input-filter" style="width: 80%; margin: auto;" placeholder="2й сет с 00:00 до 2:00" name="set2">
 				 		<input type="text" class="w3-input w3-hide  input-filter" style="width: 80%; margin: auto;" placeholder="3й сет с 00:00 до 2:00" name="set3">
@@ -120,7 +120,7 @@
 				<a href="{{ url_for('competition.routes') }}">
 				<div id="create_routes" class="w3-display-container my-controls w3-round-xlarge w3-btn-1 w3-margin w3-border w3-border-lime w3-text-lime w3-hover-lime w3-hover-text-white">
 					<div class="w3-display-middle w3-center w3-large ">
-					 <b>Управлять<br> Трассами</b>
+					 <b>Управлять<br> трассами</b>
 					</div>
 				</div>
 				</a>
@@ -157,10 +157,10 @@
 			</div>
 
 		</div>
-		<p class="w3-tiny w3-text-grey w3-margin-bottom"><sup>*</sup>этот блок служит для запуска и остановки регистрации. Включения/Выключения и управления модулем трасс, в закрытом состоянии участники не могут вносить результаты по трассам</p>
+		<p class="w3-tiny w3-text-grey w3-margin-bottom"><sup>*</sup>Этот блок служит для запуска и остановки регистрации, для включения/выключения и управления модулем трасс. В закрытом состоянии участники не могут вносить результаты по трассам.</p>
 		
 		{% if competitionStatus == 'closed' %}
-			<div id="controls_tooltip" class="w3-blue my-tooltip-text-2 w3-round-medium w3-padding w3-small w3-center">Что-бы активировать блок управленияя соревнованиями, "Откройте соревнования"!</div>
+			<div id="controls_tooltip" class="w3-blue my-tooltip-text-2 w3-round-medium w3-padding w3-small w3-center">Чтобы активировать блок управления соревнованиями, "Откройте соревнования"!</div>
 		{% else %}
 
 		{% endif %}
@@ -176,7 +176,7 @@
 			<a href="{{ url_for('competition.allmembers') }}" class="w3-btn-1 w3-padding w3-border-blue w3-round w3-border w3-margin w3-text-blue">Все пользователи</a>
 			<br>
 
-			<p class="w3-tiny w3-text-grey" style="width: 100%"><sup>*</sup>В этом блоке можно упрвлять всеми пользователями и командами когда либо зарегестрированными на сайте</p>
+			<p class="w3-tiny w3-text-grey" style="width: 100%"><sup>*</sup>В этом блоке можно управлять всеми пользователями и командами, когда-либо зарегистрированными на сайте.</p>
 		</div>
 		<hr style="width: 90%; margin:auto;">
 
@@ -195,7 +195,7 @@
 				{% endfor %}
 					
 			<br>
-			<p class="w3-tiny w3-text-grey" style="display: block;"><sup>*</sup>Этот блок предназанчен для управления архивными соревнованиями. Здесь можно удалить протоколы архивных (предыдущих) соревнований. Этот блок в оновном используется для тестирования работы системы <span class="w3-red">Внимание! при удалении архива, он становится не видим пользователям!</span></p>
+			<p class="w3-tiny w3-text-grey" style="display: block;"><sup>*</sup>Этот блок предназанчен для управления архивными соревнованиями. Здесь можно удалить протоколы предыдущих (завершенных) соревнований. Этот блок в основном используется для тестирования работы системы. <span class="w3-red">Внимание! При удалении архива он становится невидимым пользователям!</span></p>
 		</div>
 		
 		<!-- Delete archived competition modal window -->
@@ -204,8 +204,8 @@
 					<button onclick="this.parentElement.parentElement.style.display='none'" class="w3-button w3-right w3-hover-gren w3-green"><i class="fa fa-close"></i></button>	
 					<h2 class="w3-text-blue">Удаление архивных соревнований</h2>
 					
-						<p class="w3-small">Вы уверены что хотите удалить этот архив? Он будет удален с сервера!</p>
-					 	<button class="w3-button w3-red w3-margin" onclick="delete_archive_modal('delete_archive')"><i class="fa fa-trash-o" ></i> удалить</button>
+						<p class="w3-small">Вы уверены, что хотите удалить этот архив? Он будет удален с сервера.</p>
+					 	<button class="w3-button w3-red w3-margin" onclick="delete_archive_modal('delete_archive')"><i class="fa fa-trash-o" ></i> Удалить</button>
 					
 				</div>	
 			</div>	

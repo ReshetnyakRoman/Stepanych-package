@@ -38,7 +38,7 @@ def delete_archive():
 		db.session.commit()
 		flash('Архив соревнований "%s" удален' % (competitionName))
 		return redirect(url_for('competition.admin'))
-	flash('Что-то пошло не так!')	
+	flash('Что-то пошло не так...')	
 	return redirect(url_for('competition.admin'))
 
 
@@ -89,7 +89,7 @@ def open_competition():
 		flash('Соревнования октрыты, добавлено %s сета' % (numberOfSets))
 		return redirect(url_for('competition.admin'))
 
-	flash('Что-то пошло не так!')	
+	flash('Что-то пошло не так...')	
 	return redirect(url_for('competition.admin'))
 
 @competition.route('/admin/close-competition', methods=['POST'])
@@ -112,7 +112,7 @@ def close_competition():
 		flash('Соревнования закрыты и добавлены в архив')
 		return redirect(url_for('competition.admin'))
 
-	flash('Что-то пошло не так, не получилось закрыть соревнования :(')	
+	flash('Что-то пошло не так... Не получилось закрыть соревнования :(')	
 	return redirect(url_for('competition.admin'))
 
 
@@ -130,7 +130,7 @@ def open_registration():
 		flash('Регистрация открыта!')
 		return redirect(url_for('competition.admin'))
 
-	flash('Что-то пошло не так! Не получилось открыть регистрацию :(')	
+	flash('Что-то пошло не так... Не получилось открыть регистрацию :(')	
 	return redirect(url_for('competition.admin'))
 
 
@@ -149,7 +149,7 @@ def close_registration():
 		flash('Регистрация закрыта!')
 		return redirect(url_for('competition.admin'))
 
-	flash('Что-то пошло не так! Не получилось закрыть регистрацию :(')	
+	flash('Что-то пошло не так... Не получилось закрыть регистрацию :(')	
 	return redirect(url_for('competition.admin'))
 
 @competition.route('/admin/open-set', methods=['POST'])
@@ -163,10 +163,10 @@ def open_set():
 		db.session.add(competition)
 		db.session.commit()
 
-		flash('Трассы %sго сэта открыты!' %(request.form['setNuber']))
+		flash('Трассы %sго сета открыты!' %(request.form['setNuber']))
 		return redirect(url_for('competition.admin'))
 
-	flash('Что-то пошло не так! Не получилось отрыть трассы :(')	
+	flash('Что-то пошло не так... Не получилось отрыть трассы :(')	
 	return redirect(url_for('competition.admin'))
 
 
@@ -184,7 +184,7 @@ def close_set():
 		flash('Трассы %sго сета закрыты!' %(request.form['setNuber']))
 		return redirect(url_for('competition.admin'))
 
-	flash('Что-то пошло не так! Не получилось отрыть трассы :(')	
+	flash('Что-то пошло не так... Не получилось отрыть трассы :(')	
 	return redirect(url_for('competition.admin'))
 
 
