@@ -23,6 +23,7 @@ def admin():
 	sets = setDescriptions.query.all()
 
 	return render_template('competition/competitionAdmin.html',
+	volunteersStatus=competition.volunteersStatus,	
 	 displayLoginForm=request.args.get('displayLoginForm'),
 	 competitionArchive=competitionArchive,
 	 competitionStatus=competition.competitionStatus,
@@ -151,6 +152,44 @@ def close_registration():
 
 	flash('Что-то пошло не так... Не получилось закрыть регистрацию :(')	
 	return redirect(url_for('competition.admin'))
+
+
+@competition.route('/admin/open-volunteers-registration', methods=['POST'])
+@admin_required
+def open_volunteers_registration():
+	if request.method == 'POST':
+
+		competition = Competition.query.first()
+		competition.volunteersStatus = 'open'
+
+		db.session.add(competition)
+		db.session.commit()
+
+		flash('Регистрация волонтеров открыта!')
+		return redirect(url_for('competition.admin'))
+
+	flash('Что-то пошло не так... Не получилось открыть регистрацию :(')	
+	return redirect(url_for('competition.admin'))
+
+
+
+@competition.route('/admin/close-volunteers-registration', methods=['POST'])
+@admin_required
+def close_volunteers_registration():
+	if request.method == 'POST':
+
+		competition = Competition.query.first()
+		competition.volunteersStatus = 'closed'
+
+		db.session.add(competition)
+		db.session.commit()
+
+		flash('Регистрация волонтеров закрыта!')
+		return redirect(url_for('competition.admin'))
+
+	flash('Что-то пошло не так... Не получилось закрыть регистрацию :(')	
+	return redirect(url_for('competition.admin'))
+
 
 @competition.route('/admin/open-set', methods=['POST'])
 @admin_required

@@ -4,7 +4,7 @@ cat /proc/sys/kernel/osrelease - версия ядра
 yum list firewalld - установленная версия пакета
 sudo netstat -plntu - проверка запущенных демонов, на каких портах они слушают и на каких ip
 sudo journalctl -r репорт последних действий в системе может показать  брутфорс атаку.
-
+sudo netstat -tnp  - показывает кто подключен к системе!
 
 Управление 
 sudo systemctl start firewalld
@@ -94,3 +94,31 @@ enabled = true
 enabled = true
 
 ====end file====
+cmd_timeout = 5
+
+Knock is a port-knocking server/client
+Настройки /etc/knockd.conf
+
+
+[options]
+LogFile = /var/log/port_knocking.log
+
+[openSSH]
+sequence = 32510,8429,27709
+seq_timeout = 5
+cmd_timeout = 5
+tcpflags = syn
+command = firewall-cmd --add-port=22/tcp
+cmd_timeout = 1800 
+stop_command = firewall-cmd --remove-port=22/tcp
+
+
+[closeSSH]
+sequence = 91362,17522,4500
+seq_timeout = 5
+command = firewall-cmd --remove-port=22/tcp
+tcpflags = syn
+
+
+
+

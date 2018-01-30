@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div class="w3-hide-small" style="height: 43px;"></div>
+	
+	<section class="w3-row w3-margin-top">
+		<div class="w3-col m1 l2 w3-hide-small"> &nbsp;</div>
+
+		<div class="w3-col m10 l8 s12 w3-padding " id="content">
+
+			<!-- Start of Text - Content block -->
+	<!-- Шапка --> 
+			<h2 class="w3-text-red">Волонтеры!</h2>
+			
+			<div class="w3-small">
+			<p class="">В проведении соревнований мы всегда рады любой помощи! Работы хватит на всех :)</p>
+			<p>Кто нам нужен:</p>
+			<ul>
+				<li>нужны судьи</li>
+				<li>нужны рукастые люди для самых разных задач при подготовке</li>
+				<li>нужны матерые и не очень Альпинисты/Спелики/Туристы разбирающиеся в технических аспектах для нагрутки трасс и веревочных этапов</li>
+				<li>нужны художники для отрисовки трасс</li>
+				<li>нужны девушки-красавицы, для помощи с организацией питания всех волонтеров и судей :) </li>
+			</ul>
+			<br>
+			<p>В свою очередь мы предлагаем: душевную компания, бесплатные майки/наклейки, питание и небольшой корпоратив :)</p>
+			</div>
+			{% if status == 'closed' %}
+			<a class="w3-btn-1 w3-green w3-padding w3-margin w3-round w3-disabled"><i class="fa fa-plus-square"></i> Записаться</a>
+			<p class="w3-tiny w3-text-green w3-margin-bottom" style="padding-left: 16px">Сожалеем пока набор закрыт.</p>
+			{% else %}
+			<a class="w3-btn-1 w3-green w3-padding w3-margin w3-round" onclick="document.getElementById('add_volunteer').style.display='block'"><i class="fa fa-plus-square"></i> Записаться</a>
+			{% endif %}
+
+			{% with messages = get_flashed_messages() %}
+			    {% if messages %}
+			    <div class="w3-pale-green w3-border-green w3-border w3-round" style="margin: 16px 0 0 0;">
+			    <a href="#" class="w3-right w3-padding w3-text-green w3-large w3-hover-text-red w3-round w3-padding" onclick="assign_id(this);delete_element()" style="position: relative; top:-3px">x</a>
+			    {% for message in messages %}
+			    	
+			        <p class="w3-padding">{{ message }}</p>
+
+			    {% endfor %}
+			    </div>
+			    <br>
+			  {% endif %}
+			{% endwith %}				
+			<p class="w3-small">Список вступивших молодчиков волонтеров:</p>
+			<input class="w3-input w3-border-bottom w3-border-blue w3-blue-l5 input-filter" type="text" placeholder="фильтр..." onkeyup="myFilter(0)" id="inputFilter" style="font-size: 13px; padding: 4px;">
+
+		<!-- Участники -->	
+			<ul class="w3-ul ul-filter" style="white-space: nowrap; overflow: auto;">
+			{% set count = 1 %}
+			{% for volunteer in volunteerList %}
+				<li class="w3-tiny w3-row user">
+					
+					<div style="width: 25px; display: inline-block;">{{ loop.index }} </div>
+					<div class="sname" style="width: 100px; display: inline-block;">{{ volunteer.sname }}</div>
+					<div class="name" style="width: 80px; display: inline-block;">{{ volunteer.name }}</div>
+					
+					{% if current_user.can(Permission.ADMIN) %}
+					<div class="phone" style="width: 120px; display: inline-block;">{{ volunteer.phone }}</div>
+					{% else %}		
+					{% endif %}
+					<div class="role" style="width: 150px; display: inline-block;">{{ volunteer.role }}</div>
+					<div class="tshirtSize" style="width: 30px; display: inline-block;">{{ volunteer.tshirtSize }}</div>
+					{% if current_user.can(Permission.ADMIN) %}
+					<div class="w3-hover-red w3-round w3-text-red w3-padding-small" style="width: 32px; display: inline-block;" onclick="document.getElementById('delete_user').style.display='block';assign_id(this)"><i class="fa fa-trash-o  w3-large"></i></div>
+					{% else %}		
+					{% endif %}
+
+
+				</li>
+			{% set count = count + 1 %}
+			{% endfor %}			
+
+			</ul>	
+		<!-- Модальное окно удаление участника -->
+			<div id="delete_user" class="w3-modal">
+				<div class="w3-modal-content w3-animate-zoom w3-padding w3-center" style="max-width: 600px">
+					<button onclick="this.parentElement.parentElement.style.display='none'" class="w3-button w3-right w3-hover-gren w3-green"><i class="fa fa-close"></i></button>	
+					<h2 class="w3-text-blue">Удаление волонтера</h2>
+					
+						<p class="w3-small">Вы уверены, что хотите удалить этого пацана? Он будет удален с сервера.</p>
+					 	<button class="w3-button w3-red w3-margin" onclick="delete_volonteer_modal('delete_user')"><i class="fa fa-trash-o" ></i> Удалить</button>
+					
+				</div>	
+			</div>				
+
+		<!-- New volunteer  modal window -->
+
+		<div id="add_volunteer" class="w3-modal" style="display: {{ request.args.get('displayNewGallery') }}">
+			<div class="w3-modal-content w3-animate-zoom w3-padding w3-center" style="max-width: 320px">
+				<button onclick="document.getElementById('add_volunteer').style.display='none'" class="w3-button w3-right w3-hover-red-d3 w3-red"><i class="fa fa-close"></i></button>	
+
+				<h3 class="w3-text-blue">Запись в волонтеры</h3>
+				{% with messages = get_flashed_messages() %}
+				    {% if messages %}
+				    
+				    {% for message in messages %}
+				        <p class="w3-text-red w3-padding">{{ message }}</p>
+				    {% endfor %}
+				    
+				  {% endif %}
+				{% endwith %} 	
+
+				<form action="{{ url_for('competition.volunteers') }}" class="w3-container w3-padding" method="POST" id="volunteers">
+					
+					<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+					<input type="text" required="" placeholder="Имя" name="name" class="w3-input  w3-animate-input w3-border-blue w3-center w3-small w3-margin-bottom" style="width: 60%; margin: auto;" required>
+					<input type="text" required="" placeholder="Фамилия" name="sname" class="w3-input  w3-animate-input w3-border-blue w3-center w3-small w3-margin-bottom" style="width: 60%; margin: auto;" required>
+					<input type="text" required="" placeholder="8 (926) 555-55-55" name="phone" class="w3-input  w3-animate-input w3-border-blue w3-center w3-small w3-margin-bottom" style="width: 60%; margin: auto;" required>
+
+					<select name="role" class="w3-small w3-margin-bottom" required>
+						<option value="M" selected disabled>что бы хотел далать</option>
+						<option value="Крутить тарссы">Крутить тарссы</option>
+						<option value="Судья">Судья</option>
+						<option value="Повар">Повар</option>
+						<option value="Художник">Художник</option>
+						<option value="Золотые руки">Золотые руки</option>
+					</select>
+					<select name="tshirtSize" class="w3-small w3-margin-bottom" required>
+						<option value="M" selected disabled>размер футболки</option>
+						<option value="XS">XS</option>
+						<option value="S">S</option>
+						<option value="M">M</option>
+						<option value="L">L</option>
+						<option value="XL">XL</option>
+					</select>
+					<br>
+					<br>
+				 	
+				 	
+				 	<input type="submit" class="w3-button w3-green w3-margin button-upload" value="Записаться">
+				 	
+				</form>
+			
+			</div>	
+		
+		</div>
+
+			<script type="text/javascript" src="/static/js/jquery.h5validate.js"></script>
+		    <script type="text/javascript">
+		 
+		        // Enable h5Validate plugin
+		        $("#volunteers").h5Validate({
+		            errorClass: "validationError",
+		            
+		        });
+		 
+		        // Prevent form submission when errors
+		        $("#volunteers").submit(function (evt) {
+		            if ($("#volunteers").h5Validate("allValid") === false) {
+		                evt.preventDefault();
+		                $('#loader_section').hide();
+		                $('main').removeClass('blur');
+						$('aside').removeClass('blur');
+					    $('header').removeClass('blur');
+					    $('footer').removeClass('blur');
+		            }
+		        });
+		 
+		    </script>
+
+
+				<!-- End of Text - Content block -->
+			</div>
+
+			<div class="w3-col m1 l2 w3-hide-small"> &nbsp;</div>
+			
+			
+		</section>
+
+{% endblock %}

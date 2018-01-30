@@ -17,6 +17,7 @@ class Competition(db.Model):
 	resultsBody = db.Column(db.Text) #текст для финальных результатов
 	resultsBodyHTML = db.Column(db.Text) #html-текст для финальных результатов
 	registrationStatus = db.Column(db.String(64)) #Статус регстрации - открыта/закрыта defaulte = 'closed'
+	volunteersStatus = db.Column(db.String(64)) #Статус регстрации волонтеров - открыта/закрыта defaulte = 'closed'
 
 	def __repr__(self):
 		return '<competition %s nuber of sets %s >' % (self.competitionName, self.numberOfSets)	

@@ -277,6 +277,9 @@ ExecStartPre=/usr/bin/mysqld_pre_systemd
 ExecStart=/usr/sbin/mysqld --daemonize --pid-file=/var/run/mysqld/mysqld.pid $MYSQLD_OPTS
 
 # Use this to switch malloc implementation
+
+ссылка на иконки
+https://www.w3schools.com/icons/icons_reference.asp
 EnvironmentFile=-/etc/sysconfig/mysql
 
 # Sets open_files_limit
@@ -321,7 +324,7 @@ mysql> GRANT ALL PRIVILEGES ON Stepanich.* TO 'stepanich_mysql_user'@'localhost'
 2) Загрузить файл в MySQL командой (при этом нужно быть в папке в которой находится файл):
 $ mysql -u [uname] -p[pass] [db_to_restore] < [backupfile.sql]
 в нашем случае:
-$ mysql -u user -p Stepanich < Stepanich_backup.sql
+$ mysql -u stepanich -p Stepanich < Stepanich_backup.sql
 
 Если нужно создать базу данных которая уже существует то синтаксис команды следующий:
 mysqlimport -u [uname] -p[pass] [dbname] [backupfile.sql]

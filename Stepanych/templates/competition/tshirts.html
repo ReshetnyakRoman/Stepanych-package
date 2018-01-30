@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div class="w3-hide-small" style="height: 43px;"></div>
+	
+	<section class="w3-row w3-margin-top">
+		<div class="w3-col m1 l2 w3-hide-small"> &nbsp;</div>
+
+		<div class="w3-col m10 l8 s12 w3-padding " id="content">
+
+			<!-- Start of Text - Content block -->
+	
+			<h2 class="w3-text-red">Сводная по майкам для "{{competition}}"</h2>
+			
+			
+		<p class="w3-small w3-text-grey">Указаны результаты по всем подавшим заявки участникам и по всем волонтерам:</p>
+		<!-- Участники -->	
+		<br>
+
+			<div style="width: 100px; display: inline-block; padding-left: 16px;">Размер </div>
+			<div style="width: 100px; display: inline-block;">Участники</div>
+			<div style="width: 100px; display: inline-block;">Волонтеры</div>
+			<div style="width: 100px; display: inline-block;">Всего</div>
+
+			<ul class="w3-ul ul-filter w3-margin-top" style="white-space: nowrap; overflow: auto;">
+			
+				<li class="w3-small w3-row user" style="width: 400px;">
+					<div style="width: 100px; display: inline-block;">Размер XS</div>
+					<div style="width: 100px; display: inline-block;">{{ xsParticipants }}</div>
+					<div style="width: 100px; display: inline-block;">{{ xsVolunteers }}</div>
+					<div style="width: 100px; display: inline-block;"><span style="font-weight: bold;">{{ xsParticipants + xsVolunteers}}</span></div>
+				</li>
+				<li class="w3-small w3-row user" style="width: 400px;">
+					<div style="width: 100px; display: inline-block;">Размер S</div>
+					<div style="width: 100px; display: inline-block;">{{ sParticipants }}</div>
+					<div style="width: 100px; display: inline-block;">{{ sVolunteers }}</div>
+					<div style="width: 100px; display: inline-block;"><span style="font-weight: bold;">{{ sParticipants + sVolunteers}}</span></div>
+				</li>
+				<li class="w3-small w3-row user" style="width: 400px;">
+					<div style="width: 100px; display: inline-block;">Размер M</div>
+					<div style="width: 100px; display: inline-block;">{{ mParticipants }}</div>
+					<div style="width: 100px; display: inline-block;">{{ mVolunteers }}</div>
+					<div style="width: 100px; display: inline-block;"><span style="font-weight: bold;">{{ mParticipants + mVolunteers}}</span></div>
+				</li>
+				<li class="w3-small w3-row user" style="width: 400px;">
+					<div style="width: 100px; display: inline-block;">Размер L</div>
+					<div style="width: 100px; display: inline-block;">{{ lParticipants }}</div>
+					<div style="width: 100px; display: inline-block;">{{ lVolunteers }}</div>
+					<div style="width: 100px; display: inline-block;" ><span style="font-weight: bold;">{{ lParticipants + lVolunteers}}</span></div>
+				</li>
+				<li class="w3-small w3-row user" style="width: 400px;">
+					<div style="width: 100px; display: inline-block;">Размер XL</div>
+					<div style="width: 100px; display: inline-block;">{{ xlParticipants }}</div>
+					<div style="width: 100px; display: inline-block;">{{ xlVolunteers }}</div>
+					<div style="width: 100px; display: inline-block;"><span style="font-weight: bold;">{{ lParticipants + lVolunteers}}</span></div>
+				</li>
+
+				<li class="w3-small w3-row " style="font-weight: bold;" style="width: 400px;">
+					<div style="width: 100px; display: inline-block;">Итого</div>
+					<div style="width: 100px; display: inline-block;">{{ xsParticipants+sParticipants+mParticipants+lParticipants+xlParticipants }}</div>
+					<div style="width: 100px; display: inline-block;">{{ xsVolunteers+sVolunteers+mVolunteers+lVolunteers+xlVolunteers }}</div>
+					<div style="width: 100px; display: inline-block;" >{{ xsVolunteers+sVolunteers+mVolunteers+lVolunteers+xlVolunteers+xsParticipants+sParticipants+mParticipants+lParticipants+xlParticipants}}</div>
+				</li>
+				
+
+			</ul>	
+		
+
+
+
+
+				<!-- End of Text - Content block -->
+			</div>
+
+			<div class="w3-col m1 l2 w3-hide-small"> &nbsp;</div>
+			
+			
+		</section>
+
+{% endblock %}

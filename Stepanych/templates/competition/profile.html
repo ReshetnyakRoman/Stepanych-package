@@ -19,9 +19,11 @@
 				<p class="w3-large"><b>{{ member.name }}</b></p>
 				<p class="w3-large"><b>{{ member.sname }}</b></p>
 				<p class="w3-small">{{ member.year }} г.р.</p>
+				<p class="w3-small">{% if member.city != None  %}{{ member.city }} /{%else %} {% endif %} {{ member.country }}</p>
 				<br>
 				<p class="w3-small">Клуб: </p>
 				<p class="w3-small">"{{ member.club }}"</p>
+
 				<br>
 				<p class="w3-small">Разряды:</p>
 				<p class="w3-small"	>по альпинизму: {{ member.alpSkill }}</p>

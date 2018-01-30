@@ -15,13 +15,29 @@ from flask_login import login_user, logout_user, login_required, current_user
 import os
 from transliterate import translit, get_available_language_codes
 
+def put(xs,i,e):
+        n = len(xs)
+        if i <= n:
+            xs.insert(i,e)
+        else:
+            xs.extend([None]*(i-n-1))
+        xs.append(e)
+
 @competition.route('/routes')
 def routes():
 	competition = Competition.query.first()
 	routeForm = RoutesForm()
-	routes = Routes.query.filter_by(competition=competition.competitionName).all()
+	routes = Routes.query.filter_by(competition=competition.competitionName).order_by(Routes.routeNuber).all()
 	openSet = int(competition.routesStatus)
-	
+	completeList =[0]
+	for i in range(1,35):
+		routeAttrName = 'routeTimeSec'+str(i)
+		if current_user.is_anonymous:
+			put(completeList,i-1,0)
+		else: 
+			completeList.append(getattr(current_user,routeAttrName,0))
+			
+				
 	if current_user.is_anonymous:
 		userSetStatus = 0
 	else:
@@ -35,7 +51,7 @@ def routes():
 		noRotes = True
 	else:
 		noRotes = False
-	return render_template('competition/routes.html', routeForm=routeForm, routes=routes, noRotes=noRotes, openSet = int(competition.routesStatus), userSetStatus=userSetStatus)
+	return render_template('competition/routes.html',completeList=completeList, routeForm=routeForm, routes=routes, noRotes=noRotes, openSet = int(competition.routesStatus), userSetStatus=userSetStatus)
 
 
 @competition.route('/routes/add', methods=['POST'])
@@ -134,8 +150,15 @@ def route_submit():
 			teamRouteTimeSec = 'routeTimeSec'+routeNuberStr
 
 			routeNuber = int(request.form['routeNuber'])
-			routeMin = int(request.form['route_time_min'])
-			routeSec = int(request.form['route_time_sec'])
+			
+			if request.form['route_time_min']=='':
+				routeMin =0
+			else:
+				routeMin = int(request.form['route_time_min'])
+			if request.form['route_time_sec']=='':
+				routeSec = 0
+			else:	
+				routeSec = int(request.form['route_time_sec'])
 			totalTimeSec = routeMin*60 + routeSec
 			route = Routes.query.filter_by(routeNuber=routeNuber).filter_by(competition=competition.competitionName).first()
 

@@ -42,15 +42,20 @@
 			{% for member in memberList %}
 				<li class="w3-tiny w3-row user">
 					<a href="{{ url_for('competition.profile', name=member.name, sname=member.sname, year=member.year)}}" class="w3-hover-text-blue">
-					<div style="width: 30px; display: inline-block;">{{ loop.index }} </div>
-					<div class="sname" style="width: 100px; display: inline-block;">{{ member.sname }}</div>
-					<div class="name" style="width: 100px; display: inline-block;">{{ member.name }}</div>
-					<div class="year" style="width: 50px; display: inline-block;">{{ member.year }}</div>
-					<div class="male" style="width: 55px; display: inline-block;">{{ member.male }}</div>
-					<div class="club" style="width: 150px; display: inline-block;">{{ member.club }}</div>
-					<div class="alpSkill" style="width: 40px; display: inline-block;">{{ member.alpSkill }}</div>
-					<div class="climbSkill" style="width: 40px; display: inline-block;">{{ member.climbSkill }}</div>
+					<div style="width: 25px; display: inline-block;">{{ loop.index }} </div>
+					<div class="sname" style="width: 80px; display: inline-block;">{{ member.sname }}</div>
+					<div class="name" style="width: 80px; display: inline-block;">{{ member.name }}</div>
+					<div class="year" style="width: 40px; display: inline-block;">{{ member.year }}</div>
+					<div class="male" style="width: 15px; display: inline-block;">{{ member.male }}</div>
+					
+					<div class="club" style="width: 110px; display: inline-block;">{{ member.club }}</div>
+					<div class="country" style="width: 30px; display: inline-block;">{{ member.country }}</div>
+					<div class="city" style="width: 80px; display: inline-block;">{% if member.city != None  %}{{ member.city }}{%else %} {% endif %}</div>
+					<div class="alpSkill" style="width: 30px; display: inline-block;">{{ member.alpSkill }}</div>
+					<div class="climbSkill" style="width: 30px; display: inline-block;">{{ member.climbSkill }}</div>
+					<div class="city" style="width: 20px; display: inline-block;">{{ member.tshirtSize }}</div>
 					</a>
+					<div class="club" style="width: 100px; display: inline-block;">{% if member.phone != None  %}{{ member.phone }}{%else %} {% endif %}</div>
 					{% if current_user.can(Permission.ADMIN) %}
 					<div class="w3-hover-red w3-round w3-text-red w3-padding-small" style="width: 32px; display: inline-block;" onclick="document.getElementById('delete_user').style.display='block';assign_id(this)"><i class="fa fa-trash-o  w3-large"></i></div>
 					{% else %}		

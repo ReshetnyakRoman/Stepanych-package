@@ -28,7 +28,7 @@
 			  	{% endif %}
 		 	{% endwith %}
 			<hr style="width: 90%; margin:auto;" >
-
+			
 			<div id="route" class="my-flex">
 			{% if current_user.can(Permission.ADMINVIEW) %}
 			<!-- create new route  -->
@@ -61,6 +61,10 @@
 						<div class="my-route-click" onclick="get_route_info({{routes.routeNuber}}),document.getElementById('add_route_result').style.display='block'">
 							
 							<div class="w3-padding w3-blue w3-display-topleft w3-center w3-round-large">{{ routes.score }}<br><span class="w3-tiny">бал</span></div>
+							{% if completeList[routes.routeNuber] != 0 and completeList[routes.routeNuber] != None %}
+							<div class="w3-padding w3-text-green w3-display-bottomleft w3-center w3-xlarge"><i class="fa fa-check-square-o"></i></div>
+							{% else %}
+							{% endif %}
 							<div class="w3-display-middle my-route-center routeNuber"><b>{{ routes.routeNuber }}</b></div>
 							<div class="w3-padding w3-lime w3-display-bottomright w3-center w3-round-large">{{ routes.controlTimeSec }}<br><span class="w3-tiny">мин</span></div>
 						</div>	
@@ -103,7 +107,7 @@
 				 	{{ routeForm.img(class="w3-margin-bottom w3-button w3-small") }}
 				 	<br>
 				 	
-				 	{{ routeForm.submit1(class="w3-button w3-green w3-margin button-upload") }}
+				 	{{ routeForm.submit2(class="w3-button w3-green w3-margin button-upload") }}
 
 				</form>
 			</div>	
@@ -120,22 +124,23 @@
 				
 				<form action="{{ url_for('competition.route_submit') }}" class="w3-container w3-padding" method="POST">
 					<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-					<input id="routeNuber1" type="text" name="routeNuber" value=" " id="routeNuber" class="w3-border">
-					<input type="number" placeholder="мин" min=0 name="route_time_min" class="w3-border" style=" width: 45px;" required>:<input type="number" placeholder="сек" min=0 max=59 name="route_time_sec" class=" w3-border" style=" width: 45px;" required>
+					<input id="routeNuber1" type="text" name="routeNuber" value=" " id="routeNuber" class="w3-border"/>
+					<input required type="number"  placeholder="мин" min=0 name="route_time_min"  style="width: 45px;" title="введите минуты"/>:<input required type="number" placeholder="сек" min=0 max=59 name="route_time_sec" style="width: 45px;" title="введите секунды">
 
 					 	<div class="w3-clear"></div>
 					{% if userSetStatus != 0 and openSet != 0 %}	
-				 	<input type="submit" class="w3-button w3-green w3-margin w3-small button-upload" value="Сохранить">
+				 	<input type="submit" class="w3-button w3-green w3-margin w3-small button-upload" value="Сохранить"/>
 				 	{% else%}
-				 	<input type="submit" class="w3-button w3-green w3-margin w3-small w3-disabled" value="Сохранить" disabled>
+				 	<input type="submit" class="w3-button w3-green w3-margin w3-small w3-disabled" value="Сохранить" disabled />
 					<p class="w3-tiny w3-text-red">Ваш сет закрыт или вы не авторизованы</p>
 					{% endif %}	
 				</form>
+
 				<div class="w3-clear"></div>
 			</div>	
 		</div>
 
-
+		
 
 	<!-- End of Text - Content block -->
 		</div>

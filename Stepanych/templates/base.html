@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html lang="ru">
 <head>
 	<meta charset="UTF-8">
@@ -116,6 +116,10 @@
 					</a>
 				</div>
 				<!-- ====================================================================== -->
+				<a href="{{ url_for('competition.volunteers')}}">
+				<div class="w3-row w3-border-white w3-border-bottom w3-padding w3-center"> <i class="fa fa-male  w3-large"></i> <span class="w3-padding-small">Волонтерам</span></div>
+				</a>
+
 				{% for info in infos %}
 				<a href="{{ url_for('site.page', iconDescriptionEng=info.iconDescriptionEng)}}">
 				<div class="w3-row w3-border-white w3-border-bottom w3-padding w3-center"> <i class="{{info.icon}}  w3-large"></i> <span class="w3-padding-small">{{info.iconDescription}}</span></div>
@@ -313,6 +317,11 @@
 					<a  id="testss" href="{{ url_for('competition.results') }}" class="w3-bar-item w3-red-d3 w3-hover-red my-menuitem-animation my-bar-item-transition w3-center button-upload" style="height: 100%">
 					<i class="fa fa-flag-checkered w3-xxlarge  w3-padding"></i>
 					<p class="w3-small">Результаты</p> 
+					</a>
+
+					<a  id="testss" href="{{ url_for('competition.volunteers') }}" class="w3-bar-item w3-red-d3 w3-hover-red my-menuitem-animation my-bar-item-transition w3-center button-upload" style="height: 100%">
+					<i class="fa fa-male w3-xxlarge  w3-padding"></i>
+					<p class="w3-small">Волонтерам</p> 
 					</a>
 
 					{% for competition in competitions %}

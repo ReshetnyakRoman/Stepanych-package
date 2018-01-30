@@ -37,4 +37,4 @@ class RoutesForm(FlaskForm):
 	img = FileField('Схема', validators=[FileAllowed(images, 'Только картинки')],
 		render_kw={"style":"width:200px", "size":50})
 
-	submit1 = SubmitField('Создать трассу')
+	submit2 = SubmitField('Создать трассу')

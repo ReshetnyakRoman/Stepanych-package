@@ -105,7 +105,8 @@ class Photo(db.Model):
 	__tablename__='gallery'
 	id=db.Column(db.Integer, primary_key=True)
 	imgName = db.Column(db.String(128)) 
-	imgURL = db.Column(db.String(128)) 
+	imgURL = db.Column(db.String(128))
+	galleryURL = db.Column(db.String(512), default = 'None') 
 	galleryName = db.Column(db.String(128))
 	galleryID =  db.Column(db.Integer)
 	authorName = db.Column(db.String(128))

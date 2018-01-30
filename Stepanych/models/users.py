@@ -27,6 +27,11 @@ class mainTable(db.Model, UserMixin):
 	club1 = db.Column(db.String(64))
 	alpSkill1 = db.Column(db.String(64))
 	climbSkill1 = db.Column(db.String(64))
+	tshirtSize1 = db.Column(db.String(64), default = 'M')
+	country1 = db.Column(db.String(64), default = 'RU')
+	city1 = db.Column(db.String(64))
+	phone1 = db.Column(db.String(64))
+
 	name2 = db.Column(db.String(64))
 	sname2 = db.Column(db.String(64))
 	year2 = db.Column(db.Integer, default = 0)
@@ -34,6 +39,12 @@ class mainTable(db.Model, UserMixin):
 	club2 = db.Column(db.String(64))
 	alpSkill2 = db.Column(db.String(64))
 	climbSkill2 = db.Column(db.String(64))	
+	tshirtSize2 = db.Column(db.String(64), default = 'M')
+	country2 = db.Column(db.String(64), default = 'RU')
+	city2 = db.Column(db.String(64))
+	city1 = db.Column(db.String(64))
+	phone2 = db.Column(db.String(64))
+
 	role = db.Column(db.String(64), db.ForeignKey('roles.role', ondelete='CASCADE'))
 	teamChange = db.Column(db.String(64))
 	waitingListYes = db.Column(db.Integer, default = 1)
@@ -328,11 +339,28 @@ class Members(db.Model):
 	alpSkill = db.Column(db.String(32))
 	climbSkill = db.Column(db.String(32))
 	male = db.Column(db.String(32))
-
+	tshirtSize = db.Column(db.String(64), default = 'M')
+	country = db.Column(db.String(64), default = 'RU')
+	city = db.Column(db.String(64))
+	phone = db.Column(db.String(64))
 
 	def __repr__(self):
 		return '<name %s second name %s birth year %s club %s alb %s climb %s >' % (self.name,self.sname, self.year, self.club, self.alpSkill, self.climbSkill)	
 
+
+
+class Volunteers(db.Model):
+	__tablename__='volunteers'
+	id=db.Column(db.Integer, primary_key=True)
+	competition = db.Column(db.String(64))
+	name = db.Column(db.String(64))
+	sname = db.Column(db.String(64))
+	role = db.Column(db.String(512))
+	tshirtSize = db.Column(db.String(64), default = 'M')
+	phone = db.Column(db.String(64))
+
+	def __repr__(self):
+		return '<name %s second name %s  >' % (self.name,self.sname)	
 
 
 class Permission: 

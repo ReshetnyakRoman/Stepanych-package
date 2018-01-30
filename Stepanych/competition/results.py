@@ -18,7 +18,7 @@ def results():
 	
 	teams = mainTable.query.filter_by(competition=competition.competitionName).filter_by(teamStatus='ok').order_by(mainTable.routeScoreTotal.desc()).order_by(mainTable.routeTimeSecTotal).all()
 	badTeams = mainTable.query.filter_by(competition=competition.competitionName).filter(mainTable.teamStatus != 'ok').order_by(mainTable.routeScoreTotal.desc()).all()
-	routesInfo = Routes.query.filter_by(competition=competition.competitionName).all()
+	routesInfo = Routes.query.filter_by(competition=competition.competitionName).order_by(Routes.routeNuber).all()
 	return render_template('competition/results.html', 
 		displayLoginForm=request.args.get('displayLoginForm'),
 		routesInfo=routesInfo,

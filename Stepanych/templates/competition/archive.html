@@ -120,7 +120,20 @@
 								<a href="{{url_for('competition.profile', name=team.name2, sname=team.sname2, year=team.year2)}}" class="w3-text-blue">{{team.sname2}} {{team.name2}}</a>
 							</td>
 							<td>{{team.year1}} <br>{{team.year2}}</td>
-							<td>{{team.club1}} <br>{{team.club2}}</td>
+							<td>{{team.club1}} 
+									{% if team.city1 != None or team.country1 != None %} 
+										({% if team.city1 != None %}{{ team.city1 }} /{% else %}{%endif%}
+										{% if team.country1 != None %}{{ team.country1 }}{% else %}{%endif%})
+									{% else %}
+									{%endif%}	
+									 
+								<br>{{team.club2}}
+									{% if team.city2 != None or team.country2 != None %} 
+										({% if team.city2 != None %}{{ team.city2 }} /{% else %}{%endif%}
+											{% if team.country2 != None %}{{ team.country2 }}{% else %}{%endif%})
+									{% else %}
+									{%endif%}	
+								</td>
 							<td>{{team.alpSkill1}} <br>{{team.alpSkill1}} </td>
 							<td>{{team.climbSkill1}} <br>{{team.climbSkill1}} </td>
 								{% for route in routesInfo %}
@@ -145,7 +158,20 @@
 								<a href="{{url_for('competition.profile', name=team.name2, sname=team.sname2, year=team.year2)}}" class="w3-text-blue">{{team.sname2}} {{team.name2}}</a>
 							</td>
 							<td>{{team.year1}} <br>{{team.year2}}</td>
-							<td>{{team.club1}} <br>{{team.club2}}</td>
+							<td>{{team.club1}} 
+									{% if team.city1 != None or team.country1 != None %} 
+										({% if team.city1 != None %}{{ team.city1 }} /{% else %}{%endif%}
+										{% if team.country1 != None %}{{ team.country1 }}{% else %}{%endif%})
+									{% else %}
+									{%endif%}	
+									 
+								<br>{{team.club2}}
+									{% if team.city2 != None or team.country2 != None %} 
+										({% if team.city2 != None %}{{ team.city2 }} /{% else %}{%endif%}
+											{% if team.country2 != None %}{{ team.country2 }}{% else %}{%endif%})
+									{% else %}
+									{%endif%}	
+							</td>
 							<td>{{team.alpSkill1}} <br>{{team.alpSkill1}} </td>
 							<td>{{team.climbSkill1}} <br>{{team.climbSkill1}} </td>
 								{% for route in routesInfo %}

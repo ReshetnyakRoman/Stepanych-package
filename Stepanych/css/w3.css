@@ -166,7 +166,7 @@ a:hover .w3-grayscale-off{filter:grayscale(0%)}
 .w3-green,.w3-hover-green:hover{color:#fff!important;background-color:#4CAF50!important}
 .w3-light-green,.w3-hover-light-green:hover{color:#000!important;background-color:#8bc34a!important}
 .w3-indigo,.w3-hover-indigo:hover{color:#fff!important;background-color:#3f51b5!important}
-.w3-khaki,.w3-hover-khaki:hover{color:#000!important;background-color:#f0e68c!important}
+.w3-khaki,.w3-hover-khaki:hover{color:#000!important;background-color:#b4aa50!important}
 .w3-lime,.w3-hover-lime:hover{color:#000!important;background-color:#cddc39!important}
 .w3-orange,.w3-hover-orange:hover{color:#000!important;background-color:#ff9800!important}
 .w3-deep-orange,.w3-hover-deep-orange:hover{color:#fff!important;background-color:#ff5722!important}
@@ -299,6 +299,7 @@ a:hover .w3-grayscale-off{filter:grayscale(0%)}
 .w3-hover-text-teal:hover {color:#009688 !important}
 .w3-border-teal {border-color:#009688 !important}
 .w3-hover-border-teal:hover {border-color:#009688 !important}
+.w3-border-khaki {border-color:#b4aa50 !important}
 
 /* Light green theme */
 

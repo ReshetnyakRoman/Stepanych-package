@@ -282,6 +282,7 @@
 		year1x = $(teamID+' input.year1').val();
 		club1x = $(teamID+' input.club1').val();
 		male1x = $(teamID+' select.male1').val();
+		phone1x = $(teamID+' input.phone1').val();
 		alpSkill1x = $(teamID+' select.alpSkill1').val(); 
 		climbSkill1x = $(teamID+' select.climbSkill1').val();
 
@@ -290,6 +291,7 @@
 		year2x = $(teamID+' input.year2').val();
 		club2x = $(teamID+' input.club2').val();
 		male2x = $(teamID+' select.male2').val();
+		phone2x = $(teamID+' input.phone2').val();
 		alpSkill2x = $(teamID+' select.alpSkill2').val(); 
 		climbSkill2x = $(teamID+' select.climbSkill2').val();
 		var team = {
@@ -298,6 +300,7 @@
 			club1 : club1x,
 			year1 : year1x,
 			male1 : male1x,
+			phone1 : phone1x,
 			alpSkill1 : alpSkill1x,
 			climbSkill1 : climbSkill1x,
 
@@ -306,6 +309,7 @@
 			year2 : year2x,
 			club2 : club2x,
 			male2 : male2x,
+			phone2 : phone2x,
 			alpSkill2 : alpSkill2x,
 			climbSkill2 :climbSkill2x,
 
@@ -355,6 +359,17 @@
 		var teamID = $('li#delete div.name').text() + $('li#delete div.sname').text()+$('li#delete div.year').text();
 		//alert(teamID);
 		$.post('/competition/allmembers/delete', {keyNameSnameYear : teamID});
+		var y = document.getElementById('delete').parentElement;
+		var x = document.getElementById('delete');
+		y.removeChild(x);
+		
+	}
+
+	function delete_volonteer_modal(arg){
+		document.getElementById(arg).style.display = "none";
+		//var teamID = $('li#delete div.name').text() + $('li#delete div.sname').text();
+		//alert(teamID);
+		$.post('/competition/volunteers/delete', {name : $('li#delete div.name').text(), sname : $('li#delete div.sname').text() } );
 		var y = document.getElementById('delete').parentElement;
 		var x = document.getElementById('delete');
 		y.removeChild(x);
@@ -527,7 +542,17 @@
 		//(то что показываем, то что скрываем, id вкалдки которую выделяем синим)
 	var i, x, tablinks;
 
-		
+		$("input").each(function(){
+			$(this).val('');
+			ul = document.getElementsByClassName("ul-filter");
+		    	for (n = 0; n < ul.length; n++) {		    	
+				    li = ul[n].getElementsByTagName("li");
+				    for (i = 0; i < li.length; i++) {
+				            li[i].style.display = "block";
+					}   
+		    	}
+
+		})
         $("#"+hide).hide("slow");
         $("#"+show).show("slow");
         $(".tablink").removeClass("w3-border-blue w3-blue-l4");
@@ -558,6 +583,7 @@
 					}   
 		    	}
 		}
+
 
 		function tableFilter(x,y) {
 		    var input, filter, table, tr, i, n, y;
@@ -688,46 +714,7 @@
 			set_inputs[0].autofocus = set_inputs[0].focus();
 			document.getElementById('set_description').className = document.getElementById('set_description').className.replace(" w3-hide", " w3-show");
 		}
-
-	/*Open/Close Registration to competitions block*/
-
-		function open_registration(arg1, arg2) {
-		/* меняем нкопку открыть регистрацию на кнопку закрыть регистрацию */
-			if (arg1.className.indexOf("w3-disabled") == -1) {
-				arg1.className = arg1.className.replace(" w3-show", " w3-hide");
-				var x = document.getElementById(arg2);
-			    x.className = x.className.replace(" w3-hide", " w3-show");
-			    } 
-			else { 
-			        
-			    }
-		}	
-
-		    /* TODO Дописать функцию которая активирует кнопку регистрации на главной и в меню */	
-
-	    function close_registration(arg1, arg2) {
-		    arg1.className = arg1.className.replace(" w3-show", " w3-hide");
-			var x = document.getElementById(arg2);
-		    x.className = x.className.replace(" w3-hide", " w3-show");
-		    /* TODO Дописать функцию которая заблокирует кнопку регистрации на главной и в меню */
-		}
-
-		function open_routes(arg1, arg2) {
-		/* меняем нкопку открыть регистрацию на кнопку закрыть регистрацию */	
-		    arg1.className = arg1.className.replace(" w3-show", " w3-grayscale");
-			var x = document.getElementById(arg2);
-		    x.className = x.className.replace(" w3-hide", " w3-show");
-		    /* TODO Дописать функцию которая активирует трассы на странице тарссы */
-		}
-
-	    function close_routes(arg1, arg2) {
-		    arg1.className = arg1.className.replace(" w3-show", " w3-hide");
-			var x = document.getElementById(arg2);
-		    x.className = x.className.replace(" w3-hide", " w3-show");
-		    /* TODO Дописать функцию которая заблокирует трассы на странице трассы */
-		}
-		var del
-		
+	
 
 
 
@@ -783,7 +770,7 @@
 			  contentType:"application/json; charset=utf-8",
 			  dataType:"json",
 			  success: function(data){
-			    alert('Изаенения сохранены');
+			    alert('Изменения сохранены');
 			    //location.reload(true);
 			  },
 			  error: function() {

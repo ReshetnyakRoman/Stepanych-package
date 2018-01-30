@@ -208,13 +208,23 @@ def registration():
 			club1 = registrationForm.club1.data,
 			alpSkill1 = registrationForm.alpSkill1.data,
 			climbSkill1 = registrationForm.climbSkill1.data,
+			tshirtSize1 = registrationForm.tshirtSize1.data,
+			country1 = (registrationForm.country1.data).upper(),
+			city1 = registrationForm.city1.data,
+			phone1 = registrationForm.phone1.data,
+
 			name2 = registrationForm.name2.data,
 			sname2 = registrationForm.sname2.data,
 			year2 = registrationForm.year2.data,
 			male2 = registrationForm.male2.data,
 			club2 = registrationForm.club2.data,
 			alpSkill2 = registrationForm.alpSkill2.data,
-			climbSkill2 = registrationForm.climbSkill2.data,	
+			climbSkill2 = registrationForm.climbSkill2.data,
+			tshirtSize2 = registrationForm.tshirtSize2.data,
+			country2 = (registrationForm.country2.data).upper(),
+			city2 = registrationForm.city2.data,	
+			phone2 = registrationForm.phone2.data,
+
 			role = registrationForm.role.data,
 			teamChange = 'no',
 			teamStatus = 'ok',
@@ -236,8 +246,23 @@ def registration():
 				club = registrationForm.club1.data,
 				alpSkill = registrationForm.alpSkill1.data,
 				climbSkill = registrationForm.climbSkill1.data,
-				male = registrationForm.male1.data)
+				male = registrationForm.male1.data,
+				tshirtSize = registrationForm.tshirtSize1.data,
+				country = (registrationForm.country1.data).upper(),
+				city = registrationForm.city1.data,
+				phone = registrationForm.phone1.data
+				)
 			db.session.add(memeber1)
+		else: 
+			memeber1 = Members.query.filter_by(keyNameSnameYear=registrationForm.name1.data+registrationForm.sname1.data+registrationForm.year1.data).first()
+			memeber1.club = registrationForm.club1.data  
+			memeber1.alpSkill = registrationForm.alpSkill1.data
+			memeber1.climbSkill = registrationForm.climbSkill1.data
+			memeber1.tshirtSize = registrationForm.tshirtSize1.data
+			memeber1.country = (registrationForm.country1.data).upper()
+			memeber1.city = registrationForm.city1.data
+			memeber1.phone = registrationForm.phone1.data
+			db.session.add(memeber1)	
 
 		if Members.query.filter_by(keyNameSnameYear=registrationForm.name2.data+registrationForm.sname2.data+registrationForm.year2.data).first() is None:
 			memeber2 = Members(
@@ -248,8 +273,23 @@ def registration():
 				club = registrationForm.club2.data,
 				alpSkill = registrationForm.alpSkill2.data,
 				climbSkill = registrationForm.climbSkill2.data,
-				male = registrationForm.male2.data)
+				male = registrationForm.male2.data,
+				tshirtSize = registrationForm.tshirtSize2.data,
+				country = (registrationForm.country2.data).upper(),
+				city = registrationForm.city2.data,
+				phone = registrationForm.phone2.data
+				)
 			db.session.add(memeber2)
+		else: 
+			memeber2 = Members.query.filter_by(keyNameSnameYear=registrationForm.name2.data+registrationForm.sname2.data+registrationForm.year2.data).first()
+			memeber2.club = registrationForm.club2.data  
+			memeber2.alpSkill = registrationForm.alpSkill2.data
+			memeber2.climbSkill = registrationForm.climbSkill2.data
+			memeber2.tshirtSize = registrationForm.tshirtSize2.data
+			memeber2.country = (registrationForm.country2.data).upper()
+			memeber2.city = registrationForm.city2.data
+			memeber2.phone = registrationForm.phone2.data
+			db.session.add(memeber2)	
 		
 		db.session.commit()
 		token = team.generate_confirmation_token()

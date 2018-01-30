@@ -45,12 +45,12 @@ class RegistrationForm(FlaskForm):
 		Required("введите название команды"),
 		Length(1,128),
 		Regexp('^[A-Za-zА-Яа-яёЁЙ0-9()& +-][A-Za-zА-Яа-яёЁЙ0-9_ ()&+-]*$',0,'Допускаются только буквы, цыфры и нижнее подчеркивание и пробелы')],
-		render_kw={"placeholder": "название команды"})
+		render_kw={"placeholder": "название команды", "required":"required"}, id='teamNamex')
 	
-	email = StringField('Email', validators = [Required("введите email"), Email("неправильное написание"), Length(1,64)], render_kw = {"placeholder": "email*"})
-	password = PasswordField('Пароль', validators = [Required("введите пароль")], render_kw = {"placeholder": "Хитрый пароль"})
+	email = StringField('Email', validators = [Required("введите email"), Email("неправильное написание"), Length(1,64)], render_kw = {"placeholder": "email*", "required":"required"})
+	password = PasswordField('Пароль', validators = [Required("введите пароль")], render_kw = {"placeholder": "Хитрый пароль", "required":"required"})
 
-	setNumber = QuerySelectField(query_factory=set_query, allow_blank=False, get_label='description')
+	setNumber = QuerySelectField(query_factory=set_query, allow_blank=False, get_label='description',render_kw={"required":"required"})
 	
 	role = SelectField(default=('user', 'user'),
 		#choices = [
@@ -64,72 +64,116 @@ class RegistrationForm(FlaskForm):
 		Required("Введите имя 1го участника"), 
 		Length(1,64), 
 		Regexp('^[A-Za-zА-Яа-я0-9ёЁ][A-Za-zА-ЯЁёа-я0-9_ ]*$',0,'Допускаются только буквы, цыфры и нижнее подчеркивание и пробелы')],
-		render_kw={"placeholder": "Имя участника"})
+		render_kw={"placeholder": "Имя участника", "required":"required"})
 
 	sname1 = StringField('Фамилия 1го участника', 
 		validators =[
 		Required("Введите фамилию 1го участника"), 
 		Length(1,64), 
 		Regexp('^[A-Za-zА-ЯЁёа-я0-9][A-Za-zА-ЯЁёа-я0-9_ ]*$',0,'Допускаются только буквы, цыфры и нижнее подчеркивание и пробелы')],
-		render_kw={"placeholder": "Файмилия участника"})
+		render_kw={"placeholder": "Файмилия участника", "required":"required"})
 	
 	club1 = StringField('Клуб', 
 		validators =[
 		Required("Введите клуб 1го участника"), 
 		Length(1,128)],
-		render_kw={"placeholder": "Клуб"})
+		render_kw={"placeholder": "Клуб", "required":"required"})
+
+	country1 = StringField('Страна RU/UA/BY', 
+		validators =[
+		Required("Введите клуб 2го участника"), 
+		Length(1,2)],
+		render_kw={"placeholder": "Страна RU/UA/BY", "required":"required","maxlength":"2"})
+
+	city1 = StringField('Город', 
+		validators =[
+		Required("Город 2го участника"), 
+		Length(1,80)],
+		render_kw={"placeholder": "Город", "required":"required"})
 	
 	year1 = StringField('Год рождения', 
 		validators =[
 		Required("Введите год рождения 1го участника"), 
 		Length(1,4), 
 		Regexp('^[0-9]*$',0,'Допускаются цыфры')],
-		render_kw={"placeholder": "год рождения", "maxlength":"4"})
+		render_kw={"placeholder": "год рождения", "maxlength":"4", "required":"required"})
+
+	phone1 = StringField('телефон', 
+		validators =[
+		Required("Введите телефон 1го участника"), 
+		Length(1,20), 
+		Regexp('^[0-9()& +-][0-9_ ()&+-]*$',0,'Допускаются цыфры')],
+		render_kw={"placeholder": "8 (926) 555-55-55", "maxlength":"20", "required":"required"})
 
 	alpSkill1 = SelectField(default=('', "разряд по альпизнизму"), choices = alpSkill,
-		validators = [Required("выберите разряд по альпизнизму")], id='alpSkill1')
+		validators = [Required("выберите разряд по альпизнизму")], id='alpSkill1', render_kw={"required":"required"})
 
-	climbSkill1 = SelectField(default=('', "разряд по скалолазанию"), choices = climbSkill, validators = [Required("выберите разряд по скалолазанию")], id='climbSkill1')
+	climbSkill1 = SelectField(default=('', "разряд по скалолазанию"), choices = climbSkill, validators = [Required("выберите разряд по скалолазанию")], id='climbSkill1',render_kw={"required":"required"})
 
-	male1 = SelectField(default=('', "пол"), choices = [('','пол'),('М','М'),('Ж','Ж')], validators = [Required("укажите пол участника")], id='male1')			
+	male1 = SelectField(default=('', "пол"), choices = [('','пол'),('М','М'),('Ж','Ж')], validators = [Required("укажите пол участника")], id='male1', render_kw={"required":"required"})			
+
+	tshirtSize1 = SelectField(default=('', "размер футболки"), choices = [('','размер футболки'),('XS','XS'),('S','S'),('M','M'),('L','L'),('XL','XL')],
+		validators = [Required("укажите пол участника")], id='tshirtSize1', render_kw={"required":"required"})
 
 	name2 = StringField('Имя 2го участника', 
 		validators =[
 		Required("Введите имя 2го участника"), 
 		Length(1,64), 
 		Regexp('^[A-Za-zА-ЯЁёа-я0-9][A-Za-zА-ЯЁёа-я0-9_ ]*$',0,'Допускаются только буквы, цыфры и нижнее подчеркивание и пробелы')],
-		render_kw={"placeholder": "Имя участника"})
+		render_kw={"placeholder": "Имя участника", "required":"required"})
 
 	sname2 = StringField('Фамилия 2го участника', 
 		validators =[
 		Required("Введите фамилию 2го участника"), 
 		Length(1,64), 
 		Regexp('^[A-Za-zА-ЯЁёа-я0-9][A-Za-zА-ЯЁёа-я0-9_ ]*$',0,'Допускаются только буквы, цыфры и нижнее подчеркивание и пробелы')],
-		render_kw={"placeholder": "Файмилия участника"})
+		render_kw={"placeholder": "Файмилия участника", "required":"required"})
 
 	club2 = StringField('Клуб', 
 		validators =[
-		Required("Введите клуб 1го участника"), 
+		Required("Введите клуб 2го участника"), 
 		Length(1,80)],
-		render_kw={"placeholder": "Клуб"})
+		render_kw={"placeholder": "Клуб", "required":"required"})
+
+	country2 = StringField('Страна RU/UA/BY', 
+		validators =[
+		Required("Введите клуб 2го участника"), 
+		Length(1,2)],
+		render_kw={"placeholder": "Страна RU/UA/BY", "required":"required","maxlength":"2"})
+
+	city2 = StringField('Город', 
+		validators =[
+		Required("Город 2го участника"), 
+		Length(1,80)],
+		render_kw={"placeholder": "Город", "required":"required"})
 	
 	year2 = StringField('Год рождения', 
 		validators =[
 		Required("Введите год рождения 2го участника"), 
 		Length(1,4), 
 		Regexp('^[0-9]*$',0,'Допускаются цыфры')],
-		render_kw={"placeholder": "год рождения", "maxlength":"4"})
+		render_kw={"placeholder": "год рождения", "maxlength":"4", "required":"required"})
+
+	phone2 = StringField('телефон', 
+		validators =[
+		Required("Введите телефон 1го участника"), 
+		Length(1,20), 
+		Regexp('^[0-9()& +-][0-9_ ()&+-]*$',0,'Допускаются цыфры')],
+		render_kw={"placeholder": "8 (926) 555-55-55", "maxlength":"20", "required":"required"})
 
 	alpSkill2 = SelectField(default=('', "разряд по альпизнизму"), choices = alpSkill,
-		validators = [Required("выберите разряд по альпизнизму")], id='alpSkill2')
+		validators = [Required("выберите разряд по альпизнизму")], id='alpSkill2', render_kw={"required":"required"})
 
 	climbSkill2 = SelectField(default=('', "разряд по скалолазанию"), choices = climbSkill,
-		validators = [Required("выберите разряд по скалолазанию")], id='climbSkill2')
+		validators = [Required("выберите разряд по скалолазанию")], id='climbSkill2', render_kw={"required":"required"})
 
 	male2 = SelectField(default=('', "пол"), choices = [('','пол'),('М','М'),('Ж','Ж')],
-		validators = [Required("укажите пол участника")], id='male2')
+		validators = [Required("укажите пол участника")], id='male2', render_kw={"required":"required"})
 
-	submit1 = SubmitField('Зарегестрировать')
+	tshirtSize2 = SelectField(default=('', "размер футболки"), choices = [('','размер футболки'),('XS','XS'),('S','S'),('M','M'),('L','L'),('XL','XL')],
+		validators = [Required("укажите пол участника")], id='tshirtSize2', render_kw={"required":"required"})
+	
+	submit3 = SubmitField('Зарегестрировать')
 
 	def __init__(self, *args, **kwargs):
 		super(RegistrationForm, self).__init__(*args, **kwargs)

@@ -109,13 +109,37 @@
 
 				<form action="{{ url_for('competition.close_registration') }}" method="POST">
 				<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-				<button type="submit" id="close_registration" class="w3-display-container w3-show my-controls w3-round-xlarge w3-btn-1 w3-margin w3-border w3-border-red w3-text-red w3-hover-red w3-hover-text-white">
+				<button type="submit"  class="w3-display-container w3-show my-controls w3-round-xlarge w3-btn-1 w3-margin w3-border w3-border-red w3-text-red w3-hover-red w3-hover-text-white">
 					<div class="w3-display-middle w3-center w3-large ">
 					 <b>Закрыть<br> регистрацию</b>
 					</div>
 				</button>
 				</form>
 				{% endif %}
+
+				{% if volunteersStatus == 'closed' %}
+
+				<form action="{{ url_for('competition.open_volunteers_registration') }}" method="POST">
+				<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+				<button type="submit"  class="w3-display-container w3-show my-controls w3-round-xlarge w3-btn-1 w3-margin w3-border w3-border-khaki w3-text-khaki w3-hover-khaki w3-hover-text-white">
+					<div  class="w3-display-middle w3-center w3-large">
+					 <b>Открыть<br>регистрацию<br>волонтеров </b>
+					</div>
+				</button>
+				</form>
+				
+				{% else %}
+
+				<form action="{{ url_for('competition.close_volunteers_registration') }}" method="POST">
+				<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+				<button type="submit" id="close_registration" class="w3-display-container w3-show my-controls w3-round-xlarge w3-btn-1 w3-margin w3-border w3-border-red w3-text-red w3-hover-red w3-hover-text-white">
+					<div class="w3-display-middle w3-center w3-large ">
+					 <b>Закрыть<br> регистрацию<br>волонтеров</b>
+					</div>
+				</button>
+				</form>
+				{% endif %}
+
 
 				<a href="{{ url_for('competition.routes') }}">
 				<div id="create_routes" class="w3-display-container my-controls w3-round-xlarge w3-btn-1 w3-margin w3-border w3-border-lime w3-text-lime w3-hover-lime w3-hover-text-white">
@@ -133,7 +157,7 @@
 					<form action="{{ url_for('competition.close_set') }}" method="POST">
 					<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 					<input type="hidden" name="setNuber" value="{{set.setNuber}}"/>
-					<button type="submit"  class="w3-display-container my-controls w3-round-xlarge w3-btn-1 w3-margin w3-border w3-border-red w3-text-red w3-hover-red w3-hover-text-white {% if set.setNuber == 0 %} w3-hide {% else %}w3-show {% endif %}" onclick="open_routes(this, 'close_routes')">
+					<button type="submit"  class="w3-display-container my-controls w3-round-xlarge w3-btn-1 w3-margin w3-border w3-border-red w3-text-red w3-hover-red w3-hover-text-white {% if set.setNuber == 0 %} w3-hide {% else %}w3-show {% endif %}" >
 						<div class="w3-display-middle w3-center w3-large ">
 						 <b>Закрыть<br> {{set.setNuber}}й сет</b>
 						</div>
@@ -144,7 +168,7 @@
 					<form action="{{ url_for('competition.open_set') }}" method="POST">
 					<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 					<input type="hidden" name="setNuber" value="{{set.setNuber}}"/>
-					<button type="submit"  class="w3-display-container my-controls w3-round-xlarge w3-btn-1 w3-margin w3-border w3-border-blue w3-text-blue w3-hover-blue w3-hover-text-white {% if set.setNuber == 0 %} w3-hide {% else %}w3-show {% endif %}" onclick="open_routes(this, 'close_routes')">
+					<button type="submit"  class="w3-display-container my-controls w3-round-xlarge w3-btn-1 w3-margin w3-border w3-border-blue w3-text-blue w3-hover-blue w3-hover-text-white {% if set.setNuber == 0 %} w3-hide {% else %}w3-show {% endif %}">
 						<div class="w3-display-middle w3-center w3-large ">
 						 <b>Открыть<br> {{set.setNuber}}й сет</b>
 						</div>
@@ -174,7 +198,10 @@
 		<div class="my-flex w3-continer w3-margin-bottom">
 			<a href="{{ url_for('competition.allteams') }}" class="w3-btn-1 w3-padding w3-border-blue w3-border w3-round w3-margin w3-text-blue">Все команды</a>
 			<a href="{{ url_for('competition.allmembers') }}" class="w3-btn-1 w3-padding w3-border-blue w3-round w3-border w3-margin w3-text-blue">Все пользователи</a>
+			<a href="{{ url_for('competition.volunteers') }}" class="w3-btn-1 w3-padding w3-border-blue w3-round w3-border w3-margin w3-text-blue">Все волонтеры</a>
+			<a href="{{ url_for('competition.tshirts') }}" class="w3-btn-1 w3-padding w3-border-blue w3-round w3-border w3-margin w3-text-blue">Футболки</a>
 			<br>
+
 
 			<p class="w3-tiny w3-text-grey" style="width: 100%"><sup>*</sup>В этом блоке можно управлять всеми пользователями и командами, когда-либо зарегистрированными на сайте.</p>
 		</div>

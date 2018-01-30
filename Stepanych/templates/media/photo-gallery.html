@@ -36,7 +36,13 @@
 		{% endif %}
 
 		<h2 class="w3-text-red w3-center">Альбом "{{ galleryInfo.galleryName }}"</h2>
-
+		{% if galleryInfo.galleryURL != '' and galleryInfo.galleryURL != 'None' %}
+		<p class="w3-small">Здесь представлены только лучшие фотографии альбома. 
+			
+		Полностью альбом можно увдидеть по <a href="{{ galleryInfo.galleryURL }}" target="blank" class="w3-text-blue">этой ссылке ВК/FB </a></p>
+		{% else %}
+		{% endif %}
+		<br>
 		<!-- Galeries section -->
 			<div id="grid-gallery" class="grid-gallery" >
 				<section class="grid-wrap">

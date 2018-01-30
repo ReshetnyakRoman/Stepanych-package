@@ -148,6 +148,7 @@ def add_gallery():
 						gallery = Photo(
 							imgName = imgName, 
 							imgURL = imgURL, 
+							galleryURL = bleach.clean(request.form['galleryURL']),
 							galleryName = bleach.clean(request.form['galleryName']),
 							galleryID = galleryID,
 							authorName=current_user.teamName)

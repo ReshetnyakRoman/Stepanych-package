@@ -30,7 +30,7 @@
 	<p id="mytest"></p>
   <div class="w3-row">
     <a href="javascript:void(0)" onclick="toogle('registredteams','participantteams','tab1');">
-      <div id="tab1" class="w3-half tablink w3-bottombar w3-hover-light-grey w3-padding  w3-border-blue w3-blue-l4">Список зарегистрировавшихся команд</div>
+      <div id="tab1" class="w3-half tablink w3-bottombar w3-hover-light-grey w3-padding  w3-border-blue w3-blue-l4">Список заявок</div>
     </a>
     <a href="javascript:void(0)" onclick="toogle('participantteams','registredteams','tab2');">
       <div id="tab2" class="w3-half tablink w3-bottombar w3-hover-light-grey w3-padding w3-text-grey ">Финальный список команд участников</div>
@@ -48,7 +48,7 @@
 				<div class="w3-col m1 w3-hide-small" id="climb_level">р-д<br>скл</div>
 				<div class="w3-col m3 s5">Сет<br> <span class="w3-text-grey w3-small">Клуб</span> </div>
 			</div>	
-			<input class="w3-input w3-border-bottom w3-border-blue w3-blue-l5 input-filter" type="text" placeholder="фильтр..." onkeyup="myFilter(0)" id="inputFilter" style="font-size: 13px; padding: 4px;">
+			<input class="w3-input w3-border-bottom w3-border-blue w3-blue-l5 input-filter" type="text" placeholder="фильтр..." onkeyup="myFilter(0)" id="inputFilter1" style="font-size: 13px; padding: 4px;">
 	<!-- Set #n Registred -->
 			{% for set in registredTeams %}
 			<p onclick="blocks('set{{ loop.index }}')" class="w3-padding w3-block w3-border-bottom w3-border-white w3-left-align w3-blue" style="cursor: pointer;">Сет {{ set }} >></p>
@@ -68,9 +68,14 @@
 							<div class="w3-col s3" id="alp_level">{{set}}й сет</div>
 						</div>
 
-						<div id="member1" style="" class="w3-text-grey w3-small w3-row">
+						<div  style="" class="w3-text-grey w3-small w3-row">
 							<div class="w3-col m5 s6">
-								<a href="{{url_for('competition.profile', name=team.name1, sname=team.sname1, year=team.year1 )}}" class="w3-text-blue">{{team.sname1}} {{team.name1}}</a>
+								<a href="{{url_for('competition.profile', name=team.name1, sname=team.sname1, year=team.year1 )}}" class="w3-text-blue">{{team.sname1}} {{team.name1}}</a> 
+								{% if team.city1 != None or team.country1 != None %} 
+									({% if team.city1 != None %}{{ team.city1 }} /{% else %}{%endif%}
+									{% if team.country1 != None %}{{ team.country1 }}{% else %}{%endif%})
+								{% else %}
+								{%endif%}
 							</div>
 							<div class="w3-col m2 w3-hide-small">{{team.year1}}</div>
 							<div class="w3-col m1 w3-hide-small">{{team.alpSkill1}}</div>
@@ -78,9 +83,14 @@
 							<div class="w3-col m3 s6">{{team.club1}}</div> 
 						</div>
 
-						<div id="member1" style="" class="w3-text-grey w3-small w3-row">
+						<div  style="" class="w3-text-grey w3-small w3-row">
 							<div class="w3-col m5 s6">
 								<a href="{{url_for('competition.profile', name=team.name2, sname=team.sname2, year=team.year2 )}}" class="w3-text-blue">{{team.sname2}} {{team.name2}}</a>
+								{% if team.city2 != None or team.country2 != None %} 
+									({% if team.city2 != None %}{{ team.city2 }} /{% else %}{%endif%}
+									{% if team.country2 != None %}{{ team.country2 }}{% else %}{%endif%})
+								{% else %}
+								{%endif%}
 							</div>
 							<div class="w3-col m2 w3-hide-small">{{team.year2}}</div>
 							<div class="w3-col m1 w3-hide-small">{{team.alpSkill2}}</div>
@@ -126,7 +136,7 @@
 					<div class="w3-col m1 w3-hide-small" id="climb_level">раз<br>скл</div>
 					<div class="w3-col m3 s5">Сет<br> <span class="w3-text-grey w3-small">Клуб</span> </div>
 				</div>	
-				<input class="w3-input w3-border-bottom w3-border-blue w3-blue-l5 input-filter" type="text" placeholder="фильтр..." onkeyup="myFilter(1)" id="inputFilter" style="font-size: 13px; padding: 4px;">
+				<input class="w3-input w3-border-bottom w3-border-blue w3-blue-l5 input-filter" type="text" placeholder="фильтр..." onkeyup="myFilter(1)" id="inputFilter2" style="font-size: 13px; padding: 4px;">
 		<!-- Set #n Participants -->
 				
 
@@ -163,6 +173,11 @@
 										<a href="{{url_for('competition.profile', name=team.name1, sname=team.sname1, year=team.year1 )}}" class="w3-text-blue">
 											<span class="sname1">{{team.sname1}}</span> 
 											<span class="name1">{{team.name1}}</span></a>
+										{% if team.city1 != None or team.country1 != None %} 
+											({% if team.city1 != None %}{{ team.city1 }} /{% else %}{%endif%}
+											{% if team.country1 != None %}{{ team.country1 }}{% else %}{%endif%})
+										{% else %}
+										{%endif%}	
 									</div>
 									<div class="w3-col m2 w3-hide-small"><span class="year1">{{team.year1}}</span></div>
 									<div class="w3-col m1 w3-hide-small"><span class="alpSkill1">{{team.alpSkill1}}</span></div>
@@ -175,6 +190,11 @@
 										<a href="{{url_for('competition.profile', name=team.name2, sname=team.sname2, year=team.year2 )}}" class="w3-text-blue">
 											<span class="sname2">{{team.sname2}}</span> 
 											<span class="name2">{{team.name2}}</span></a>
+										{% if team.city2 != None or team.country2 != None %} 
+											({% if team.city2 != None %}{{ team.city2 }} /{% else %}{%endif%}
+											{% if team.country2 != None %}{{ team.country2 }}{% else %}{%endif%})
+										{% else %}
+										{%endif%}	
 									</div>
 									<div class="w3-col m2 w3-hide-small"><span class="year2">{{team.year2}}</span></div>
 									<div class="w3-col m1 w3-hide-small"><span class="alpSkill2">{{team.alpSkill2}}</span></div>
