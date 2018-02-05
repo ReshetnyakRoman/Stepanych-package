@@ -5,14 +5,41 @@ yum list firewalld - установленная версия пакета
 sudo netstat -plntu - проверка запущенных демонов, на каких портах они слушают и на каких ip
 sudo journalctl -r репорт последних действий в системе может показать  брутфорс атаку.
 sudo netstat -tnp  - показывает кто подключен к системе!
+history | grep yum - посмотрет историю запускаемых команд в данном случае yum
+
+
+---------Firewalld---------
+!Не работает на моем VPS (godaddy)
+установка 
+sudo yum install firewalld
 
 Управление 
+--list-all  - показать все
+--list-all-zones - показать по всем зонам
+--zone=   - указать конкретную зону
+--permanent - включить правило после перезагрузки
+--change-interface= смена интерфейса(сетевухи)
+man firewall-cmd  - все команды 
+
 sudo systemctl start firewalld
+sudo systemctl status firewalld
+sudo firewall-cmd --state
 sudo systemctl stop firewalld
 sudo systemctl enable firewalld
-sudo firewall-cmd --reload перезапуск 
-firewall-cmd --list-all  - проверка текущих настроек
+sudo systemctl disable firewalld - убрать из автозагрузки
+sudo systemctl restart firewalld
 
+sudo firewall-cmd --list-all  - проверка текущих настроек
+sudo firewall-cmd --get-default-zone - просмотр текущей дефолтной зоны
+sudo firewall-cmd --set-default-zone=pbulic установка текущей зоны
+sudo firewall-cmd --get-active-zones - позказывает какие зоны активны и на каких интерфейсах они мониторят трафик
+sudo firewall-cmd --get-zones - показать существующие зоны
+sudo firewall-cmd --zone=home --list-all - просмотр правил конкретной зоын (home)
+sudo firewall-cmd --list-all-zones | less - настройки по всем зонам
+sudo firewall-cmd --permanent --zone=public --change-interface=eth0 - присваеваем зону интерфейсу
+sudo firewall-cmd --get-services - список поддерживаемых сервисов (описания тут /usr/lib/firewalld/services/ssh.xml)
+sudo firewall-cmd --zone=public --list-services - список добавленых в зону public сервисов
+sudo firewall-cmd --zone=public --permanent --list-services список перманентно добавленых в зону public сервисов
 
 названия служб поддерживаемых firewalld
 http https imap imaps smtp smtp-submission pop3 pop3s mysql ssh telnet
@@ -30,27 +57,37 @@ $ firewall-cmd --permanent --zone=public --add-port=2234/tcp
 sudo firewall-cmd --set-default-zone=dmz
 sudo firewall-cmd --get-default-zone
 добавляем перманентные сервисы в нашу зону:
-sudo firewall-cmd --zone=dmz --add-service=http --permanent
-sudo firewall-cmd --zone=dmz --add-service=https --permanent
-sudo firewall-cmd --zone=dmz --add-service=mysql --permanent /command failed
-sudo firewall-cmd --zone=dmz --add-service=ssh --permanent
-sudo firewall-cmd --zone=dmz --add-service=smtp-submission --permanent /command failed
-sudo firewall-cmd --zone=dmz --add-service=smtp --permanent /command failed
-sudo firewall-cmd --zone=dmz --add-service=pop3 --permanent 
-sudo firewall-cmd --zone=dmz --add-service=pop3s --permanent /command failed
-sudo firewall-cmd --zone=dmz --add-service=ssh --permanent
-sudo firewall-cmd --zone=dmz --add-service=imap --permanent
-sudo firewall-cmd --zone=dmz --add-service=imaps --permanent
+sudo firewall-cmd --zone=public --add-service=http --permanent
+sudo firewall-cmd --zone=public --add-service=https --permanent
+sudo firewall-cmd --zone=public --add-service=mysql --permanent  /не включено
+sudo firewall-cmd --zone=public --add-service=ssh --permanent
+sudo firewall-cmd --zone=public --add-service=smtp-submission --permanent
+sudo firewall-cmd --zone=public --add-service=smtp --permanent 
+sudo firewall-cmd --zone=public --add-service=pop3 --permanent 
+sudo firewall-cmd --zone=public --add-service=pop3s --permanent
+sudo firewall-cmd --zone=public --add-service=imap --permanent
+sudo firewall-cmd --zone=public --add-service=imaps --permanent
 
 пример удаления службы
-sudo firewall-cmd --remove-service=ssh --permanent
+sudo firewall-cmd --remove-service=mysql --permanent
+
+Если нет соответвующей службы можно открыть порт:
 пример добавления порта формат порт/протоко(tcp/udp)
-sudo firewall-cmd --add-port=7022/tcp --permanent
+sudo firewall-cmd --zone=public --add-port=5000/tcp
+перманентно:
+sudo firewall-cmd --zone=public --permanent --add-port=5000/tcp
+
+баним конкретный ip:
+# firewall-cmd --zone=public --add-rich-rule='rule family="ipv4" source address="192.168.0.254" reject'
+удаление бана:
+firewall-cmd --zone=public --remove-rich-rule='rule family="ipv4" source address="192.168.0.254" reject'
+
 
 ----------fail2ban-------
 
 fail2ban  - банит ip которые пытаются подсоеденится много раз по ssh но неудачно!
 sudo systemctl start fail2ban
+sudo systemctl stop fail2ban
 sudo systemctl restart fail2ban
 
 sudo fail2ban-client status - показывает запущенные службы fail2ban
@@ -96,29 +133,140 @@ enabled = true
 ====end file====
 cmd_timeout = 5
 
-Knock is a port-knocking server/client
-Настройки /etc/knockd.conf
 
+------------KNOCKD------------
+KNOCKD is a port-knocking server/client
+управление:
+sudo systemctl start knockd
+sudo systemctl stop knockd
+sudo systemctl status knockd
+sudo systemctl restart knockd
+sudo systemctl enable knockd - добавление в автозагрузку
+sudo systemctl disable knockd - удаление из автозагрузки
+
+Настройки: 
+sudo nano /etc/knockd.conf
+лиги
+tail /var/log/port_knocking.log
+
+
+=====File knockd.conf===
 
 [options]
 LogFile = /var/log/port_knocking.log
 
 [openSSH]
-sequence = 32510,8429,27709
+sequence = 32510,8429,7709
 seq_timeout = 5
-cmd_timeout = 5
 tcpflags = syn
-command = firewall-cmd --add-port=22/tcp
-cmd_timeout = 1800 
-stop_command = firewall-cmd --remove-port=22/tcp
-
+start_command = iptables -I INPUT -p tcp --dport 22 -j ACCEPT
+cmd_timeout = 1800
+stop_command = iptables -D INPUT -p tcp --dport 22 -j ACCEPT
 
 [closeSSH]
-sequence = 91362,17522,4500
+sequence = 9362,17522,4500
 seq_timeout = 5
-command = firewall-cmd --remove-port=22/tcp
 tcpflags = syn
+command = iptables -D INPUT -p tcp --dport 22 -j ACCEPT
+
+[restartFLASK-UWSGI]
+sequence = 55555,33333,1111
+seq_timeout = 5
+tcpflags = syn
+command = systemctl restart flask-uwsgi
+
+[restartNGINX]
+sequence = 44444,55555,1111
+seq_timeout = 5
+tcpflags = syn
+command = nginx -s reload
+
+====end file====
+
+====iptables====
+
+Общие сведения:
+http://bencane.com/2012/09/17/iptables-linux-firewall-rules-for-a-basic-web-server/
+
+постоянные правила хранятся в файле
+/etc/sysconfig/iptables
+временные вводятся с теримнала и снимаются после перезагрузки
+
+sudo service iptables save  	что-то сохраняет после этого iptables запускаются
+sudo systemctl start iptables 	запуск службы
+sudo systemctl restart iptables 	запуск службы
+sudo systemctl stop iptables 	остановка службы
+sudo systemctl enable iptables 	добавление службы в автозагрузку
+sudo systemctl disable iptables  убрать службу из автозагрузки
+iptables -L -v -n  				показать перманентные правила (из файла)
+sudo iptables -L  		 		показать текущие правила
+
+-I 	  	говорим что мы хотим втавить (I - insert) запись в цепочку (INPUT - входящие соединения)
+-A  	означает (A - append ) добавить правило в конец таблицы для цепочки INPUT
+-D 		Delete	
+-P 		означает policy мы указываем дефолтную политику для цепочки
+-m 					match мэтчит соединение с его статусом connection state (-ctstate) ESTABLISHED or RELATED.
+-p tcp 				укзываем протокол (p), сли флаг не указан то команда работает на все протоколы
+--dport 22 			указываем порт (destination port), т.е. эта запись будет работать только для трафика на 22-м порту
+-s 192.168.122.1  	указываем источник трафика (source) в данном случае конкретный ip
+-j ACCEPT 			прыгаем (Jump) к действию которое нужно сделать над этим трафиком ACCEPT (разрешить проход через фаервол)/REJECT (запретить проход)
+-i eth0				указываем интерфейс обычно eth0 сетевой интерфейс lo loopback(внутренний трафик в системе), если флаг не указан то команда работает на все интерфейсы
+
+DROP vs REJECT:
+REJECT - отправляет обратный пакет reply icmp packet о том что запрос отвергнут "port is unreachable"  - хуже при DoS атаках
+DROP - просто молчит и не пускает
+
+Настройка через консоль:
+#разрешаем входящий трафик по ssh для всех ip, что бы мо могли подключатся к серверу
+sudo iptables -I INPUT -p tcp --dport 22 -j ACCEPT
+!Если нужно сбросить входящий трафик по ssh для всех ip, что бы мо могли подключатся к серверу
+sudo iptables -D INPUT -p tcp --dport 22 -j ACCEPT
+#применяем политику (P - policy) закрыть весь входящий трафий (кроме разрешенного выше)!
+sudo iptables -P INPUT DROP
+
+#открываем 80й порт для http трафика 
+sudo iptables -A INPUT -p tcp --dport 80 -j ACCEPT  
+
+# разрешаем loopback traffic для функционирования MySQL на localhost:
+sudo iptables -I INPUT -i lo -j ACCEPT
+
+#разрешаем устанавливать соединения на других портах программам которые уже успешно подсоеденились на открытых (например для FTP)
+iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+
+!не обязательная: пример блокировки нежелательного ip или диапозона ip. запись будет 3й по счету, т.к. она должна сработать до правила открытия для всех 80го порта:
+sudo iptables -D INPUT -s 94.46.186.152 -j DROP  
+
+#сохраняем данные из временных в постоянные (нужно делать под рутом)
+/sbin/iptables-save  > /etc/sysconfig/iptables
+
+#разрешаем вхдящую почту (возможно SMTP порт може быть 587)
+sudo iptables -A INPUT -p tcp --dport 25 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 587 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+
+если не работате то, упращенный вариант:
+sudo iptables -A INPUT -p tcp --dport 25 -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 587 -j ACCEPT
+
+Рарешеам прием сообщений от почтового сервера провайдера с 25го порта для возможности отправки нашей почты
+sudo iptables -A INPUT -p tcp --sport 25 -j ACCEPT
 
 
+Открываем 53 порт UDP чтобы получать сообщения от DNS сервера для разрешения имени почтового севреа провадера.
+sudo iptables -A INPUT -p udp --sport 53 -j ACCEPT
 
 
+!на крайний случай если  предыдущеая команда не рабоатет  разрешаем любой трафик с почтовым сервером провйдера по ip:
+sudo iptables -A INPUT -s 208.109.80.210 -j ACCEPT 
+
+Финальная таблица, рабочая таблица
+*filter
+:INPUT DROP [151:14793]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [337:128074]
+-A INPUT -i lo -j ACCEPT
+-A INPUT -p tcp -m tcp --dport 22 -j ACCEPT
+-A INPUT -p tcp -m tcp --dport 80 -j ACCEPT
+-A INPUT -p tcp -m tcp --dport 587 -j ACCEPT
+-A INPUT -p udp -m udp --sport 53 -j ACCEPT
+-A INPUT -p tcp -m tcp --sport 25 -j ACCEPT
+COMMIT
