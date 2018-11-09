@@ -157,10 +157,10 @@
 					</div>
 					<!-- ====================================================================== -->
 					<div class="w3-row" style="height: 45%; vertical-align: center;">
-						<a href="{{ url_for('info.sponsors') }}" style="height: 100%;"  class="w3-display-container w3-red w3-col s6 w3-hover-red-d3 w3-border-bottom w3-border-right w3-center w3-border-white">
+						<a href="{{ url_for('competition.volunteers') }}" style="height: 100%;"  class="w3-display-container w3-red w3-col s6 w3-hover-red-d3 w3-border-bottom w3-border-right w3-center w3-border-white">
 						<div class="w3-display-middle">
-						<i class="w3-block fa fa-rouble w3-xxlarge"></i>
-						<p>Спонсоры</p>
+						<i class="w3-block fa fa-male w3-xxlarge"></i>
+						<p>Волонтерам</p>
 						</div>
 						</a>
 
@@ -256,10 +256,7 @@
 					<p class="w3-tiny">Положение и протоколы</p> 
 					</a>
 					
-					<a href="{{ url_for('info.sponsors') }}" class="w3-bar-item w3-red-d3 w3-hover-red my-menuitem-animation my-bar-item-transition w3-center" style="height: 100%">
-					<i class="fa fa-rouble w3-xxlarge w3-padding"></i>
-					<p class="w3-tiny">Спонсоры и партнеры</p>
-					</a>
+					
 
 					{% for info in infos %}
 					<a href="{{ url_for('site.page',iconDescriptionEng=info.iconDescriptionEng) }}" class="w3-bar-item w3-red-d3 w3-hover-red my-menuitem-animation my-bar-item-transition w3-center" style="height: 100%">
