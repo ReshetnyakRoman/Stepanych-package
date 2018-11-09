@@ -5,7 +5,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config:
 	WTF_CSRF_ENABLED = True
-	SECRET_KEY = os.environ.get('SECRET_KEY') or 'stepanych is the best ever competitions since 2001'
+	SECRET_KEY = os.environ.get('SECRET_KEY') or 'strong_phrase'
 	SQLALCHEMY_COMMIT_ON_TEARDOWN = True
 	SQLALCHEMY_TRACK_MODIFICATIONS = True
 	MY_MAIL_SUBJECT_PREFIX = '[От_Степаныча]'
@@ -34,20 +34,20 @@ class Config:
 
 class DevelopmentConfig(Config): 
 	DEBUG = True
-	SQLALCHEMY_DATABASE_URI = 'mysql://stepanich:Stepanich_competition2001@localhost/Stepanich?charset=utf8'
+	SQLALCHEMY_DATABASE_URI = 'mysql://stepanich:strong_passowrd@localhost/Stepanich?charset=utf8'
 	SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'sql_repository')
-	MAIL_SERVER = '104.238.111.93'
+	MAIL_SERVER = '555.555.55.55'
 	MAIL_USE_TLS = True
 	MAIL_PORT = 25
 	MAIL_USERNAME = 'registration' # os.environ.get('MAIL_USERNAME')
-	MAIL_PASSWORD = 'Registration_2001' # os.environ.get('MAIL_PASSWORD')
+	MAIL_PASSWORD = 'strong_passowrd' # os.environ.get('MAIL_PASSWORD')
 	
 class TestingConfig(Config): 
 	TESTING = True
-	SQLALCHEMY_DATABASE_URI = 'mysql://stepanych:Stepanich_competition2001@localhost/mytestdb?charset=utf8'	
+	SQLALCHEMY_DATABASE_URI = 'mysql://stepanych:strong_passowrd@localhost/mytestdb?charset=utf8'	
 
 class ProductionConfig(Config):
-	SQLALCHEMY_DATABASE_URI = 'mysql://stepanich:Stepanich_competition2001@localhost/Stepanich?charset=utf8'
+	SQLALCHEMY_DATABASE_URI = 'mysql://stepanich:strong_passowrd@localhost/Stepanich?charset=utf8'
 	SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'sql_repository')
 	
 
