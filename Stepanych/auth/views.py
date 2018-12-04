@@ -47,7 +47,10 @@ def login(currentURL=''):
 	competition1 = Competition.query.first().competitionName
 	confirmationURL = session['confirmURL']
 	if loginForm.validate_on_submit():
-		team = mainTable.query.filter_by(teamName=loginForm.teamName.data).filter_by(competition=competition1).first()
+		if(mainTable.query.filter_by(teamName=loginForm.teamName.data).first().role == 'admin' or mainTable.query.filter_by(teamName=loginForm.teamName.data).first().role == 'guest'):
+			team = mainTable.query.filter_by(teamName=loginForm.teamName.data).first()
+		else:
+			team = mainTable.query.filter_by(teamName=loginForm.teamName.data).filter_by(competition=competition1).first()
 		if team is not None and team.verify_password(loginForm.password.data): #сравниваем введеный хэш введенного пароля с хэшем в БД
 			login_user(team, loginForm.remember_me.data) #создаем сессию текущего пользователя к которой можно обращатся через current_user
 			session['teamName'] = loginForm.teamName.data #прописываем в сессию имя команды
