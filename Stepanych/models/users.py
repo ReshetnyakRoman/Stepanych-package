@@ -141,7 +141,7 @@ class mainTable(db.Model, UserMixin):
 	def results(self,routeNuber,competition):
 		results = {
 		'routeScoreTotal':self.routeScoreTotal,
-		'routeScoreFinal':round(self.routeScoreFinal,0),
+		'routeScoreFinal':round(self.routeScoreFinal,2),
 		'routeTimeSecTotal':self.routeTimeSecTotal,
 		'routeTimeSecTotalMin': round((self.routeTimeSecTotal - self.routeTimeSecTotal%60)/60,0),
 		'routeTimeSecTotalSec': self.routeTimeSecTotal%60
