@@ -149,7 +149,7 @@
 
 									<input disabled id="routeScoreFinal"	 type="number" value="{{ team.results(1000,competition).routeScoreFinal | round | int }}" min="0" style="width: 45px; text-align: center;" class="routeScoreFinal">
 								</td>
-								<td class="w3-border-blue w3-border-left w3-center">{{ team.results(1000,competition).routeScoreTotal | round | int }} <br>{{ team.results(1000,competition).routeTimeSecTotalMin | round | int }}:{{team.results(1000,competition).routeTimeSecTotalSec}}
+								<td class="w3-border-blue w3-border-left w3-center">{{ team.results(1000,competition).routeScoreTotal | round(2, 'floor') }} <br>{{ team.results(1000,competition).routeTimeSecTotalMin | round | int }}:{{team.results(1000,competition).routeTimeSecTotalSec}}
 								</td>
 								<td class="w3-border-blue w3-border-left w3-center">{{team.results(0,competition).routesPassed}}</td>
 
@@ -205,7 +205,7 @@
 
 									<input disabled	 type="number" value="{{ team.results(1000,competition).routeScoreFinal | round | int }}" min="0" style="width: 45px; text-align: center;" class="routeScoreFinal">
 								</td>
-								<td class="w3-border-blue w3-border-left w3-center">{{ team.routeScoreTotal | round | int }} <br>{{ team.results(1000,competition).routeTimeSecTotalMin | round | int }}:{{team.results(1000,competition).routeTimeSecTotalSec}}
+								<td class="w3-border-blue w3-border-left w3-center">{{ team.routeScoreTotal | round(2, 'floor') }} <br>{{ team.results(1000,competition).routeTimeSecTotalMin | round | int }}:{{team.results(1000,competition).routeTimeSecTotalSec}}
 								</td>
 								<td class="w3-border-blue w3-border-left w3-center">{{team.results(0,competition).routesPassed}}</td>
 
@@ -366,7 +366,7 @@
 										</td>
 									{% endfor %}
 								<td class="w3-border-blue w3-border-left w3-center">{{ team.results(1000,competition).routeScoreFinal | round | int }}</td>
-								<td class="w3-border-blue w3-border-left w3-center">{{ team.routeScoreTotal | round | int }} <br>{{ team.results(1000,competition).routeTimeSecTotalMin | round | int }}:{{team.results(1000,competition).routeTimeSecTotalSec}}
+								<td class="w3-border-blue w3-border-left w3-center">{{ team.routeScoreTotal | round(2, 'floor') }} <br>{{ team.results(1000,competition).routeTimeSecTotalMin | round | int }}:{{team.results(1000,competition).routeTimeSecTotalSec}}
 								</td>
 								<td class="w3-border-blue w3-border-left w3-center">{{team.results(0,competition).routesPassed}}</td>	
 							</tr>
@@ -404,7 +404,7 @@
 										</td>
 									{% endfor %}
 								<td class="w3-border-blue w3-border-left w3-center">{{ team.results(1000,competition).routeScoreFinal | round | int }}</td>
-								<td class="w3-border-blue w3-border-left w3-center">{{ team.routeScoreTotal | round | int }}<br>{{ team.results(1000,competition).routeTimeSecTotalMin | round | int }}:{{team.results(1000,competition).routeTimeSecTotalSec}}
+								<td class="w3-border-blue w3-border-left w3-center">{{ team.routeScoreTotal | round(2, 'floor') }}<br>{{ team.results(1000,competition).routeTimeSecTotalMin | round | int }}:{{team.results(1000,competition).routeTimeSecTotalSec}}
 								</td>
 								<td class="w3-border-blue w3-border-left w3-center">{{team.results(0,competition).routesPassed}}</td>	
 
@@ -552,7 +552,7 @@
 										</td>
 									{% endfor %}
 								<td class="w3-border-blue w3-border-left w3-center">{{ team.results(1000,competition).routeScoreFinal | round | int }}</td>
-								<td class="w3-border-blue w3-border-left w3-center">{{ team.routeScoreTotal | round | int }} <br>{{ team.results(1000,competition).routeTimeSecTotalMin | round | int }}:{{team.results(1000,competition).routeTimeSecTotalSec}}
+								<td class="w3-border-blue w3-border-left w3-center">{{ team.routeScoreTotal | round(2, 'floor') }} <br>{{ team.results(1000,competition).routeTimeSecTotalMin | round | int }}:{{team.results(1000,competition).routeTimeSecTotalSec}}
 								</td>
 								<td class="w3-border-blue w3-border-left w3-center">{{team.results(0,competition).routesPassed}}</td>	
 							</tr>
@@ -590,7 +590,7 @@
 										</td>
 									{% endfor %}
 								<td class="w3-border-blue w3-border-left w3-center">{{ team.results(1000,competition).routeScoreFinal | round | int }}</td>
-								<td class="w3-border-blue w3-border-left w3-center">{{ team.routeScoreTotal | round | int }}<br>{{ team.results(1000,competition).routeTimeSecTotalMin | round | int }}:{{team.results(1000,competition).routeTimeSecTotalSec}}
+								<td class="w3-border-blue w3-border-left w3-center">{{ team.routeScoreTotal | round(2, 'floor') }}<br>{{ team.results(1000,competition).routeTimeSecTotalMin | round | int }}:{{team.results(1000,competition).routeTimeSecTotalSec}}
 								</td>
 								<td class="w3-border-blue w3-border-left w3-center">{{team.results(0,competition).routesPassed}}</td>	
 
